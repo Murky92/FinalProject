@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+    <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyCu5nNm7f-0fU8tQKNAfMIYnlJrtJBJRMY",
+            authDomain: "tabletop-reserve.firebaseapp.com",
+            projectId: "tabletop-reserve",
+            storageBucket: "tabletop-reserve.firebasestorage.app",
+            messagingSenderId: "178270446013",
+            appId: "1:178270446013:web:b71f5339747750eb3a32d4"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        var db = firebase.firestore();
+
+        // Firebase Authentication
+        function login() {
+            var email = document.getElementById('email').value;
+            var password = document.getElementById('password').value;
+            var errorMessageElement = document.getElementById('error-message');
+
+            if (!validateEmail(email)) {
+                errorMessageElement.textContent = 'Please enter a valid email address.';
+                return;
+            }
+
+            if (!validatePassword(password)) {
+                errorMessageElement.textContent = 'Password must be at least 6 characters long.';
+                return;
+            }
+
+            firebase.auth().signInWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    var user = userCredential.user;
+
+                    // Check user role in Firestore
+                    db.collection("Users").doc(user.uid).get()
+                        .then((doc) => {
+                            if (doc.exists) {
+                                var role = doc.data().role;
+                                if (role === "admin") {
+                                    window.location.href = "/adminhome";
+                                } else {
+                                    window.location.href = "/userhome";
+                                }
+                            } else {
+                                errorMessageElement.textContent = "No user role found.";
+                            }
+                        })
+                        .catch((error) => {
+                            errorMessageElement.textContent = "Error getting role: " + error.message;
+                        });
+                })
+                .catch((error) => {
+                    errorMessageElement.textContent = 'Error: ' + error.message;
+                });
+        }
+
+        function validateEmail(email) {
+            var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(String(email).toLowerCase());
+        }
+
+        function validatePassword(password) {
+            return password.length >= 6;
+        }
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #585858;
+        }
+        
+        .logo {
+            width: 500px;
+            margin-bottom: 20px;
+        }
+
+        .login-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 300px;
+            box-sizing: border-box;
+        }
+
+        .login-container input {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        .login-container button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 4px;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .login-container button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <img src="logo-transparent-png.png" alt="Tabletop Reserve Logo" class="logo">
+    <div class="login-container">
+        <h2>Login</h2>
+        <form onsubmit="event.preventDefault(); login();">
+            <input type="text" id="email" placeholder="Email" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <button type="submit">Log In</button>
+        </form>
+        <p id="error-message" style="color: red;"></p>
+    </div>
+</body>
+</html>
