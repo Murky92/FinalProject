@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pending Approval - Tabletop Reserve</title>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .logo {
+            width: 500px;
+            margin-bottom: 30px;
+        }
+
+        .approval-container {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        p {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .contact-info {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 4px;
+            margin-top: 20px;
+        }
+
+        .back-button {
+            display: inline-block;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-button:hover {
+            background-color: #218838;
+        }
+
+        #error-message {
+            color: red;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <img src="logo-transparent-png.png" alt="Tabletop Reserve Logo" class="logo">
+    
+    <div class="approval-container">
+        <h1>Shop Registration Pending Approval</h1>
+        
+        <p>Thank you for registering your shop with Tabletop Reserve! Your application is currently under review by our admin team.</p>
+        
+        <p>We will verify the details you've provided and ensure your shop meets our requirements. This process typically takes 1-3 business days.</p>
+        
+        <div class="contact-info">
+            <p>If you have any questions or need to provide additional information, please contact our support team at:</p>
+            <p>Email: support@tabletop-reserve.com</p>
+            <p>Phone: 0800 123 4567</p>
+        </div>
+        
+        <a href="/" class="back-button">Return to Homepage</a>
+        
+        <p id="error-message"></p>
+    </div>
+
+    <script>
+        // Firebase Configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyCu5nNm7f-0fU8tQKNAfMIYnlJrtJBJRMY",
+            authDomain: "tabletop-reserve.firebaseapp.com",
+            projectId: "tabletop-reserve",
+            storageBucket: "tabletop-reserve.firebasestorage.app",
+            messagingSenderId: "178270446013",
+            appId: "1:178270446013:web:b71f5339747750eb3a32d4"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        var auth = firebase.auth();
+        var db = firebase.firestore();
+
+        // Check if user is logged in and has a pending shop registration
+        auth.onAuthStateChanged(function(user) {
+            if (user) {
+                db.collection("Stores").doc(user.uid).get()
+                    .then((doc) => {
+                        if (doc.exists && doc.data().isApproved === false) {
+                            // User is logged in and shop is pending approval
+                            console.log("Shop pending approval");
+                        } else {
+                            // Redirect if shop is already approved or not found
+                            window.location.href = "/";
+                        }
+                    })
+                    .catch((error) => {
+                        document.getElementById('error-message').textContent = 
+                            "Error checking registration status: " + error.message;
+                    });
+            } else {
+                // Redirect to login if no user is logged in
+                window.location.href = "/login.html";
+            }
+        });
+    </script>
+</body>
+</html>

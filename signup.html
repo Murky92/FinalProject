@@ -3,16 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign Up</title>
+    <title>Store Registration</title>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
-            flex-direction: column;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            margin: 0;
         }
 
         .logo {
@@ -22,57 +26,136 @@
 
         .signup-container {
             background-color: #fff;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            width: 400px;
         }
+
         .signup-container h2 {
+            text-align: center;
             margin-bottom: 20px;
+            color: #333;
         }
-        .signup-container label {
-            display: block;
-            margin-bottom: 5px;
-        }
-        .signup-container input, .signup-container button {
-            box-sizing: border-box;
+
+        .signup-container input {
             width: 100%;
             padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
         }
+
         .signup-container button {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             background-color: #28a745;
+            color: white;
             border: none;
-            border-radius: 5px;
-            color: #fff;
+            border-radius: 4px;
+            cursor: pointer;
             font-size: 16px;
+        }
+
+        .signup-container button:hover {
+            background-color: #218838;
+        }
+
+        #error-message {
+            color: red;
+            text-align: center;
+            margin-top: 10px;
         }
     </style>
 </head>
 <body>
     <img src="logo-transparent-png.png" alt="Tabletop Reserve Logo" class="logo">
     <div class="signup-container">
-        <h2>Sign Up</h2>
-        <form action="/submit_signup" method="post">
-            <label for="name">Name:</label>
-            <input type="text" id="name" name="name" required>
-            
-            <label for="email">Email:</label>
-            <input type="email" id="email" name="email" required>
-            
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-            
-            <label for="location">Location:</label>
-            <input type="text" id="location" name="location" required>
-            
-            <input type="hidden" name="role" value="user">
-            
-            <button type="submit">Sign Up</button>
+        <h2>Shop Registration</h2>
+        <form id="store-signup-form">
+            <input type="text" id="storeName" placeholder="Shop Name" required>
+            <input type="text" id="ownerName" placeholder="Shop Owner Name" required>
+            <input type="email" id="email" placeholder="Email Address" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <input type="text" id="address" placeholder="Shop Address" required>
+            <input type="text" id="city" placeholder="Town/City" required>
+            <input type="text" id="county" placeholder="County" required>
+            <input type="text" id="postCode" placeholder="Postcode" required>
+            <input type="tel" id="phoneNumber" placeholder="Phone Number" required>
+            <button type="submit">Register Shop</button>
         </form>
+        <p id="error-message"></p>
     </div>
+
+    <script>
+        // Firebase Configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyCu5nNm7f-0fU8tQKNAfMIYnlJrtJBJRMY",
+            authDomain: "tabletop-reserve.firebaseapp.com",
+            projectId: "tabletop-reserve",
+            storageBucket: "tabletop-reserve.firebasestorage.app",
+            messagingSenderId: "178270446013",
+            appId: "1:178270446013:web:b71f5339747750eb3a32d4"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        var auth = firebase.auth();
+        var db = firebase.firestore();
+
+        // Store Signup Handler
+        document.getElementById('store-signup-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            var errorMessageElement = document.getElementById('error-message');
+            
+            // Collect form data
+            var storeName = document.getElementById('storeName').value;
+            var ownerName = document.getElementById('ownerName').value;
+            var email = document.getElementById('email').value;
+            var password = document.getElementById('password').value;
+            var address = document.getElementById('address').value;
+            var city = document.getElementById('city').value;
+            var county = document.getElementById('county').value;
+            var postCode = document.getElementById('postCode').value;
+            var phoneNumber = document.getElementById('phoneNumber').value;
+
+            // Basic validation
+            if (password.length < 6) {
+                errorMessageElement.textContent = 'Password must be at least 6 characters long.';
+                return;
+            }
+
+            // Create user with Firebase Authentication
+            auth.createUserWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    // User created successfully
+                    var user = userCredential.user;
+
+                    // Store additional store information in Firestore
+                    return db.collection("Stores").doc(user.uid).set({
+                        storeName: storeName,
+                        ownerName: ownerName,
+                        email: email,
+                        address: address,
+                        city: city,
+                        county: county,
+                        postCode: postCode,
+                        phoneNumber: phoneNumber,
+                        role: "shop",
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        isApproved: false  // Shops will need admin approval
+                    });
+                })
+                .then(() => {
+                    // Redirect to a store pending approval page
+                    window.location.href = "shop-pending-approval.html";
+                })
+                .catch((error) => {
+                    // Handle errors
+                    errorMessageElement.textContent = error.message;
+                });
+        });
+    </script>
 </body>
 </html>
