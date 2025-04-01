@@ -31,8 +31,9 @@
                 <li><a href="shophome.html">Dashboard</a></li>
                 <li><a href="shop-profile.html">Shop Profile</a></li>
                 <li><a href="shop-reservations.html">Reservations</a></li>
-                <li><a href="shop-schedule.html">Schedule</a></li>
                 <li><a href="#" class="active">Tables</a></li>
+                <li><a href="shop-schedule.html">Schedule</a></li>
+                
             </ul>
         </nav>
         
@@ -76,7 +77,6 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h2 id="table-modal-title">Add New Table</h2>
-                <button class="close-btn" onclick="closeModal('table-modal')">&times;</button>
             </div>
             
             <form id="table-form">
@@ -172,7 +172,6 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h2>Delete Table</h2>
-                <button class="close-btn" onclick="closeModal('delete-table-modal')">&times;</button>
             </div>
             
             <p>Are you sure you want to delete this table? All future reservations for this table will be canceled.</p>
@@ -189,6 +188,7 @@
             </div>
         </div>
     </div>
+    
 
     <style>
         .tables-grid {
@@ -284,6 +284,28 @@
             border-radius: 4px;
             margin-top: 10px;
             margin-bottom: 15px;
+        }
+
+        /* Additional styles to ensure modals display properly */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            overflow: auto;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 50%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
     </style>
 
@@ -429,7 +451,7 @@
                     </div>
                     <div class="table-actions">
                         <button class="action-btn edit-btn" onclick="editTable('${table.id}')">Edit</button>
-                        <button class="action-btn delete-btn" onclick="deleteTable('${table.id}')">Delete</button>
+                        <button class="action-btn delete-btn" onclick="openDeleteConfirmation('${table.id}')">Delete</button>
                     </div>
                 `;
                 
@@ -493,15 +515,18 @@
             document.getElementById('table-modal').style.display = 'block';
         }
         
-        // Delete Table
-        function deleteTable(tableId) {
+        // Open Delete Confirmation Modal
+        function openDeleteConfirmation(tableId) {
+            console.log("Delete button clicked for table ID:", tableId);
             document.getElementById('delete-table-id').value = tableId;
             document.getElementById('delete-table-warning').classList.add('hidden');
             
             // Check for existing reservations
             checkForReservations(tableId);
             
-            document.getElementById('delete-table-modal').style.display = 'block';
+            // Show the modal
+            const modal = document.getElementById('delete-table-modal');
+            modal.style.display = 'block';
         }
         
         // Check for existing reservations
@@ -526,6 +551,7 @@
         // Confirm Delete Table
         function confirmDeleteTable() {
             const tableId = document.getElementById('delete-table-id').value;
+            console.log("Confirming delete for table ID:", tableId);
             
             window.shopAuth.db.collection('Tables').doc(tableId).delete()
                 .then(() => {
