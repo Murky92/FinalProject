@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Tabletop Reserve</title>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .admin-nav {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .admin-nav ul {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .admin-nav li {
+            margin-right: 20px;
+        }
+        
+        .admin-nav a {
+            text-decoration: none;
+            color: #333;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+        
+        .admin-nav a:hover, .admin-nav a.active {
+            background-color: #333;
+            color: white;
+        }
+        
+        .logout-btn {
+            background-color: #ff3b30;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 10px 0;
+            color: #4a6ee0;
+        }
+        
+        .recent-activity {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        
+        .activity-item {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+        
+        .hidden {
+            display: none;
+        }
+    </style>
+    <!-- Load admin authentication script -->
+    <script src="admin-auth.js"></script>
+</head>
+<body>
+    <div id="loading-message">Verifying admin access...</div>
+    
+    <div id="admin-content" class="dashboard-container">
+        <div class="dashboard-header">
+            <h1>Admin Dashboard</h1>
+            <button onclick="window.adminAuth.logout()" class="logout-btn">Logout</button>
+        </div>
+        
+        <nav class="admin-nav">
+            <ul>
+                <li><a href="#" class="active">Dashboard</a></li>
+            
+                <li><a href="user-management.html">User Management</a></li>
+                <li><a href="settings.html">Settings</a></li>
+            </ul>
+        </nav>
+        
+        <section class="stats-grid">
+            <div class="stat-card">
+                <h3>Total Shops</h3>
+                <div id="total-shops" class="stat-value">0</div>
+                <p>Registered shops</p>
+            </div>
+            
+            <div class="stat-card">
+                <h3>Pending Approvals</h3>
+                <div id="pending-approvals" class="stat-value">0</div>
+                <p>Shops awaiting approval</p>
+            </div>
+            
+            <div class="stat-card">
+                <h3>Approved Shops</h3>
+                <div id="approved-shops" class="stat-value">0</div>
+                <p>Active shops</p>
+            </div>
+            
+            <div class="stat-card">
+                <h3>Rejected Shops</h3>
+                <div id="rejected-shops" class="stat-value">0</div>
+                <p>Rejected applications</p>
+            </div>
+        </section>
+        
+        <section class="recent-activity">
+            <h2>Recent Activity</h2>
+            <div id="recent-activity-list">
+                <p>Loading recent activity...</p>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Verify admin access and load dashboard data when verified
+        window.adminAuth.verifyAdmin(function(user) {
+            // Admin verified successfully, load dashboard data
+            loadDashboardData();
+        });
+
+        // Load Dashboard Data
+        function loadDashboardData() {
+            // Get store statistics
+            loadStoreStatistics();
+            
+            // Load recent activity
+            loadRecentActivity();
+        }
+
+        // Load Store Statistics
+        function loadStoreStatistics() {
+            const db = window.adminAuth.db;
+            
+            // Total Shops
+            db.collection("Stores").get().then((snapshot) => {
+                document.getElementById('total-shops').textContent = snapshot.size;
+            });
+            
+            // Pending Approvals
+            db.collection("Stores")
+                .where("isApproved", "==", false)
+                .get().then((snapshot) => {
+                    // Filter results client-side to handle undefined or null registrationStatus
+                    let pendingCount = 0;
+                    snapshot.forEach(doc => {
+                        const data = doc.data();
+                        if (!data.registrationStatus || data.registrationStatus === "pending") {
+                            pendingCount++;
+                        }
+                    });
+                    document.getElementById('pending-approvals').textContent = pendingCount;
+                    
+                    // After counting, check if we have pending shops but none are showing on the approval page
+                    if (pendingCount > 0) {
+                        console.log(`Dashboard shows ${pendingCount} pending shops`);
+                    }
+                });
+            
+            // Approved Shops
+            db.collection("Stores")
+                .where("isApproved", "==", true)
+                .get().then((snapshot) => {
+                    document.getElementById('approved-shops').textContent = snapshot.size;
+                });
+            
+            // Rejected Shops
+            db.collection("Stores")
+                .where("registrationStatus", "==", "rejected")
+                .get().then((snapshot) => {
+                    document.getElementById('rejected-shops').textContent = snapshot.size;
+                });
+        }
+
+        // Load Recent Activity
+        function loadRecentActivity() {
+            const db = window.adminAuth.db;
+            const activityList = document.getElementById('recent-activity-list');
+            activityList.innerHTML = '';
+            
+            // Get recent approval/rejection activities
+            db.collection("Stores")
+                .where("approvedAt", "!=", null)
+                .orderBy("approvedAt", "desc")
+                .limit(5)
+                .get()
+                .then((approvedSnapshot) => {
+                    // Get rejected shops
+                    db.collection("Stores")
+                        .where("rejectedAt", "!=", null)
+                        .orderBy("rejectedAt", "desc")
+                        .limit(5)
+                        .get()
+                        .then((rejectedSnapshot) => {
+                            // Combine and sort the activities
+                            const activities = [];
+                            
+                            approvedSnapshot.forEach((doc) => {
+                                const data = doc.data();
+                                activities.push({
+                                    type: 'approved',
+                                    shopName: data.storeName,
+                                    timestamp: data.approvedAt,
+                                    by: data.approvedBy
+                                });
+                            });
+                            
+                            rejectedSnapshot.forEach((doc) => {
+                                const data = doc.data();
+                                activities.push({
+                                    type: 'rejected',
+                                    shopName: data.storeName,
+                                    timestamp: data.rejectedAt,
+                                    by: data.rejectedBy
+                                });
+                            });
+                            
+                            // Sort activities by timestamp (most recent first)
+                            activities.sort((a, b) => b.timestamp - a.timestamp);
+                            
+                            // Display up to 10 most recent activities
+                            const recentActivities = activities.slice(0, 10);
+                            
+                            if (recentActivities.length === 0) {
+                                activityList.innerHTML = '<p>No recent activity</p>';
+                                return;
+                            }
+                            
+                            recentActivities.forEach((activity) => {
+                                const activityItem = document.createElement('div');
+                                activityItem.className = 'activity-item';
+                                
+                                const date = activity.timestamp.toDate();
+                                const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+                                
+                                activityItem.innerHTML = `
+                                    <p><strong>${activity.shopName}</strong> was ${activity.type} by ${activity.by} on ${formattedDate}</p>
+                                `;
+                                
+                                activityList.appendChild(activityItem);
+                            });
+                        });
+                });
+        }
+    </script>
+</body>
+</html>

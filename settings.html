@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Settings</title>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="admin-styles.css">
+    <!-- Load admin authentication script -->
+    <script src="admin-auth.js"></script>
+    <style>
+        .settings-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .settings-section {
+            margin-bottom: 30px;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: #4a6ee0;
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        
+        .setting-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .setting-row:last-child {
+            border-bottom: none;
+        }
+        
+        .setting-label {
+            font-weight: bold;
+        }
+        
+        .setting-description {
+            color: #666;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+        
+        .save-settings-btn {
+            margin-top: 20px;
+            padding: 10px 20px;
+        }
+    </style>
+</head>
+<body>
+    <div id="loading-message">Verifying admin access...</div>
+    
+    <div id="admin-content" class="admin-container">
+        <div class="dashboard-header">
+            <h1>System Settings</h1>
+            <button onclick="window.adminAuth.logout()" class="danger-btn">Logout</button>
+        </div>
+        
+        <nav class="admin-nav">
+            <ul>
+                <li><a href="adminhome.html">Dashboard</a></li>
+                <li><a href="user-management.html">User Management</a></li>
+                <li><a href="#" class="active">Settings</a></li>
+            </ul>
+        </nav>
+        
+        <button class="back-btn" onclick="window.location.href='adminhome.html'">← Back to Dashboard</button>
+        
+        <div id="settings-message" class="hidden"></div>
+        
+        <div class="settings-section">
+            <h2>Application Settings</h2>
+            <div class="settings-card">
+                <div class="setting-row">
+                    <div>
+                        <div class="setting-label">Shop Auto-Approval</div>
+                        <div class="setting-description">Automatically approve new shop registrations</div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="auto-approve-toggle">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <div class="setting-row">
+                    <div>
+                        <div class="setting-label">Email Notifications</div>
+                        <div class="setting-description">Send email notifications for new shop registrations</div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="email-notifications-toggle" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <div class="setting-row">
+                    <div>
+                        <div class="setting-label">Maintenance Mode</div>
+                        <div class="setting-description">Temporarily disable shop registration during maintenance</div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="maintenance-mode-toggle">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        
+        <div class="settings-section">
+            <h2>Shop Registration Settings</h2>
+            <div class="settings-card">
+                <div class="setting-row">
+                    <div>
+                        <div class="setting-label">Required Fields</div>
+                        <div class="setting-description">Select which fields are required for shop registration</div>
+                    </div>
+                    <div>
+                        <div><input type="checkbox" id="req-phone" checked> Phone Number</div>
+                        <div><input type="checkbox" id="req-address" checked> Complete Address</div>
+                        <div><input type="checkbox" id="req-owner" checked> Owner Name</div>
+                    </div>
+                </div>
+                
+                <div class="setting-row">
+                    <div>
+                        <div class="setting-label">Registration Time Limit</div>
+                        <div class="setting-description">Time limit for shop registration process (in minutes)</div>
+                    </div>
+                    <div>
+                        <input type="number" id="reg-time-limit" min="5" max="60" value="30" style="width: 70px;">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="settings-section">
+            <h2>Security Settings</h2>
+            <div class="settings-card">
+                <div class="setting-row">
+                    <div>
+                        <div class="setting-label">Admin Session Timeout</div>
+                        <div class="setting-description">Time in minutes before admin is logged out due to inactivity</div>
+                    </div>
+                    <div>
+                        <select id="session-timeout">
+                            <option value="15">15 minutes</option>
+                            <option value="30" selected>30 minutes</option>
+                            <option value="60">1 hour</option>
+                            <option value="120">2 hours</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="setting-row">
+                    <div>
+                        <div class="setting-label">Two-Factor Authentication</div>
+                        <div class="setting-description">Require two-factor authentication for admin login</div>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="two-factor-toggle">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <div class="setting-row">
+                    <div>
+                        <div class="setting-label">Failed Login Attempts</div>
+                        <div class="setting-description">Number of failed login attempts before temporary lockout</div>
+                    </div>
+                    <div>
+                        <input type="number" id="failed-login-limit" min="3" max="10" value="5" style="width: 70px;">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <button id="save-settings" class="success-btn save-settings-btn">Save Settings</button>
+    </div>
+
+    <script>
+        // Verify admin access
+        window.adminAuth.verifyAdmin(function(user) {
+            // Admin verified successfully, load settings
+            loadSettings();
+        });
+        
+        // Load settings from Firestore
+        function loadSettings() {
+            const db = window.adminAuth.db;
+            
+            db.collection("SystemSettings").doc("appSettings").get()
+                .then((doc) => {
+                    if (doc.exists) {
+                        const settings = doc.data();
+                        
+                        // Application settings
+                        document.getElementById('auto-approve-toggle').checked = settings.autoApproveShops || false;
+                        document.getElementById('email-notifications-toggle').checked = settings.emailNotifications !== false; // Default to true
+                        document.getElementById('maintenance-mode-toggle').checked = settings.maintenanceMode || false;
+                        
+                        // Registration settings
+                        document.getElementById('req-phone').checked = settings.requiredFields?.phone !== false; // Default to true
+                        document.getElementById('req-address').checked = settings.requiredFields?.address !== false; // Default to true
+                        document.getElementById('req-owner').checked = settings.requiredFields?.owner !== false; // Default to true
+                        document.getElementById('reg-time-limit').value = settings.registrationTimeLimit || 30;
+                        
+                        // Security settings
+                        document.getElementById('session-timeout').value = settings.sessionTimeout || 30;
+                        document.getElementById('two-factor-toggle').checked = settings.twoFactorAuth || false;
+                        document.getElementById('failed-login-limit').value = settings.failedLoginLimit || 5;
+                        
+                        console.log("Settings loaded successfully");
+                    } else {
+                        console.log("No settings found, using defaults");
+                    }
+                })
+                .catch((error) => {
+                    console.error("Error loading settings:", error);
+                    showMessage("Error loading settings: " + error.message, "error");
+                });
+        }
+        
+        // Save settings to Firestore
+        document.getElementById('save-settings').addEventListener('click', function() {
+            const db = window.adminAuth.db;
+            
+            // Collect all settings
+            const settings = {
+                // Application settings
+                autoApproveShops: document.getElementById('auto-approve-toggle').checked,
+                emailNotifications: document.getElementById('email-notifications-toggle').checked,
+                maintenanceMode: document.getElementById('maintenance-mode-toggle').checked,
+                
+                // Registration settings
+                requiredFields: {
+                    phone: document.getElementById('req-phone').checked,
+                    address: document.getElementById('req-address').checked,
+                    owner: document.getElementById('req-owner').checked
+                },
+                registrationTimeLimit: parseInt(document.getElementById('reg-time-limit').value),
+                
+                // Security settings
+                sessionTimeout: parseInt(document.getElementById('session-timeout').value),
+                twoFactorAuth: document.getElementById('two-factor-toggle').checked,
+                failedLoginLimit: parseInt(document.getElementById('failed-login-limit').value),
+                
+                // Metadata
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                updatedBy: window.adminAuth.auth.currentUser.email || window.adminAuth.auth.currentUser.uid
+            };
+            
+            // Save to Firestore
+            db.collection("SystemSettings").doc("appSettings").set(settings, { merge: true })
+                .then(() => {
+                    console.log("Settings saved successfully");
+                    showMessage("Settings saved successfully!", "success");
+                })
+                .catch((error) => {
+                    console.error("Error saving settings:", error);
+                    showMessage("Error saving settings: " + error.message, "error");
+                });
+        });
+        
+        // Show message
+        function showMessage(message, type) {
+            const messageElement = document.getElementById('settings-message');
+            messageElement.textContent = message;
+            messageElement.className = type === 'error' ? 'error-message' : 'success-message';
+            messageElement.classList.remove('hidden');
+            
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                messageElement.classList.add('hidden');
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
