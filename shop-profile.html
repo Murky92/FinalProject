@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop Profile - Tabletop Reserve</title>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="shop-styles.css">
+    <!-- Load shop authentication script -->
+    <script src="shop-auth.js"></script>
+</head>
+<body>
+    <div id="loading-message">Verifying shop access...</div>
+    
+    <div id="shop-content" class="shop-container hidden">
+        <div class="dashboard-header">
+            <h1>Shop Profile<span id="shop-name-header"></span></h1>
+            <button onclick="window.shopAuth.logout()" class="logout-btn">Logout</button>
+        </div>
+        
+        <div id="approval-banner" class="approval-banner hidden">
+            <div class="approval-message">Your shop is pending approval. Some features may be limited until your shop is approved.</div>
+        </div>
+        
+        <nav class="shop-nav">
+            <ul>
+                <li><a href="shophome.html">Dashboard</a></li>
+                <li><a href="#" class="active">Shop Profile</a></li>
+                <li><a href="shop-reservations.html">Reservations</a></li>
+                <li><a href="shop-schedule.html">Schedule</a></li>
+            </ul>
+        </nav>
+        
+        <div id="profile-message" class="message hidden"></div>
+        
+        <div class="tab-buttons">
+            <button id="tab-basic" class="tab-btn active" onclick="switchTab('basic')">Basic Information</button>
+            <button id="tab-details" class="tab-btn" onclick="switchTab('details')">Shop Details</button>
+            <button id="tab-contact" class="tab-btn" onclick="switchTab('contact')">Contact Information</button>
+        </div>
+        
+        <!-- Basic Information Tab -->
+        <div id="basic-info" class="tab-content active">
+            <div class="card">
+                <h2>Basic Information</h2>
+                <p>Update your shop's basic details.</p>
+                
+                <form id="basic-form">
+                    <div class="form-group">
+                        <label for="shop-name">Shop Name*</label>
+                        <input type="text" id="shop-name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="owner-name">Owner Name*</label>
+                        <input type="text" id="owner-name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="shop-description">Shop Description</label>
+                        <textarea id="shop-description" placeholder="Tell customers about your shop, your specialty, and what makes your place unique."></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="shop-type">Shop Type</label>
+                        <select id="shop-type">
+                            <option value="game-store">Game Store with Tables</option>
+                            <option value="dedicated-tables">Dedicated Gaming Space</option>
+                            <option value="cafe">Gaming Café</option>
+                            <option value="restaurant">Restaurant with Gaming Space</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-buttons">
+                        <button type="submit" class="primary-btn">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Shop Details Tab -->
+        <div id="details-info" class="tab-content">
+            <div class="card">
+                <h2>Shop Details</h2>
+                <p>Add specific details about your shop to help customers find you.</p>
+                
+                <form id="details-form">
+                    <div class="form-group">
+                        <label for="shop-amenities">Amenities</label>
+                        <div class="checkbox-group">
+                            <div><input type="checkbox" id="wifi"> Free Wi-Fi</div>
+                            <div><input type="checkbox" id="food"> Food Available</div>
+                            <div><input type="checkbox" id="drinks"> Drinks Available</div>
+                            <div><input type="checkbox" id="parking"> Parking Available</div>
+                            <div><input type="checkbox" id="accessible"> Wheelchair Accessible</div>
+                            <div><input type="checkbox" id="library"> Game Library</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="shop-specialty">Shop Specialty</label>
+                        <textarea id="shop-specialty" placeholder="What types of games do you specialize in?"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="payment-methods">Payment Methods</label>
+                        <div class="checkbox-group">
+                            <div><input type="checkbox" id="cash"> Cash</div>
+                            <div><input type="checkbox" id="credit"> Credit Cards</div>
+                            <div><input type="checkbox" id="debit"> Debit Cards</div>
+                            <div><input type="checkbox" id="mobile"> Mobile Payments</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-buttons">
+                        <button type="submit" class="primary-btn">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Contact Information Tab -->
+        <div id="contact-info" class="tab-content">
+            <div class="card">
+                <h2>Contact Information</h2>
+                <p>Update your address and contact details.</p>
+                
+                <form id="contact-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="shop-email">Email*</label>
+                            <input type="email" id="shop-email" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="shop-phone">Phone Number*</label>
+                            <input type="tel" id="shop-phone" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="shop-address">Street Address*</label>
+                        <input type="text" id="shop-address" required>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="shop-city">City*</label>
+                            <input type="text" id="shop-city" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="shop-county">County*</label>
+                            <input type="text" id="shop-county" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="shop-postcode">Postcode*</label>
+                            <input type="text" id="shop-postcode" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="shop-website">Website</label>
+                        <input type="url" id="shop-website" placeholder="https://...">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="shop-social">Social Media</label>
+                        <input type="text" id="shop-social" placeholder="Facebook, Twitter, Instagram, etc.">
+                    </div>
+                    
+                    <div class="form-buttons">
+                        <button type="submit" class="primary-btn">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Verify shop owner access
+        window.shopAuth.verifyShopOwner(function(user, shopData) {
+            // Shop owner verified, populate forms with existing data
+            populateForms(shopData);
+        });
+        
+        // Switch between tabs
+        function switchTab(tabId) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show the selected tab
+            document.getElementById(tabId + '-info').classList.add('active');
+            
+            // Add active class to the clicked button
+            document.getElementById('tab-' + tabId).classList.add('active');
+        }
+        
+        // Populate forms with existing shop data
+        function populateForms(shopData) {
+            // Basic Information
+            document.getElementById('shop-name').value = shopData.storeName || '';
+            document.getElementById('owner-name').value = shopData.ownerName || '';
+            document.getElementById('shop-description').value = shopData.description || '';
+            document.getElementById('shop-type').value = shopData.shopType || 'game-store';
+            
+            // Contact Information
+            document.getElementById('shop-email').value = shopData.email || '';
+            document.getElementById('shop-phone').value = shopData.phoneNumber || '';
+            document.getElementById('shop-address').value = shopData.address || '';
+            document.getElementById('shop-city').value = shopData.city || '';
+            document.getElementById('shop-county').value = shopData.county || '';
+            document.getElementById('shop-postcode').value = shopData.postCode || '';
+            document.getElementById('shop-website').value = shopData.website || '';
+            document.getElementById('shop-social').value = shopData.socialMedia || '';
+            
+            // Shop Details - Amenities
+            if (shopData.amenities) {
+                document.getElementById('wifi').checked = shopData.amenities.wifi || false;
+                document.getElementById('food').checked = shopData.amenities.food || false;
+                document.getElementById('drinks').checked = shopData.amenities.drinks || false;
+                document.getElementById('parking').checked = shopData.amenities.parking || false;
+                document.getElementById('accessible').checked = shopData.amenities.accessible || false;
+                document.getElementById('library').checked = shopData.amenities.gameLibrary || false;
+            }
+            
+            // Shop Details - Payment Methods
+            if (shopData.paymentMethods) {
+                document.getElementById('cash').checked = shopData.paymentMethods.cash || false;
+                document.getElementById('credit').checked = shopData.paymentMethods.credit || false;
+                document.getElementById('debit').checked = shopData.paymentMethods.debit || false;
+                document.getElementById('mobile').checked = shopData.paymentMethods.mobile || false;
+            }
+            
+            document.getElementById('shop-specialty').value = shopData.specialty || '';
+        }
+        
+        // Handle Basic Information Form Submit
+        document.getElementById('basic-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const updates = {
+                storeName: document.getElementById('shop-name').value,
+                ownerName: document.getElementById('owner-name').value,
+                description: document.getElementById('shop-description').value,
+                shopType: document.getElementById('shop-type').value,
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+            
+            saveShopUpdates(updates, 'Basic information updated successfully!');
+        });
+        
+        // Handle Shop Details Form Submit
+        document.getElementById('details-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const updates = {
+                amenities: {
+                    wifi: document.getElementById('wifi').checked,
+                    food: document.getElementById('food').checked,
+                    drinks: document.getElementById('drinks').checked,
+                    parking: document.getElementById('parking').checked,
+                    accessible: document.getElementById('accessible').checked,
+                    gameLibrary: document.getElementById('library').checked
+                },
+                paymentMethods: {
+                    cash: document.getElementById('cash').checked,
+                    credit: document.getElementById('credit').checked,
+                    debit: document.getElementById('debit').checked,
+                    mobile: document.getElementById('mobile').checked
+                },
+                specialty: document.getElementById('shop-specialty').value,
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+            
+            saveShopUpdates(updates, 'Shop details updated successfully!');
+        });
+        
+        // Handle Contact Information Form Submit
+        document.getElementById('contact-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const updates = {
+                email: document.getElementById('shop-email').value,
+                phoneNumber: document.getElementById('shop-phone').value,
+                address: document.getElementById('shop-address').value,
+                city: document.getElementById('shop-city').value,
+                county: document.getElementById('shop-county').value,
+                postCode: document.getElementById('shop-postcode').value,
+                website: document.getElementById('shop-website').value,
+                socialMedia: document.getElementById('shop-social').value,
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+            
+            saveShopUpdates(updates, 'Contact information updated successfully!');
+        });
+        
+        // Save Shop Updates
+        function saveShopUpdates(updates, successMessage) {
+            const shopData = window.shopAuth.getShopData();
+            
+            if (!shopData || !shopData.id) {
+                showMessage('Error: Shop data not available', 'error');
+                return;
+            }
+            
+            window.shopAuth.db.collection('Stores').doc(shopData.id).update(updates)
+                .then(() => {
+                    showMessage(successMessage, 'success');
+                    
+                    // Refresh shop data
+                    window.shopAuth.refreshShopData();
+                })
+                .catch((error) => {
+                    console.error('Error updating shop:', error);
+                    showMessage('Error: ' + error.message, 'error');
+                });
+        }
+        
+        // Show message
+        function showMessage(message, type) {
+            const messageElement = document.getElementById('profile-message');
+            messageElement.textContent = message;
+            messageElement.className = type === 'error' ? 'message error-message' : 'message success-message';
+            messageElement.classList.remove('hidden');
+            
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                messageElement.classList.add('hidden');
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

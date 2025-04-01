@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop Dashboard - Tabletop Reserve</title>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="shop-styles.css">
+    <!-- Load shop authentication script -->
+    <script src="shop-auth.js"></script>
+</head>
+<body>
+    <div id="loading-message">Verifying shop access...</div>
+    
+    <div id="shop-content" class="shop-container hidden">
+        <div class="dashboard-header">
+            <h1>Shop Dashboard<span id="shop-name-header"></span></h1>
+            <button onclick="window.shopAuth.logout()" class="logout-btn">Logout</button>
+        </div>
+        
+        <div id="approval-banner" class="approval-banner hidden">
+            <div class="approval-message">Your shop is pending approval. Some features may be limited until your shop is approved.</div>
+        </div>
+        
+        <nav class="shop-nav">
+            <ul>
+                <li><a href="#" class="active">Dashboard</a></li>
+                <li><a href="shop-profile.html">Shop Profile</a></li>
+                <li><a href="shop-reservations.html">Reservations</a></li>
+                <li><a href="shop-schedule.html">Schedule</a></li>
+            </ul>
+        </nav>
+        
+        <div class="card">
+            <h2>Shop Status
+                <span id="shop-status-label" class="status-label status-pending">Pending</span>
+            </h2>
+            <p id="shop-status-message">Your shop registration is currently pending approval by an administrator.</p>
+            
+            <div class="shop-info">
+                <div>
+                    <div class="info-item">
+                        <div class="info-label">Shop Name</div>
+                        <div id="shop-name" class="info-value">Loading...</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Owner</div>
+                        <div id="shop-owner" class="info-value">Loading...</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Email</div>
+                        <div id="shop-email" class="info-value">Loading...</div>
+                    </div>
+                </div>
+                <div>
+                    <div class="info-item">
+                        <div class="info-label">Address</div>
+                        <div id="shop-address" class="info-value">Loading...</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">City</div>
+                        <div id="shop-city" class="info-value">Loading...</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Phone</div>
+                        <div id="shop-phone" class="info-value">Loading...</div>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="shop-profile.html" class="primary-btn mt-2">Edit Shop Profile</a>
+        </div>
+        
+        <div class="card">
+            <h2>What's Next?</h2>
+            <p>Complete these steps to get your shop ready for reservations:</p>
+            
+            <ol>
+                <li>Update your shop profile with detailed information</li>
+                <li>Set up your opening hours and schedule</li>
+                <li>Add tables that customers can reserve</li>
+                <li>Configure any special events or game nights</li>
+            </ol>
+            
+            <p id="approval-note" class="hidden"><strong>Note:</strong> Some features will be available after your shop is approved.</p>
+        </div>
+    </div>
+
+    <script>
+        // Verify shop owner access
+        window.shopAuth.verifyShopOwner(function(user, shopData) {
+            // Shop owner verified, update UI with shop data
+            updateShopUI(shopData);
+        });
+        
+        // Update UI with shop data
+        function updateShopUI(shopData) {
+            // Fill in shop details
+            document.getElementById('shop-name').textContent = shopData.storeName || 'Not provided';
+            document.getElementById('shop-owner').textContent = shopData.ownerName || 'Not provided';
+            document.getElementById('shop-email').textContent = shopData.email || 'Not provided';
+            
+            // Address information
+            const addressParts = [];
+            if (shopData.address) addressParts.push(shopData.address);
+            document.getElementById('shop-address').textContent = addressParts.length > 0 ? 
+                addressParts.join(', ') : 'Not provided';
+            
+            document.getElementById('shop-city').textContent = shopData.city || 'Not provided';
+            document.getElementById('shop-phone').textContent = shopData.phoneNumber || 'Not provided';
+            
+            // Update status label and message
+            const statusLabel = document.getElementById('shop-status-label');
+            const statusMessage = document.getElementById('shop-status-message');
+            
+            if (shopData.isApproved) {
+                statusLabel.textContent = 'Approved';
+                statusLabel.className = 'status-label status-approved';
+                statusMessage.textContent = 'Your shop is approved. You can now set up tables and accept reservations.';
+                document.getElementById('approval-note').classList.add('hidden');
+            } else if (shopData.registrationStatus === 'rejected') {
+                statusLabel.textContent = 'Rejected';
+                statusLabel.className = 'status-label status-rejected';
+                statusMessage.textContent = 'Your shop registration has been rejected. Please contact support for more information.';
+                document.getElementById('approval-note').classList.add('hidden');
+            } else {
+                statusLabel.textContent = 'Pending';
+                statusLabel.className = 'status-label status-pending';
+                statusMessage.textContent = 'Your shop registration is currently pending approval by an administrator.';
+                document.getElementById('approval-note').classList.remove('hidden');
+            }
+        }
+    </script>
+</body>
+</html>

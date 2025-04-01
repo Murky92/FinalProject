@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reservations - Tabletop Reserve</title>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="shop-styles.css">
+    <!-- Load shop authentication script -->
+    <script src="shop-auth.js"></script>
+    <style>
+        .date-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .date-selector {
+            display: flex;
+            align-items: center;
+        }
+        
+        .date-selector button {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0 10px;
+        }
+        
+        .current-date {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin: 0 15px;
+        }
+        
+        .date-picker {
+            margin-left: 15px;
+        }
+        
+        .reservation-status-filter {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .status-filter {
+            padding: 5px 15px;
+            border-radius: 20px;
+            border: 1px solid #ddd;
+            background: #f5f5f5;
+            cursor: pointer;
+        }
+        
+        .status-filter.active {
+            background: #4a6ee0;
+            color: white;
+            border-color: #4a6ee0;
+        }
+        
+        .reservation-item {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            background-color: white;
+        }
+        
+        .reservation-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .reservation-title {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .reservation-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .detail-item {
+            font-size: 0.9rem;
+        }
+        
+        .detail-label {
+            color: #666;
+            margin-bottom: 3px;
+        }
+        
+        .reservation-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: #aaa;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .notes-container {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+        }
+        
+        .notes-label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .calendar-view {
+            margin-top: 20px;
+        }
+        
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .time-slots {
+            display: grid;
+            grid-template-columns: 100px repeat(7, 1fr);
+            gap: 2px;
+            background-color: #f1f1f1;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .time-header, .day-header {
+            padding: 10px;
+            background-color: #4a6ee0;
+            color: white;
+            text-align: center;
+            font-weight: bold;
+        }
+        
+        .time-slot {
+            padding: 10px;
+            background-color: white;
+            text-align: center;
+            border: 1px solid #f1f1f1;
+            min-height: 40px;
+        }
+        
+        .time-label {
+            padding: 10px;
+            background-color: #f5f5f5;
+            text-align: right;
+            font-weight: bold;
+        }
+        
+        .booked {
+            background-color: #ffe8cc;
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .booked::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(
+                45deg,
+                rgba(255, 149, 0, 0.1),
+                rgba(255, 149, 0, 0.1) 10px,
+                rgba(255, 149, 0, 0.2) 10px,
+                rgba(255, 149, 0, 0.2) 20px
+            );
+        }
+        
+        .confirmed {
+            background-color: #d4f8d4;
+        }
+        
+        .confirmed::after {
+            background: repeating-linear-gradient(
+                45deg,
+                rgba(52, 199, 89, 0.1),
+                rgba(52, 199, 89, 0.1) 10px,
+                rgba(52, 199, 89, 0.2) 10px,
+                rgba(52, 199, 89, 0.2) 20px
+            );
+        }
+        
+        .canceled {
+            background-color: #ffd4d4;
+        }
+        
+        .canceled::after {
+            background: repeating-linear-gradient(
+                45deg,
+                rgba(255, 59, 48, 0.1),
+                rgba(255, 59, 48, 0.1) 10px,
+                rgba(255, 59, 48, 0.2) 10px,
+                rgba(255, 59, 48, 0.2) 20px
+            );
+        }
+        
+        @media (max-width: 768px) {
+            .time-slots {
+                grid-template-columns: 60px repeat(7, 1fr);
+                font-size: 0.8rem;
+            }
+            
+            .time-slot, .time-label, .time-header, .day-header {
+                padding: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="loading-message">Verifying shop access...</div>
+    
+    <div id="shop-content" class="shop-container hidden">
+        <div class="dashboard-header">
+            <h1>Reservations<span id="shop-name-header"></span></h1>
+            <button onclick="window.shopAuth.logout()" class="logout-btn">Logout</button>
+        </div>
+        
+        <div id="approval-banner" class="approval-banner hidden">
+            <div class="approval-message">Your shop is pending approval. Some features may be limited until your shop is approved.</div>
+        </div>
+        
+        <nav class="shop-nav">
+            <ul>
+                <li><a href="shophome.html">Dashboard</a></li>
+                <li><a href="shop-profile.html">Shop Profile</a></li>
+                <li><a href="#" class="active">Reservations</a></li>
+                <li><a href="shop-schedule.html">Schedule</a></li>
+            </ul>
+        </nav>
+        
+        <div id="reservation-message" class="message hidden"></div>
+        
+        <div class="tab-buttons">
+            <button id="tab-list" class="tab-btn active" onclick="switchTab('list')">List View</button>
+            <button id="tab-calendar" class="tab-btn" onclick="switchTab('calendar')">Calendar View</button>
+        </div>
+        
+        <!-- List View Tab -->
+        <div id="list-info" class="tab-content active">
+            <div class="card">
+                <div class="date-nav">
+                    <div class="date-selector">
+                        <button onclick="changeDate(-1)">◀</button>
+                        <div id="current-date" class="current-date">Today</div>
+                        <button onclick="changeDate(1)">▶</button>
+                        <input type="date" id="date-picker" class="date-picker" onchange="pickDate(this.value)">
+                    </div>
+                    
+                    <button class="primary-btn" onclick="refreshReservations()">Refresh</button>
+                </div>
+                
+                <div class="reservation-status-filter">
+                    <button class="status-filter active" data-status="all" onclick="filterByStatus('all')">All</button>
+                    <button class="status-filter" data-status="pending" onclick="filterByStatus('pending')">Pending</button>
+                    <button class="status-filter" data-status="confirmed" onclick="filterByStatus('confirmed')">Confirmed</button>
+                    <button class="status-filter" data-status="completed" onclick="filterByStatus('completed')">Completed</button>
+                    <button class="status-filter" data-status="canceled" onclick="filterByStatus('canceled')">Canceled</button>
+                </div>
+                
+                <div id="reservations-list">
+                    <!-- Reservations will be loaded here -->
+                    <div class="loading-reservations">Loading reservations...</div>
+                </div>
+                
+                <div id="empty-state" class="empty-state hidden">
+                    <div class="empty-state-icon">📅</div>
+                    <h3>No Reservations Found</h3>
+                    <p>There are no reservations for the selected date and filters.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Calendar View Tab -->
+        <div id="calendar-info" class="tab-content">
+            <div class="card">
+                <div class="date-nav">
+                    <div class="date-selector">
+                        <button onclick="changeWeek(-1)">◀</button>
+                        <div id="current-week" class="current-date">This Week</div>
+                        <button onclick="changeWeek(1)">▶</button>
+                    </div>
+                </div>
+                
+                <div id="calendar-view" class="calendar-view">
+                    <!-- Calendar will be generated here -->
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Reservation Details Modal -->
+    <div id="reservation-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Reservation Details</h2>
+                <button class="close-btn" onclick="closeModal('reservation-modal')">&times;</button>
+            </div>
+            
+            <div id="reservation-details-content">
+                <!-- Reservation details will be loaded here -->
+            </div>
+            
+            <div class="modal-buttons" id="reservation-actions">
+                <!-- Action buttons will be added here based on reservation status -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- Cancel Reservation Modal -->
+    <div id="cancel-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Cancel Reservation</h2>
+                <button class="close-btn" onclick="closeModal('cancel-modal')">&times;</button>
+            </div>
+            
+            <p>Are you sure you want to cancel this reservation? This action cannot be undone.</p>
+            
+            <div class="form-group">
+                <label for="cancellation-reason">Reason for Cancellation (Optional)</label>
+                <textarea id="cancellation-reason" placeholder="Provide a reason for the cancellation..."></textarea>
+            </div>
+            
+            <input type="hidden" id="cancel-reservation-id">
+            
+            <div class="modal-buttons">
+                <button class="primary-btn" onclick="closeModal('cancel-modal')">Back</button>
+                <button class="danger-btn" onclick="confirmCancelReservation()">Cancel Reservation</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let selectedDate = new Date();
+        let currentFilter = 'all';
+        let allReservations = [];
+        let weekStart = new Date();
+        
+        // Store shop ID after verification
+        let shopId = null;
+        
+        // Verify shop owner access
+        window.shopAuth.verifyShopOwner(function(user, shopData) {
+            // Store shop ID
+            shopId = shopData.id;
+            
+            // Load reservations for today
+            loadReservations(selectedDate);
+            
+            // Generate calendar view
+            setWeekStart();
+            generateCalendarView();
+        });
+        
+        // Switch between tabs
+        function switchTab(tabId) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show the selected tab
+            document.getElementById(tabId + '-info').classList.add('active');
+            
+            // Add active class to the clicked button
+            document.getElementById('tab-' + tabId).classList.add('active');
+            
+            // If switching to calendar view, refresh it
+            if (tabId === 'calendar') {
+                generateCalendarView();
+            }
+        }
+        
+        // Format date for display
+        function formatDate(date) {
+            const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+            return date.toLocaleDateString('en-US', options);
+        }
+        
+        // Format time for display
+        function formatTime(timestamp) {
+            if (!timestamp) return 'N/A';
+            
+            const date = new Date(timestamp);
+            return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+        }
+        
+        // Filter reservations by status
+        function filterByStatus(status) {
+            currentFilter = status;
+            
+            // Update active status in filter buttons
+            document.querySelectorAll('.status-filter').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`.status-filter[data-status="${status}"]`).classList.add('active');
+            
+            // Filter and display reservations
+            displayReservations(allReservations);
+        }
+        
+        // Change displayed date
+        function changeDate(offset) {
+            selectedDate.setDate(selectedDate.getDate() + offset);
+            document.getElementById('current-date').textContent = formatDate(selectedDate);
+            document.getElementById('date-picker').valueAsDate = selectedDate;
+            loadReservations(selectedDate);
+        }
+        
+        // Pick a specific date
+        function pickDate(dateString) {
+            selectedDate = new Date(dateString);
+            document.getElementById('current-date').textContent = formatDate(selectedDate);
+            loadReservations(selectedDate);
+        }
+        
+        // Refresh reservations
+        function refreshReservations() {
+            loadReservations(selectedDate);
+            showMessage('Reservations refreshed', 'success');
+        }
+        
+        // Load reservations for a specific date
+        function loadReservations(date) {
+            if (!shopId) {
+                console.error('Shop ID not available');
+                return;
+            }
+            
+            // Set date range for the selected day (midnight to midnight)
+            const startOfDay = new Date(date);
+            startOfDay.setHours(0, 0, 0, 0);
+            
+            const endOfDay = new Date(date);
+            endOfDay.setHours(23, 59, 59, 999);
+            
+            // Update displayed date
+            document.getElementById('current-date').textContent = formatDate(date);
+            document.getElementById('date-picker').valueAsDate = date;
+            
+            // Show loading state
+            document.getElementById('reservations-list').innerHTML = '<div class="loading-reservations">Loading reservations...</div>';
+            document.getElementById('empty-state').classList.add('hidden');
+            
+            // Query Firestore for reservations
+            window.shopAuth.db.collection('Reservations')
+                .where('shopId', '==', shopId)
+                .where('reservationTime', '>=', startOfDay)
+                .where('reservationTime', '<=', endOfDay)
+                .orderBy('reservationTime')
+                .get()
+                .then((querySnapshot) => {
+                    allReservations = [];
+                    
+                    querySnapshot.forEach((doc) => {
+                        const reservation = doc.data();
+                        reservation.id = doc.id;
+                        allReservations.push(reservation);
+                    });
+                    
+                    // Display filtered reservations
+                    displayReservations(allReservations);
+                })
+                .catch((error) => {
+                    console.error('Error fetching reservations:', error);
+                    document.getElementById('reservations-list').innerHTML = `
+                        <div class="error-message">
+                            Error loading reservations: ${error.message}
+                        </div>
+                    `;
+                });
+        }
+        
+        // Display reservations after filtering
+        function displayReservations(reservations) {
+            const reservationsList = document.getElementById('reservations-list');
+            reservationsList.innerHTML = '';
+            
+            // Filter by status if not 'all'
+            let filteredReservations = reservations;
+            if (currentFilter !== 'all') {
+                filteredReservations = reservations.filter(r => r.status === currentFilter);
+            }
+            
+            // Show empty state if no reservations
+            if (filteredReservations.length === 0) {
+                document.getElementById('empty-state').classList.remove('hidden');
+                return;
+            }
+            
+            document.getElementById('empty-state').classList.add('hidden');
+            
+            // Create reservation items
+            filteredReservations.forEach((reservation) => {
+                const reservationItem = document.createElement('div');
+                reservationItem.className = 'reservation-item';
+                
+                // Format reservation time
+                const reservationTime = reservation.reservationTime ? new Date(reservation.reservationTime.seconds * 1000) : new Date();
+                const formattedTime = reservationTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+                
+                // Determine status label and class
+                let statusLabel = 'Unknown';
+                let statusClass = '';
+                
+                switch (reservation.status) {
+                    case 'pending':
+                        statusLabel = 'Pending';
+                        statusClass = 'status-pending';
+                        break;
+                    case 'confirmed':
+                        statusLabel = 'Confirmed';
+                        statusClass = 'status-approved';
+                        break;
+                    case 'completed':
+                        statusLabel = 'Completed';
+                        statusClass = 'status-approved';
+                        break;
+                    case 'canceled':
+                        statusLabel = 'Canceled';
+                        statusClass = 'status-rejected';
+                        break;
+                }
+                
+                reservationItem.innerHTML = `
+                    <div class="reservation-header">
+                        <div class="reservation-title">Table ${reservation.tableNumber || 'N/A'} - ${formattedTime}</div>
+                        <span class="status-label ${statusClass}">${statusLabel}</span>
+                    </div>
+                    <div class="reservation-details">
+                        <div class="detail-item">
+                            <div class="detail-label">Customer</div>
+                            <div>${reservation.customerName || 'N/A'}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Party Size</div>
+                            <div>${reservation.partySize || 'N/A'}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Duration</div>
+                            <div>${reservation.duration || 'N/A'} hour(s)</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Contact</div>
+                            <div>${reservation.customerPhone || 'N/A'}</div>
+                        </div>
+                    </div>
+                    <div class="reservation-actions">
+                        <button class="primary-btn" onclick="viewReservation('${reservation.id}')">View Details</button>
+                    </div>
+                `;
+                
+                reservationsList.appendChild(reservationItem);
+            });
+        }
+        
+        // View reservation details
+        function viewReservation(reservationId) {
+            const reservation = allReservations.find(r => r.id === reservationId);
+            if (!reservation) return;
+            
+            const detailsContent = document.getElementById('reservation-details-content');
+            const actionsContainer = document.getElementById('reservation-actions');
+            
+            // Format reservation time
+            const reservationTime = reservation.reservationTime ? new Date(reservation.reservationTime.seconds * 1000) : new Date();
+            const formattedDate = reservationTime.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+            const formattedTime = reservationTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+            
+            // Determine status label and class
+            let statusLabel = 'Unknown';
+            let statusClass = '';
+            
+            switch (reservation.status) {
+                case 'pending':
+                    statusLabel = 'Pending';
+                    statusClass = 'status-pending';
+                    break;
+                case 'confirmed':
+                    statusLabel = 'Confirmed';
+                    statusClass = 'status-approved';
+                    break;
+                case 'completed':
+                    statusLabel = 'Completed';
+                    statusClass = 'status-approved';
+                    break;
+                case 'canceled':
+                    statusLabel = 'Canceled';
+                    statusClass = 'status-rejected';
+                    break;
+            }
+            
+            detailsContent.innerHTML = `
+                <div class="reservation-header">
+                    <h3>Reservation #${reservation.id.slice(-6)}</h3>
+                    <span class="status-label ${statusClass}">${statusLabel}</span>
+                </div>
+                
+                <div class="reservation-details" style="margin-top: 20px;">
+                    <div class="detail-item">
+                        <div class="detail-label">Date</div>
+                        <div>${formattedDate}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Time</div>
+                        <div>${formattedTime}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Table</div>
+                        <div>${reservation.tableNumber || 'N/A'}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Duration</div>
+                        <div>${reservation.duration || 'N/A'} hour(s)</div>
+                    </div>
+                </div>
+                
+                <h4 style="margin-top: 20px;">Customer Information</h4>
+                <div class="reservation-details">
+                    <div class="detail-item">
+                        <div class="detail-label">Name</div>
+                        <div>${reservation.customerName || 'N/A'}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Phone</div>
+                        <div>${reservation.customerPhone || 'N/A'}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Email</div>
+                        <div>${reservation.customerEmail || 'N/A'}</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Party Size</div>
+                        <div>${reservation.partySize || 'N/A'} people</div>
+                    </div>
+                </div>
+            `;
+            
+            // Add notes if available
+            if (reservation.notes) {
+                detailsContent.innerHTML += `
+                    <div class="notes-container">
+                        <div class="notes-label">Customer Notes:</div>
+                        <div>${reservation.notes}</div>
+                    </div>
+                `;
+            }
+            
+            // Add shop notes if available
+            if (reservation.shopNotes) {
+                detailsContent.innerHTML += `
+                    <div class="notes-container" style="background-color: #e9f5ff;">
+                        <div class="notes-label">Shop Notes:</div>
+                        <div>${reservation.shopNotes}</div>
+                    </div>
+                `;
+            }
+            
+            // Add cancellation info if canceled
+            if (reservation.status === 'canceled' && reservation.cancellationReason) {
+                detailsContent.innerHTML += `
+                    <div class="notes-container" style="background-color: #ffd4d4;">
+                        <div class="notes-label">Cancellation Reason:</div>
+                        <div>${reservation.cancellationReason}</div>
+                    </div>
+                `;
+            }
+            
+            // Set action buttons based on status
+            actionsContainer.innerHTML = '';
+            
+            if (reservation.status === 'pending') {
+                actionsContainer.innerHTML = `
+                    <button class="primary-btn" onclick="confirmReservation('${reservation.id}')">Confirm</button>
+                    <button class="danger-btn" onclick="showCancelModal('${reservation.id}')">Cancel</button>
+                `;
+            } else if (reservation.status === 'confirmed') {
+                actionsContainer.innerHTML = `
+                    <button class="success-btn" onclick="completeReservation('${reservation.id}')">Mark Completed</button>
+                    <button class="danger-btn" onclick="showCancelModal('${reservation.id}')">Cancel</button>
+                `;
+            }
+            
+            // Always add close button
+            actionsContainer.innerHTML += `
+                <button class="primary-btn" onclick="closeModal('reservation-modal')">Close</button>
+            `;
+            
+            // Show modal
+            document.getElementById('reservation-modal').style.display = 'block';
+        }
+        
+        // Confirm a reservation
+        function confirmReservation(reservationId) {
+            window.shopAuth.db.collection('Reservations').doc(reservationId).update({
+                status: 'confirmed',
+                confirmedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                confirmedBy: window.shopAuth.auth.currentUser.email || window.shopAuth.auth.currentUser.uid,
+            })
+            .then(() => {
+                showMessage('Reservation confirmed successfully!', 'success');
+                closeModal('reservation-modal');
+                loadReservations(selectedDate);
+            })
+            .catch((error) => {
+                console.error('Error confirming reservation:', error);
+                showMessage('Error confirming reservation: ' + error.message, 'error');
+            });
+        }
+        
+        // Complete a reservation
+        function completeReservation(reservationId) {
+            window.shopAuth.db.collection('Reservations').doc(reservationId).update({
+                status: 'completed',
+                completedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                completedBy: window.shopAuth.auth.currentUser.email || window.shopAuth.auth.currentUser.uid,
+            })
+            .then(() => {
+                showMessage('Reservation marked as completed!', 'success');
+                closeModal('reservation-modal');
+                loadReservations(selectedDate);
+            })
+            .catch((error) => {
+                console.error('Error completing reservation:', error);
+                showMessage('Error completing reservation: ' + error.message, 'error');
+            });
+        }
+        
+        // Show cancel modal
+        function showCancelModal(reservationId) {
+            document.getElementById('cancel-reservation-id').value = reservationId;
+            document.getElementById('cancellation-reason').value = '';
+            closeModal('reservation-modal');
+            document.getElementById('cancel-modal').style.display = 'block';
+        }
+        
+        // Confirm reservation cancellation
+        function confirmCancelReservation() {
+            const reservationId = document.getElementById('cancel-reservation-id').value;
+            const reason = document.getElementById('cancellation-reason').value;
+            
+            window.shopAuth.db.collection('Reservations').doc(reservationId).update({
+                status: 'canceled',
+                canceledAt: firebase.firestore.FieldValue.serverTimestamp(),
+                canceledBy: window.shopAuth.auth.currentUser.email || window.shopAuth.auth.currentUser.uid,
+                cancellationReason: reason,
+            })
+            .then(() => {
+                showMessage('Reservation canceled!', 'success');
+                closeModal('cancel-modal');
+                loadReservations(selectedDate);
+            })
+            .catch((error) => {
+                console.error('Error canceling reservation:', error);
+                showMessage('Error canceling reservation: ' + error.message, 'error');
+            });
+        }
+        
+        // Close a modal
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+        
+        // Show message
+        function showMessage(message, type) {
+            const messageElement = document.getElementById('reservation-message');
+            messageElement.textContent = message;
+            messageElement.className = type === 'error' ? 'message error-message' : 'message success-message';
+            messageElement.classList.remove('hidden');
+            
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                messageElement.classList.add('hidden');
+            }, 5000);
+        }
+        
+        // Calendar view functions
+        
+        // Set week start to current week
+        function setWeekStart(offset = 0) {
+            // Get today's date
+            const today = new Date();
+            
+            // Calculate the first day of the current week (Sunday)
+            weekStart = new Date(today);
+            weekStart.setDate(today.getDate() - today.getDay() + (offset * 7));
+            weekStart.setHours(0, 0, 0, 0);
+            
+            // Update the current week display
+            const weekEnd = new Date(weekStart);
+            weekEnd.setDate(weekStart.getDate() + 6);
+            
+            const formattedStart = weekStart.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            const formattedEnd = weekEnd.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            
+            document.getElementById('current-week').textContent = `${formattedStart} - ${formattedEnd}`;
+        }
+        
+        // Change week
+        function changeWeek(offset) {
+            setWeekStart(offset);
+            generateCalendarView();
+        }
+        
+        // Generate calendar view
+        function generateCalendarView() {
+            if (!shopId) {
+                console.error('Shop ID not available');
+                return;
+            }
+            
+            const calendarView = document.getElementById('calendar-view');
+            calendarView.innerHTML = '<div class="loading-reservations">Loading calendar...</div>';
+            
+            // Create day headers for the week
+            const days = [];
+            for (let i = 0; i < 7; i++) {
+                const day = new Date(weekStart);
+                day.setDate(weekStart.getDate() + i);
+                days.push(day);
+            }
+            
+            // Generate time slots (10 AM to 10 PM)
+            const timeSlots = [];
+            for (let hour = 10; hour <= 22; hour++) {
+                timeSlots.push(hour);
+            }
+            
+            // Create the calendar grid
+            let calendarHtml = '<div class="time-slots">';
+            
+            // Top-left empty cell
+            calendarHtml += '<div class="time-header"></div>';
+            
+            // Day headers
+            days.forEach(day => {
+                const formattedDay = day.toLocaleDateString('en-US', { weekday: 'short', month: 'numeric', day: 'numeric' });
+                calendarHtml += `<div class="day-header">${formattedDay}</div>`;
+            });
+            
+            // Time slots
+            timeSlots.forEach(hour => {
+                const formattedHour = hour > 12 ? (hour - 12) + ' PM' : hour + ' AM';
+                
+                // Time label
+                calendarHtml += `<div class="time-label">${formattedHour}</div>`;
+                
+                // Day slots
+                days.forEach(day => {
+                    const slotDate = new Date(day);
+                    slotDate.setHours(hour, 0, 0, 0);
+                    
+                    // Create a unique ID for this slot
+                    const slotId = `slot-${day.toISOString().split('T')[0]}-${hour}`;
+                    
+                    calendarHtml += `<div id="${slotId}" class="time-slot" data-date="${slotDate.toISOString()}"></div>`;
+                });
+            });
+            
+            calendarHtml += '</div>';
+            calendarView.innerHTML = calendarHtml;
+            
+            // Load reservations for the entire week
+            loadWeekReservations();
+        }
+        
+        // Load reservations for the entire week
+        function loadWeekReservations() {
+            if (!shopId) {
+                console.error('Shop ID not available');
+                return;
+            }
+            
+            // Calculate week end (7 days after week start)
+            const weekEnd = new Date(weekStart);
+            weekEnd.setDate(weekStart.getDate() + 7);
+            weekEnd.setHours(23, 59, 59, 999);
+            
+            // Query Firestore for reservations
+            window.shopAuth.db.collection('Reservations')
+                .where('shopId', '==', shopId)
+                .where('reservationTime', '>=', weekStart)
+                .where('reservationTime', '<=', weekEnd)
+                .get()
+                .then((querySnapshot) => {
+                    const weekReservations = [];
+                    
+                    querySnapshot.forEach((doc) => {
+                        const reservation = doc.data();
+                        reservation.id = doc.id;
+                        weekReservations.push(reservation);
+                    });
+                    
+                    // Populate the calendar with reservations
+                    populateCalendar(weekReservations);
+                })
+                .catch((error) => {
+                    console.error('Error fetching week reservations:', error);
+                });
+        }
+        
+        // Populate calendar with reservations
+        function populateCalendar(reservations) {
+            // Clear all slots first
+            document.querySelectorAll('.time-slot').forEach(slot => {
+                slot.innerHTML = '';
+                slot.className = 'time-slot';
+                slot.onclick = null;
+            });
+            
+            // Group reservations by date and time
+            const reservationsBySlot = {};
+            
+            reservations.forEach(reservation => {
+                if (!reservation.reservationTime) return;
+                
+                const reservationDate = new Date(reservation.reservationTime.seconds * 1000);
+                const day = reservationDate.toISOString().split('T')[0];
+                const hour = reservationDate.getHours();
+                
+                const slotKey = `slot-${day}-${hour}`;
+                
+                if (!reservationsBySlot[slotKey]) {
+                    reservationsBySlot[slotKey] = [];
+                }
+                
+                reservationsBySlot[slotKey].push(reservation);
+            });
+            
+            // Add reservations to slots
+            for (const [slotKey, slotReservations] of Object.entries(reservationsBySlot)) {
+                const slotElement = document.getElementById(slotKey);
+                if (!slotElement) continue;
+                
+                // Count reservations by status
+                const counts = {
+                    pending: 0,
+                    confirmed: 0,
+                    completed: 0,
+                    canceled: 0
+                };
+                
+                slotReservations.forEach(reservation => {
+                    if (reservation.status in counts) {
+                        counts[reservation.status]++;
+                    }
+                });
+                
+                // Determine slot appearance based on reservation status
+                let slotClass = 'time-slot';
+                
+                if (counts.confirmed > 0 || counts.completed > 0) {
+                    slotClass += ' booked confirmed';
+                } else if (counts.pending > 0) {
+                    slotClass += ' booked';
+                } else if (counts.canceled > 0) {
+                    slotClass += ' booked canceled';
+                }
+                
+                slotElement.className = slotClass;
+                
+                // Create reservation summary
+                const totalActive = counts.pending + counts.confirmed + counts.completed;
+                
+                if (totalActive > 0) {
+                    slotElement.innerHTML = `
+                        <div>${totalActive} reservation${totalActive > 1 ? 's' : ''}</div>
+                    `;
+                    
+                    // Make slot clickable to view reservations
+                    slotElement.onclick = () => viewSlotReservations(slotReservations);
+                }
+            }
+        }
+        
+        // View reservations for a specific time slot
+        function viewSlotReservations(reservations) {
+            if (reservations.length === 0) return;
+            
+            // If only one reservation, show details
+            if (reservations.length === 1) {
+                viewReservation(reservations[0].id);
+                return;
+            }
+            
+            // For multiple reservations, switch to list view and filter by date/hour
+            const firstReservation = reservations[0];
+            const reservationDate = new Date(firstReservation.reservationTime.seconds * 1000);
+            
+            // Switch to list view
+            switchTab('list');
+            
+            // Set the date picker to this date
+            selectedDate = new Date(reservationDate);
+            selectedDate.setHours(0, 0, 0, 0);
+            
+            // Load reservations for this date
+            loadReservations(selectedDate);
+        }
+    </script>
+</body>
+</html>
