@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,7 +20,7 @@
             border-radius: 8px 8px 0 0;
             overflow: hidden;
         }
-        
+
         .tab-btn {
             background-color: transparent;
             border: none;
@@ -28,12 +29,12 @@
             font-weight: bold;
             transition: background-color 0.3s;
         }
-        
+
         .tab-btn.active {
             background-color: #fff;
             border-bottom: 3px solid #4a6ee0;
         }
-        
+
         .tab-content {
             display: none;
             padding: 20px;
@@ -41,11 +42,11 @@
             border-radius: 0 0 8px 8px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
-        
+
         .tab-content.active {
             display: block;
         }
-        
+
         /* Date navigation */
         .date-nav {
             display: flex;
@@ -53,12 +54,12 @@
             align-items: center;
             margin-bottom: 20px;
         }
-        
+
         .date-selector {
             display: flex;
             align-items: center;
         }
-        
+
         .date-selector button {
             background: none;
             border: none;
@@ -66,17 +67,17 @@
             cursor: pointer;
             padding: 0 10px;
         }
-        
+
         .current-date {
             font-size: 1.2rem;
             font-weight: bold;
             margin: 0 15px;
         }
-        
+
         .date-picker {
             margin-left: 15px;
         }
-        
+
         /* Reservation status filter */
         .reservation-status-filter {
             display: flex;
@@ -84,7 +85,7 @@
             margin-bottom: 20px;
             flex-wrap: wrap;
         }
-        
+
         .status-filter {
             padding: 5px 15px;
             border-radius: 20px;
@@ -92,13 +93,13 @@
             background: #f5f5f5;
             cursor: pointer;
         }
-        
+
         .status-filter.active {
             background: #4a6ee0;
             color: white;
             border-color: #4a6ee0;
         }
-        
+
         /* Reservation cards */
         .reservation-item {
             border: 1px solid #ddd;
@@ -107,42 +108,42 @@
             margin-bottom: 15px;
             background-color: white;
         }
-        
+
         .reservation-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 10px;
         }
-        
+
         .reservation-title {
             font-weight: bold;
             font-size: 1.1rem;
         }
-        
+
         .reservation-details {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
             gap: 15px;
             margin-bottom: 15px;
         }
-        
+
         .detail-item {
             font-size: 0.9rem;
         }
-        
+
         .detail-label {
             color: #666;
             margin-bottom: 3px;
             font-weight: 500;
         }
-        
+
         .reservation-actions {
             display: flex;
             justify-content: flex-end;
             gap: 10px;
         }
-        
+
         /* Status badges */
         .status-label {
             display: inline-block;
@@ -152,27 +153,27 @@
             text-transform: uppercase;
             font-size: 0.8rem;
         }
-        
+
         .status-pending {
             background-color: #ffe8cc;
             color: #ff9500;
         }
-        
+
         .status-confirmed {
             background-color: #d4f8d4;
             color: #34c759;
         }
-        
+
         .status-completed {
             background-color: #d4f8d4;
             color: #34c759;
         }
-        
+
         .status-canceled {
             background-color: #ffd4d4;
             color: #ff3b30;
         }
-        
+
         /* Empty states */
         .empty-state {
             text-align: center;
@@ -181,13 +182,13 @@
             border-radius: 8px;
             margin-top: 20px;
         }
-        
+
         .empty-state-icon {
             font-size: 3rem;
             margin-bottom: 15px;
             color: #aaa;
         }
-        
+
         /* Modal styles */
         .modal {
             display: none;
@@ -200,7 +201,7 @@
             background-color: rgba(0, 0, 0, 0.5);
             overflow: auto;
         }
-        
+
         .modal-content {
             background-color: #fefefe;
             margin: 5% auto;
@@ -210,25 +211,25 @@
             max-width: 90%;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-        
+
         .modal-header {
             margin-bottom: 15px;
         }
-        
+
         .modal-header h2 {
             margin: 0;
         }
-        
+
         .form-group {
             margin-bottom: 15px;
         }
-        
+
         .form-group label {
             display: block;
             font-weight: bold;
             margin-bottom: 5px;
         }
-        
+
         .form-group input,
         .form-group select,
         .form-group textarea {
@@ -237,28 +238,28 @@
             border: 1px solid #ddd;
             border-radius: 4px;
         }
-        
+
         .form-group textarea {
             height: 80px;
             resize: vertical;
         }
-        
+
         .form-row {
             display: flex;
             gap: 15px;
         }
-        
+
         .form-row .form-group {
             flex: 1;
         }
-        
+
         .modal-buttons {
             display: flex;
             justify-content: flex-end;
             gap: 10px;
             margin-top: 20px;
         }
-        
+
         /* Notes container */
         .notes-container {
             margin-top: 10px;
@@ -266,26 +267,28 @@
             background-color: #f9f9f9;
             border-radius: 4px;
         }
-        
+
         .notes-label {
             font-weight: bold;
             margin-bottom: 5px;
         }
     </style>
 </head>
+
 <body>
     <div id="loading-message">Verifying shop access...</div>
-    
+
     <div id="shop-content" class="shop-container hidden">
         <div class="dashboard-header">
             <h1>Reservations<span id="shop-name-header"></span></h1>
             <button onclick="window.shopAuth.logout()" class="logout-btn">Logout</button>
         </div>
-        
+
         <div id="approval-banner" class="approval-banner hidden">
-            <div class="approval-message">Your shop is pending approval. Some features may be limited until your shop is approved.</div>
+            <div class="approval-message">Your shop is pending approval. Some features may be limited until your shop is
+                approved.</div>
         </div>
-        
+
         <nav class="shop-nav">
             <ul>
                 <li><a href="shophome.html">Dashboard</a></li>
@@ -296,21 +299,21 @@
                 <li><a href="shop-events.html">Events</a></li>
             </ul>
         </nav>
-        
+
         <div id="reservation-message" class="message hidden"></div>
-        
+
         <div class="tab-buttons">
             <button id="tab-list" class="tab-btn active" onclick="switchTab('list')">List View</button>
             <button id="tab-calendar" class="tab-btn" onclick="switchTab('calendar')">Calendar View</button>
         </div>
-        
+
         <!-- List View Tab -->
         <div id="list-content" class="tab-content active">
             <div class="card-header">
                 <h2>Reservations</h2>
                 <button onclick="showAddReservationModal()" class="success-btn">+ Add Reservation</button>
             </div>
-            
+
             <div class="date-nav">
                 <div class="date-selector">
                     <button onclick="changeDate(-1)">◀</button>
@@ -318,59 +321,63 @@
                     <button onclick="changeDate(1)">▶</button>
                     <input type="date" id="date-picker" class="date-picker" onchange="pickDate(this.value)">
                 </div>
-                
+
                 <button class="primary-btn" onclick="refreshReservations()">Refresh</button>
             </div>
-            
+
             <div class="reservation-status-filter">
                 <button class="status-filter active" data-status="all" onclick="filterByStatus('all')">All</button>
                 <button class="status-filter" data-status="pending" onclick="filterByStatus('pending')">Pending</button>
-                <button class="status-filter" data-status="confirmed" onclick="filterByStatus('confirmed')">Confirmed</button>
-                <button class="status-filter" data-status="completed" onclick="filterByStatus('completed')">Completed</button>
-                <button class="status-filter" data-status="canceled" onclick="filterByStatus('canceled')">Canceled</button>
+                <button class="status-filter" data-status="confirmed"
+                    onclick="filterByStatus('confirmed')">Confirmed</button>
+                <button class="status-filter" data-status="completed"
+                    onclick="filterByStatus('completed')">Completed</button>
+                <button class="status-filter" data-status="canceled"
+                    onclick="filterByStatus('canceled')">Canceled</button>
             </div>
-            
+
             <div id="reservations-list">
                 <!-- Reservations will be loaded here -->
                 <div class="loading-reservations">Loading reservations...</div>
             </div>
-            
+
             <div id="empty-state" class="empty-state hidden">
                 <div class="empty-state-icon">📅</div>
                 <h3>No Reservations Found</h3>
-                <p>There are no reservations for the selected date and filters. Click the "Add Reservation" button to create one.</p>
+                <p>There are no reservations for the selected date and filters. Click the "Add Reservation" button to
+                    create one.</p>
             </div>
         </div>
-        
+
         <!-- Calendar View Tab -->
         <div id="calendar-content" class="tab-content">
             <!-- Calendar view content will be added here -->
             <p>Calendar view implementation is in progress. Please use the List View tab to manage reservations.</p>
         </div>
     </div>
-    
+
     <!-- Add/Edit Reservation Modal -->
     <div id="reservation-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h2 id="reservation-modal-title">Add New Reservation</h2>
             </div>
-            
+
             <form id="reservation-form">
                 <input type="hidden" id="edit-reservation-id">
-                
+
                 <div class="form-row">
                     <div class="form-group">
                         <label for="reservation-date">Date*</label>
                         <input type="date" id="reservation-date" required>
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="reservation-time">Time*</label>
                         <input type="time" id="reservation-time" required>
                     </div>
                 </div>
-                
+
                 <div class="form-row">
                     <div class="form-group">
                         <label for="reservation-table">Table*</label>
@@ -379,7 +386,7 @@
                             <!-- Tables will be loaded here -->
                         </select>
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="reservation-duration">Duration (Hours)*</label>
                         <select id="reservation-duration" required>
@@ -392,7 +399,7 @@
                         </select>
                     </div>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="reservation-status">Status*</label>
                     <select id="reservation-status" required>
@@ -402,45 +409,46 @@
                         <option value="canceled">Canceled</option>
                     </select>
                 </div>
-                
+
                 <h3>Customer Information</h3>
-                
+
                 <div class="form-row">
                     <div class="form-group">
                         <label for="customer-name">Customer Name*</label>
                         <input type="text" id="customer-name" required>
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="customer-phone">Phone Number*</label>
                         <input type="tel" id="customer-phone" required>
                     </div>
                 </div>
-                
+
                 <div class="form-row">
                     <div class="form-group">
                         <label for="customer-email">Email</label>
                         <input type="email" id="customer-email">
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="party-size">Party Size*</label>
                         <input type="number" id="party-size" min="1" max="20" required>
                     </div>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="customer-notes">Customer Notes</label>
-                    <textarea id="customer-notes" placeholder="Any special requests or notes from the customer"></textarea>
+                    <textarea id="customer-notes"
+                        placeholder="Any special requests or notes from the customer"></textarea>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="shop-notes">Shop Notes</label>
                     <textarea id="shop-notes" placeholder="Internal notes for shop staff only"></textarea>
                 </div>
-                
+
                 <div id="reservation-error" class="error-message hidden"></div>
-                
+
                 <div class="modal-buttons">
                     <button type="button" class="primary-btn" onclick="closeModal('reservation-modal')">Cancel</button>
                     <button type="submit" class="success-btn">Save Reservation</button>
@@ -448,40 +456,40 @@
             </form>
         </div>
     </div>
-    
+
     <!-- View Reservation Modal -->
     <div id="view-reservation-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h2>Reservation Details</h2>
             </div>
-            
+
             <div id="reservation-details-content">
                 <!-- Reservation details will be loaded here -->
             </div>
-            
+
             <div class="modal-buttons" id="reservation-actions">
                 <!-- Action buttons will be added here based on reservation status -->
             </div>
         </div>
     </div>
-    
+
     <!-- Cancel Reservation Modal -->
     <div id="cancel-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h2>Cancel Reservation</h2>
             </div>
-            
+
             <p>Are you sure you want to cancel this reservation? This action cannot be undone.</p>
-            
+
             <div class="form-group">
                 <label for="cancellation-reason">Reason for Cancellation (Optional)</label>
                 <textarea id="cancellation-reason" placeholder="Provide a reason for the cancellation..."></textarea>
             </div>
-            
+
             <input type="hidden" id="cancel-reservation-id">
-            
+
             <div class="modal-buttons">
                 <button class="primary-btn" onclick="closeModal('cancel-modal')">Back</button>
                 <button class="danger-btn" onclick="confirmCancelReservation()">Cancel Reservation</button>
@@ -495,68 +503,68 @@
         let currentFilter = 'all';
         let allReservations = [];
         let shopTables = [];
-        
+
         // Store shop ID after verification
         let shopId = null;
-        
+
         // Verify shop owner access
-        window.shopAuth.verifyShopOwner(function(user, shopData) {
+        window.shopAuth.verifyShopOwner(function (user, shopData) {
             // Store shop ID
             shopId = shopData.id;
-            
+
             // Load reservations for today
             loadReservations(selectedDate);
-            
+
             // Load tables for this shop
             loadTables();
         });
-        
+
         // Switch between tabs
         function switchTab(tabId) {
             // Hide all tab contents
             document.querySelectorAll('.tab-content').forEach(tab => {
                 tab.classList.remove('active');
             });
-            
+
             // Remove active class from all buttons
             document.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
-            
+
             // Show the selected tab
             document.getElementById(tabId + '-content').classList.add('active');
-            
+
             // Add active class to the clicked button
             document.getElementById('tab-' + tabId).classList.add('active');
         }
-        
+
         // Format date for display
         function formatDate(date) {
             const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
             return date.toLocaleDateString('en-US', options);
         }
-        
+
         // Format time for display
         function formatTime(time) {
             if (!time) return 'N/A';
-            
+
             return time;
         }
-        
+
         // Filter reservations by status
         function filterByStatus(status) {
             currentFilter = status;
-            
+
             // Update active status in filter buttons
             document.querySelectorAll('.status-filter').forEach(btn => {
                 btn.classList.remove('active');
             });
             document.querySelector(`.status-filter[data-status="${status}"]`).classList.add('active');
-            
+
             // Filter and display reservations
             displayReservations(allReservations);
         }
-        
+
         // Change displayed date
         function changeDate(offset) {
             selectedDate.setDate(selectedDate.getDate() + offset);
@@ -564,45 +572,46 @@
             document.getElementById('date-picker').valueAsDate = selectedDate;
             loadReservations(selectedDate);
         }
-        
+
         // Pick a specific date
         function pickDate(dateString) {
             selectedDate = new Date(dateString);
             document.getElementById('current-date').textContent = formatDate(selectedDate);
             loadReservations(selectedDate);
         }
-        
+
         // Refresh reservations
         function refreshReservations() {
             loadReservations(selectedDate);
             showMessage('Reservations refreshed', 'success');
         }
-        
+
         // Load tables for this shop
         function loadTables() {
             if (!shopId) {
                 console.error('Shop ID not available');
                 return;
             }
-            
+
+            // Query ALL tables for this shop, without filtering for active status
             window.shopAuth.db.collection('Tables')
                 .where('shopId', '==', shopId)
-                .where('isActive', '==', true)
                 .orderBy('tableNumber')
                 .get()
                 .then((querySnapshot) => {
                     shopTables = [];
-                    
+                    console.log("Found tables:", querySnapshot.size);
+
                     querySnapshot.forEach((doc) => {
                         const table = doc.data();
                         table.id = doc.id;
                         shopTables.push(table);
                     });
-                    
+
                     // Populate table select in add reservation modal
                     const tableSelect = document.getElementById('reservation-table');
                     tableSelect.innerHTML = '<option value="">Select a table</option>';
-                    
+
                     shopTables.forEach(table => {
                         const option = document.createElement('option');
                         option.value = table.id;
@@ -614,29 +623,56 @@
                     console.error('Error loading tables:', error);
                 });
         }
-        
+        // Separate function to populate the table select dropdown
+        function populateTableSelect() {
+            // Populate table select in add reservation modal
+            const tableSelect = document.getElementById('reservation-table');
+            if (!tableSelect) {
+                console.error('Table select element not found');
+                return;
+            }
+
+            tableSelect.innerHTML = '<option value="">Select a table</option>';
+
+            // Only include active tables in the dropdown
+            const activeTables = shopTables.filter(table => table.isActive !== false);
+
+            if (activeTables.length === 0) {
+                tableSelect.innerHTML += '<option value="" disabled>No active tables available</option>';
+                console.warn('No active tables available for reservations');
+            } else {
+                activeTables.forEach(table => {
+                    const option = document.createElement('option');
+                    option.value = table.id;
+                    option.textContent = `Table ${table.tableNumber} (Capacity: ${table.capacity})`;
+                    tableSelect.appendChild(option);
+                });
+                console.log('Populated dropdown with', activeTables.length, 'tables');
+            }
+        }
+
         // Load reservations for a specific date
         function loadReservations(date) {
             if (!shopId) {
                 console.error('Shop ID not available');
                 return;
             }
-            
+
             // Set date range for the selected day (midnight to midnight)
             const startOfDay = new Date(date);
             startOfDay.setHours(0, 0, 0, 0);
-            
+
             const endOfDay = new Date(date);
             endOfDay.setHours(23, 59, 59, 999);
-            
+
             // Update displayed date
             document.getElementById('current-date').textContent = formatDate(date);
             document.getElementById('date-picker').valueAsDate = date;
-            
+
             // Show loading state
             document.getElementById('reservations-list').innerHTML = '<div class="loading-reservations">Loading reservations...</div>';
             document.getElementById('empty-state').classList.add('hidden');
-            
+
             // Query Firestore for reservations
             window.shopAuth.db.collection('Reservations')
                 .where('shopId', '==', shopId)
@@ -646,13 +682,13 @@
                 .get()
                 .then((querySnapshot) => {
                     allReservations = [];
-                    
+
                     querySnapshot.forEach((doc) => {
                         const reservation = doc.data();
                         reservation.id = doc.id;
                         allReservations.push(reservation);
                     });
-                    
+
                     // Display filtered reservations
                     displayReservations(allReservations);
                 })
@@ -665,35 +701,35 @@
                     `;
                 });
         }
-        
+
         // Display reservations after filtering
         function displayReservations(reservations) {
             const reservationsList = document.getElementById('reservations-list');
             reservationsList.innerHTML = '';
-            
+
             // Filter by status if not 'all'
             let filteredReservations = reservations;
             if (currentFilter !== 'all') {
                 filteredReservations = reservations.filter(r => r.status === currentFilter);
             }
-            
+
             // Show empty state if no reservations
             if (filteredReservations.length === 0) {
                 document.getElementById('empty-state').classList.remove('hidden');
                 return;
             }
-            
+
             document.getElementById('empty-state').classList.add('hidden');
-            
+
             // Create reservation items
             filteredReservations.forEach((reservation) => {
                 const reservationItem = document.createElement('div');
                 reservationItem.className = 'reservation-item';
-                
+
                 // Format reservation time
                 const reservationTime = reservation.reservationTime ? new Date(reservation.reservationTime.seconds * 1000) : new Date();
                 const formattedTime = reservationTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-                
+
                 // Find table details
                 let tableDetails = 'Unknown Table';
                 if (reservation.tableId) {
@@ -704,11 +740,11 @@
                         tableDetails = `Table ${reservation.tableNumber || 'Unknown'}`;
                     }
                 }
-                
+
                 // Determine status label and class
                 let statusLabel = 'Unknown';
                 let statusClass = '';
-                
+
                 switch (reservation.status) {
                     case 'pending':
                         statusLabel = 'Pending';
@@ -727,7 +763,7 @@
                         statusClass = 'status-canceled';
                         break;
                 }
-                
+
                 reservationItem.innerHTML = `
                     <div class="reservation-header">
                         <div class="reservation-title">${tableDetails} - ${formattedTime}</div>
@@ -757,45 +793,45 @@
                         ${reservation.status !== 'canceled' ? `<button class="danger-btn" onclick="showCancelModal('${reservation.id}')">Cancel</button>` : ''}
                     </div>
                 `;
-                
+
                 reservationsList.appendChild(reservationItem);
             });
         }
-        
+
         // Show add reservation modal
         function showAddReservationModal() {
             // Reset form
             document.getElementById('reservation-form').reset();
             document.getElementById('edit-reservation-id').value = '';
             document.getElementById('reservation-modal-title').textContent = 'Add New Reservation';
-            
+
             // Set default date to today
             document.getElementById('reservation-date').value = selectedDate.toISOString().split('T')[0];
-            
+
             // Set default time to current hour
             const now = new Date();
             const hours = String(now.getHours()).padStart(2, '0');
             const minutes = '00'; // Default to start of hour
             document.getElementById('reservation-time').value = `${hours}:${minutes}`;
-            
+
             // Show modal
             document.getElementById('reservation-modal').style.display = 'block';
         }
-        
+
         // Edit reservation
         function editReservation(reservationId) {
             const reservation = allReservations.find(r => r.id === reservationId);
             if (!reservation) return;
-            
+
             // Set form values
             document.getElementById('edit-reservation-id').value = reservationId;
             document.getElementById('reservation-modal-title').textContent = 'Edit Reservation';
-            
+
             // Format date and time
             const reservationTime = reservation.reservationTime ? new Date(reservation.reservationTime.seconds * 1000) : new Date();
             const formattedDate = reservationTime.toISOString().split('T')[0];
             const formattedTime = reservationTime.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }).replace(' ', '');
-            
+
             document.getElementById('reservation-date').value = formattedDate;
             document.getElementById('reservation-time').value = formattedTime;
             document.getElementById('reservation-table').value = reservation.tableId || '';
@@ -807,24 +843,24 @@
             document.getElementById('party-size').value = reservation.partySize || '1';
             document.getElementById('customer-notes').value = reservation.notes || '';
             document.getElementById('shop-notes').value = reservation.shopNotes || '';
-            
+
             // Show modal
             document.getElementById('reservation-modal').style.display = 'block';
         }
-        
+
         // View reservation details
         function viewReservation(reservationId) {
             const reservation = allReservations.find(r => r.id === reservationId);
             if (!reservation) return;
-            
+
             const detailsContent = document.getElementById('reservation-details-content');
             const actionsContainer = document.getElementById('reservation-actions');
-            
+
             // Format reservation time
             const reservationTime = reservation.reservationTime ? new Date(reservation.reservationTime.seconds * 1000) : new Date();
             const formattedDate = reservationTime.toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
             const formattedTime = reservationTime.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
-            
+
             // Find table details
             let tableDetails = 'Unknown Table';
             if (reservation.tableId) {
@@ -835,11 +871,11 @@
                     tableDetails = `Table ${reservation.tableNumber || 'Unknown'}`;
                 }
             }
-            
+
             // Determine status label and class
             let statusLabel = 'Unknown';
             let statusClass = '';
-            
+
             switch (reservation.status) {
                 case 'pending':
                     statusLabel = 'Pending';
@@ -858,7 +894,7 @@
                     statusClass = 'status-canceled';
                     break;
             }
-            
+
             detailsContent.innerHTML = `
                 <div class="reservation-header">
                     <h3>Reservation #${reservation.id.slice(-6)}</h3>
@@ -904,7 +940,7 @@
                     </div>
                 </div>
             `;
-            
+
             // Add notes if available
             if (reservation.notes) {
                 detailsContent.innerHTML += `
@@ -914,7 +950,7 @@
                     </div>
                 `;
             }
-            
+
             // Add shop notes if available
             if (reservation.shopNotes) {
                 detailsContent.innerHTML += `
@@ -924,7 +960,7 @@
                     </div>
                 `;
             }
-            
+
             // Add cancellation info if canceled
             if (reservation.status === 'canceled' && reservation.cancellationReason) {
                 detailsContent.innerHTML += `
@@ -934,10 +970,10 @@
                     </div>
                 `;
             }
-            
+
             // Set action buttons based on status
             actionsContainer.innerHTML = '';
-            
+
             if (reservation.status === 'pending') {
                 actionsContainer.innerHTML = `
                     <button class="primary-btn" onclick="confirmReservation('${reservation.id}')">Confirm</button>
@@ -949,17 +985,17 @@
                     <button class="danger-btn" onclick="showCancelModal('${reservation.id}')">Cancel</button>
                 `;
             }
-            
+
             // Always add edit and close buttons
             actionsContainer.innerHTML += `
                 <button class="edit-btn" onclick="closeModal('view-reservation-modal'); editReservation('${reservation.id}')">Edit</button>
                 <button class="primary-btn" onclick="closeModal('view-reservation-modal')">Close</button>
             `;
-            
+
             // Show modal
             document.getElementById('view-reservation-modal').style.display = 'block';
         }
-        
+
         // Confirm a reservation
         function confirmReservation(reservationId) {
             window.shopAuth.db.collection('Reservations').doc(reservationId).update({
@@ -967,17 +1003,17 @@
                 confirmedAt: firebase.firestore.FieldValue.serverTimestamp(),
                 confirmedBy: window.shopAuth.auth.currentUser.email || window.shopAuth.auth.currentUser.uid,
             })
-            .then(() => {
-                showMessage('Reservation confirmed successfully!', 'success');
-                closeModal('view-reservation-modal');
-                loadReservations(selectedDate);
-            })
-            .catch((error) => {
-                console.error('Error confirming reservation:', error);
-                showMessage('Error confirming reservation: ' + error.message, 'error');
-            });
+                .then(() => {
+                    showMessage('Reservation confirmed successfully!', 'success');
+                    closeModal('view-reservation-modal');
+                    loadReservations(selectedDate);
+                })
+                .catch((error) => {
+                    console.error('Error confirming reservation:', error);
+                    showMessage('Error confirming reservation: ' + error.message, 'error');
+                });
         }
-        
+
         // Complete a reservation
         function completeReservation(reservationId) {
             window.shopAuth.db.collection('Reservations').doc(reservationId).update({
@@ -985,17 +1021,17 @@
                 completedAt: firebase.firestore.FieldValue.serverTimestamp(),
                 completedBy: window.shopAuth.auth.currentUser.email || window.shopAuth.auth.currentUser.uid,
             })
-            .then(() => {
-                showMessage('Reservation marked as completed!', 'success');
-                closeModal('view-reservation-modal');
-                loadReservations(selectedDate);
-            })
-            .catch((error) => {
-                console.error('Error completing reservation:', error);
-                showMessage('Error completing reservation: ' + error.message, 'error');
-            });
+                .then(() => {
+                    showMessage('Reservation marked as completed!', 'success');
+                    closeModal('view-reservation-modal');
+                    loadReservations(selectedDate);
+                })
+                .catch((error) => {
+                    console.error('Error completing reservation:', error);
+                    showMessage('Error completing reservation: ' + error.message, 'error');
+                });
         }
-        
+
         // Show cancel modal
         function showCancelModal(reservationId) {
             document.getElementById('cancel-reservation-id').value = reservationId;
@@ -1003,38 +1039,38 @@
             closeModal('view-reservation-modal');
             document.getElementById('cancel-modal').style.display = 'block';
         }
-        
+
         // Confirm reservation cancellation
         function confirmCancelReservation() {
             const reservationId = document.getElementById('cancel-reservation-id').value;
             const reason = document.getElementById('cancellation-reason').value;
-            
+
             window.shopAuth.db.collection('Reservations').doc(reservationId).update({
                 status: 'canceled',
                 canceledAt: firebase.firestore.FieldValue.serverTimestamp(),
                 canceledBy: window.shopAuth.auth.currentUser.email || window.shopAuth.auth.currentUser.uid,
                 cancellationReason: reason,
             })
-            .then(() => {
-                showMessage('Reservation canceled!', 'success');
-                closeModal('cancel-modal');
-                loadReservations(selectedDate);
-            })
-            .catch((error) => {
-                console.error('Error canceling reservation:', error);
-                showMessage('Error canceling reservation: ' + error.message, 'error');
-            });
+                .then(() => {
+                    showMessage('Reservation canceled!', 'success');
+                    closeModal('cancel-modal');
+                    loadReservations(selectedDate);
+                })
+                .catch((error) => {
+                    console.error('Error canceling reservation:', error);
+                    showMessage('Error canceling reservation: ' + error.message, 'error');
+                });
         }
-        
+
         // Save reservation form
-        document.getElementById('reservation-form').addEventListener('submit', function(e) {
+        document.getElementById('reservation-form').addEventListener('submit', function (e) {
             e.preventDefault();
-            
+
             if (!shopId) {
                 console.error('Shop ID not available');
                 return;
             }
-            
+
             // Get form values
             const reservationId = document.getElementById('edit-reservation-id').value;
             const reservationDate = document.getElementById('reservation-date').value;
@@ -1048,24 +1084,24 @@
             const partySize = document.getElementById('party-size').value;
             const customerNotes = document.getElementById('customer-notes').value;
             const shopNotes = document.getElementById('shop-notes').value;
-            
+
             // Validate table selection
             if (!tableId) {
                 document.getElementById('reservation-error').textContent = 'Please select a table';
                 document.getElementById('reservation-error').classList.remove('hidden');
                 return;
             }
-            
+
             // Create datetime for reservation
             const reservationDateTime = new Date(reservationDate + 'T' + reservationTime);
-            
+
             // Get table details
             const table = shopTables.find(t => t.id === tableId);
             let tableNumber = 'Unknown';
             if (table) {
                 tableNumber = table.tableNumber;
             }
-            
+
             // Create reservation data
             const reservationData = {
                 shopId: shopId,
@@ -1082,7 +1118,7 @@
                 shopNotes: shopNotes || null,
                 updatedAt: firebase.firestore.FieldValue.serverTimestamp()
             };
-            
+
             // Add timestamps based on status
             if (status === 'confirmed') {
                 reservationData.confirmedAt = firebase.firestore.FieldValue.serverTimestamp();
@@ -1094,22 +1130,22 @@
                 reservationData.canceledAt = firebase.firestore.FieldValue.serverTimestamp();
                 reservationData.canceledBy = window.shopAuth.auth.currentUser.email || window.shopAuth.auth.currentUser.uid;
             }
-            
+
             // If new reservation, add createdAt field
             if (!reservationId) {
                 reservationData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
                 reservationData.createdBy = 'shop';
             }
-            
+
             // Save to Firestore
-            const reservationRef = reservationId ? 
-                window.shopAuth.db.collection('Reservations').doc(reservationId) : 
+            const reservationRef = reservationId ?
+                window.shopAuth.db.collection('Reservations').doc(reservationId) :
                 window.shopAuth.db.collection('Reservations').doc();
-            
-            const savePromise = reservationId ? 
-                reservationRef.update(reservationData) : 
+
+            const savePromise = reservationId ?
+                reservationRef.update(reservationData) :
                 reservationRef.set(reservationData);
-            
+
             savePromise
                 .then(() => {
                     showMessage(reservationId ? 'Reservation updated successfully!' : 'Reservation added successfully!', 'success');
@@ -1122,27 +1158,27 @@
                     document.getElementById('reservation-error').classList.remove('hidden');
                 });
         });
-        
+
         // Close a modal
         function closeModal(modalId) {
             document.getElementById(modalId).style.display = 'none';
         }
-        
+
         // Show message
         function showMessage(message, type) {
             const messageElement = document.getElementById('reservation-message');
             messageElement.textContent = message;
             messageElement.className = type === 'error' ? 'message error-message' : 'message success-message';
             messageElement.classList.remove('hidden');
-            
+
             // Hide message after 5 seconds
             setTimeout(() => {
                 messageElement.classList.add('hidden');
             }, 5000);
         }
-        
+
         // Close modals when clicking outside
-        window.onclick = function(event) {
+        window.onclick = function (event) {
             const modals = document.getElementsByClassName('modal');
             for (let i = 0; i < modals.length; i++) {
                 if (event.target == modals[i]) {
@@ -1150,6 +1186,11 @@
                 }
             }
         }
+
+
     </script>
+
+
 </body>
+
 </html>

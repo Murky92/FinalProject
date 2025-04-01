@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,19 +14,21 @@
     <!-- Load shop authentication script -->
     <script src="shop-auth.js"></script>
 </head>
+
 <body>
     <div id="loading-message">Verifying shop access...</div>
-    
+
     <div id="shop-content" class="shop-container hidden">
         <div class="dashboard-header">
             <h1>Manage Tables<span id="shop-name-header"></span></h1>
             <button onclick="window.shopAuth.logout()" class="logout-btn">Logout</button>
         </div>
-        
+
         <div id="approval-banner" class="approval-banner hidden">
-            <div class="approval-message">Your shop is pending approval. Some features may be limited until your shop is approved.</div>
+            <div class="approval-message">Your shop is pending approval. Some features may be limited until your shop is
+                approved.</div>
         </div>
-        
+
         <nav class="shop-nav">
             <ul>
                 <li><a href="shophome.html">Dashboard</a></li>
@@ -33,32 +36,32 @@
                 <li><a href="shop-reservations.html">Reservations</a></li>
                 <li><a href="#" class="active">Tables</a></li>
                 <li><a href="shop-schedule.html">Schedule</a></li>
-                
+
             </ul>
         </nav>
-        
+
         <div id="tables-message" class="message hidden"></div>
-        
+
         <div class="card">
             <div class="card-header">
                 <h2>Your Tables</h2>
                 <button onclick="showAddTableModal()" class="success-btn">+ Add New Table</button>
             </div>
-            
+
             <p class="mb-2">Manage the tables available for customers to book in your shop.</p>
-            
+
             <div id="tables-list" class="tables-grid">
                 <!-- Tables will be loaded here -->
                 <div class="loading-tables">Loading tables...</div>
             </div>
-            
+
             <div id="empty-tables" class="empty-state hidden">
                 <div class="empty-state-icon">🪑</div>
                 <h3>No Tables Found</h3>
                 <p>You haven't added any tables yet. Click the "Add New Table" button to get started.</p>
             </div>
         </div>
-        
+
         <div class="card mt-2">
             <h2>Table Information</h2>
             <p>Customers will be able to browse and reserve your tables based on:</p>
@@ -71,29 +74,29 @@
             <p>Tables that are set as inactive won't appear in search results or be available for booking.</p>
         </div>
     </div>
-    
+
     <!-- Add/Edit Table Modal -->
     <div id="table-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h2 id="table-modal-title">Add New Table</h2>
             </div>
-            
+
             <form id="table-form">
                 <input type="hidden" id="edit-table-id">
-                
+
                 <div class="form-row">
                     <div class="form-group">
                         <label for="table-number">Table Number*</label>
                         <input type="number" id="table-number" min="1" required>
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="table-capacity">Capacity (People)*</label>
                         <input type="number" id="table-capacity" min="1" max="99" required>
                     </div>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="table-type">Table Type*</label>
                     <select id="table-type" required>
@@ -110,18 +113,20 @@
                         <option value="other">Other</option>
                     </select>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="specialized-game">Specialized Game Setup <small>(Optional)</small></label>
-                    <input type="text" id="specialized-game" placeholder="e.g., Warhammer 40K, Pokémon TCG, Blood Bowl, X-Wing">
+                    <input type="text" id="specialized-game"
+                        placeholder="e.g., Warhammer 40K, Pokémon TCG, Blood Bowl, X-Wing">
                     <small>If this table is set up for a specific game, enter it here</small>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="table-description">Description</label>
-                    <textarea id="table-description" placeholder="Describe this table and what makes it special..."></textarea>
+                    <textarea id="table-description"
+                        placeholder="Describe this table and what makes it special..."></textarea>
                 </div>
-                
+
                 <div class="form-group">
                     <label>Table Features</label>
                     <div class="checkbox-group">
@@ -137,28 +142,28 @@
                         <div><input type="checkbox" id="feature-dice"> House Dice/Accessories</div>
                     </div>
                 </div>
-                
+
                 <div class="form-row">
                     <div class="form-group">
                         <label for="hourly-rate">Hourly Rate (£) <small>(Optional)</small></label>
                         <input type="number" id="hourly-rate" min="0" step="0.01" placeholder="0.00">
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="min-booking">Minimum Booking (Hours)</label>
                         <input type="number" id="min-booking" min="1" max="8" value="1">
                     </div>
                 </div>
-                
+
                 <div class="form-group">
                     <label class="checkbox-label">
                         <input type="checkbox" id="table-active" checked>
                         Table is active and available for booking
                     </label>
                 </div>
-                
+
                 <div id="table-error" class="error-message hidden"></div>
-                
+
                 <div class="form-buttons">
                     <button type="button" class="primary-btn" onclick="closeModal('table-modal')">Cancel</button>
                     <button type="submit" class="success-btn">Save Table</button>
@@ -166,29 +171,30 @@
             </form>
         </div>
     </div>
-    
+
     <!-- Delete Table Confirmation Modal -->
     <div id="delete-table-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h2>Delete Table</h2>
             </div>
-            
+
             <p>Are you sure you want to delete this table? All future reservations for this table will be canceled.</p>
-            
+
             <div id="delete-table-warning" class="warning-message hidden">
-                <p><strong>Warning:</strong> This table has upcoming reservations. Deleting it will cancel these bookings.</p>
+                <p><strong>Warning:</strong> This table has upcoming reservations. Deleting it will cancel these
+                    bookings.</p>
             </div>
-            
+
             <input type="hidden" id="delete-table-id">
-            
+
             <div class="modal-buttons">
                 <button class="primary-btn" onclick="closeModal('delete-table-modal')">Cancel</button>
                 <button class="danger-btn" onclick="confirmDeleteTable()">Delete Table</button>
             </div>
         </div>
     </div>
-    
+
 
     <style>
         .tables-grid {
@@ -196,7 +202,7 @@
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 20px;
         }
-        
+
         .table-card {
             border: 1px solid #ddd;
             border-radius: 8px;
@@ -204,13 +210,13 @@
             background-color: white;
             position: relative;
         }
-        
+
         .table-card.inactive {
             opacity: 0.6;
             background-color: #f9f9f9;
             border: 1px dashed #ccc;
         }
-        
+
         .inactive-badge {
             position: absolute;
             top: 10px;
@@ -222,61 +228,61 @@
             font-size: 0.8rem;
             font-weight: bold;
         }
-        
+
         .table-header {
             display: flex;
             justify-content: space-between;
             margin-bottom: 10px;
         }
-        
+
         .table-title {
             font-weight: bold;
             font-size: 1.2rem;
         }
-        
+
         .table-details {
             margin-bottom: 15px;
         }
-        
+
         .table-detail {
             margin-bottom: 5px;
             display: flex;
         }
-        
+
         .detail-label {
             width: 80px;
             color: #666;
             font-weight: bold;
         }
-        
+
         .features-list {
             display: flex;
             flex-wrap: wrap;
             gap: 5px;
             margin-top: 10px;
         }
-        
+
         .feature-tag {
             background-color: #f0f0f0;
             padding: 3px 8px;
             border-radius: 12px;
             font-size: 0.8rem;
         }
-        
+
         .table-actions {
             display: flex;
             justify-content: flex-end;
             gap: 10px;
             margin-top: 15px;
         }
-        
+
         .checkbox-group {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
             gap: 10px;
             margin-top: 5px;
         }
-        
+
         .warning-message {
             background-color: #ffe8cc;
             color: #ff9500;
@@ -313,27 +319,27 @@
         // Store shop ID after verification
         let shopId = null;
         let allTables = [];
-        
+
         // Verify shop owner access
-        window.shopAuth.verifyShopOwner(function(user, shopData) {
+        window.shopAuth.verifyShopOwner(function (user, shopData) {
             // Store shop ID
             shopId = shopData.id;
-            
+
             // Load tables
             loadTables();
         });
-        
+
         // Load tables for this shop
         function loadTables() {
             if (!shopId) {
                 console.error('Shop ID not available');
                 return;
             }
-            
+
             // Show loading state
             document.getElementById('tables-list').innerHTML = '<div class="loading-tables">Loading tables...</div>';
             document.getElementById('empty-tables').classList.add('hidden');
-            
+
             // Query Firestore for tables
             window.shopAuth.db.collection('Tables')
                 .where('shopId', '==', shopId)
@@ -341,13 +347,13 @@
                 .get()
                 .then((querySnapshot) => {
                     allTables = [];
-                    
+
                     querySnapshot.forEach((doc) => {
                         const table = doc.data();
                         table.id = doc.id;
                         allTables.push(table);
                     });
-                    
+
                     // Display tables
                     displayTables(allTables);
                 })
@@ -360,25 +366,25 @@
                     `;
                 });
         }
-        
+
         // Display tables
         function displayTables(tables) {
             const tablesList = document.getElementById('tables-list');
             tablesList.innerHTML = '';
-            
+
             // Show empty state if no tables
             if (tables.length === 0) {
                 document.getElementById('empty-tables').classList.remove('hidden');
                 return;
             }
-            
+
             document.getElementById('empty-tables').classList.add('hidden');
-            
+
             // Create table cards
             tables.forEach((table) => {
                 const tableCard = document.createElement('div');
                 tableCard.className = table.isActive ? 'table-card' : 'table-card inactive';
-                
+
                 // Create features list
                 let featuresHtml = '';
                 if (table.features && table.features.length > 0) {
@@ -388,7 +394,7 @@
                     });
                     featuresHtml += '</div>';
                 }
-                
+
                 // Format table type for display
                 let tableTypeDisplay = 'Standard';
                 switch (table.tableType) {
@@ -414,7 +420,7 @@
                         tableTypeDisplay = 'Other';
                         break;
                 }
-                
+
                 tableCard.innerHTML = `
                     ${table.isActive ? '' : '<div class="inactive-badge">Inactive</div>'}
                     <div class="table-header">
@@ -454,11 +460,11 @@
                         <button class="action-btn delete-btn" onclick="openDeleteConfirmation('${table.id}')">Delete</button>
                     </div>
                 `;
-                
+
                 tablesList.appendChild(tableCard);
             });
         }
-        
+
         // Show Add Table Modal
         function showAddTableModal() {
             document.getElementById('table-modal-title').textContent = 'Add New Table';
@@ -468,12 +474,12 @@
             document.getElementById('table-active').checked = true;
             document.getElementById('table-modal').style.display = 'block';
         }
-        
+
         // Edit Table
         function editTable(tableId) {
             const table = allTables.find(t => t.id === tableId);
             if (!table) return;
-            
+
             document.getElementById('table-modal-title').textContent = 'Edit Table';
             document.getElementById('edit-table-id').value = tableId;
             document.getElementById('table-number').value = table.tableNumber || '';
@@ -484,7 +490,7 @@
             document.getElementById('min-booking').value = table.minBookingHours || 1;
             document.getElementById('table-active').checked = table.isActive !== false;
             document.getElementById('specialized-game').value = table.specializedGame || '';
-            
+
             // Set features
             if (table.features) {
                 document.getElementById('feature-terrain').checked = table.features.includes('Terrain/Scenery');
@@ -510,29 +516,29 @@
                 document.getElementById('feature-mats').checked = false;
                 document.getElementById('feature-dice').checked = false;
             }
-            
+
             document.getElementById('table-error').classList.add('hidden');
             document.getElementById('table-modal').style.display = 'block';
         }
-        
+
         // Open Delete Confirmation Modal
         function openDeleteConfirmation(tableId) {
             console.log("Delete button clicked for table ID:", tableId);
             document.getElementById('delete-table-id').value = tableId;
             document.getElementById('delete-table-warning').classList.add('hidden');
-            
+
             // Check for existing reservations
             checkForReservations(tableId);
-            
+
             // Show the modal
             const modal = document.getElementById('delete-table-modal');
             modal.style.display = 'block';
         }
-        
+
         // Check for existing reservations
         function checkForReservations(tableId) {
             const now = new Date();
-            
+
             window.shopAuth.db.collection('Reservations')
                 .where('tableId', '==', tableId)
                 .where('reservationTime', '>=', now)
@@ -547,18 +553,18 @@
                     console.error('Error checking reservations:', error);
                 });
         }
-        
+
         // Confirm Delete Table
         function confirmDeleteTable() {
             const tableId = document.getElementById('delete-table-id').value;
             console.log("Confirming delete for table ID:", tableId);
-            
+
             window.shopAuth.db.collection('Tables').doc(tableId).delete()
                 .then(() => {
                     showMessage('Table deleted successfully!', 'success');
                     closeModal('delete-table-modal');
                     loadTables();
-                    
+
                     // Cancel future reservations for this table
                     cancelFutureReservations(tableId);
                 })
@@ -567,12 +573,12 @@
                     showMessage('Error deleting table: ' + error.message, 'error');
                 });
         }
-        
+
         // Cancel future reservations
         function cancelFutureReservations(tableId) {
             const now = new Date();
             const cancelReason = 'Table has been removed by the shop.';
-            
+
             window.shopAuth.db.collection('Reservations')
                 .where('tableId', '==', tableId)
                 .where('reservationTime', '>=', now)
@@ -580,7 +586,7 @@
                 .get()
                 .then((querySnapshot) => {
                     const batch = window.shopAuth.db.batch();
-                    
+
                     querySnapshot.forEach((doc) => {
                         batch.update(doc.ref, {
                             status: 'canceled',
@@ -589,7 +595,7 @@
                             cancellationReason: cancelReason
                         });
                     });
-                    
+
                     return batch.commit();
                 })
                 .then(() => {
@@ -599,14 +605,14 @@
                     console.error('Error canceling reservations:', error);
                 });
         }
-        
+
         // Handle Table Form Submit
-        document.getElementById('table-form').addEventListener('submit', function(e) {
+        document.getElementById('table-form').addEventListener('submit', function (e) {
             e.preventDefault();
-            
+
             const tableId = document.getElementById('edit-table-id').value;
             const isNewTable = tableId === '';
-            
+
             // Get form values
             const tableNumber = parseInt(document.getElementById('table-number').value);
             const capacity = parseInt(document.getElementById('table-capacity').value);
@@ -616,14 +622,14 @@
             const hourlyRate = parseFloat(document.getElementById('hourly-rate').value) || null;
             const minBookingHours = parseInt(document.getElementById('min-booking').value) || 1;
             const isActive = document.getElementById('table-active').checked;
-            
+
             // Validate table number uniqueness for new tables
             if (isNewTable && allTables.some(t => t.tableNumber === tableNumber)) {
                 document.getElementById('table-error').textContent = 'A table with this number already exists.';
                 document.getElementById('table-error').classList.remove('hidden');
                 return;
             }
-            
+
             // Gather features
             const features = [];
             if (document.getElementById('feature-terrain').checked) features.push('Terrain/Scenery');
@@ -636,7 +642,7 @@
             if (document.getElementById('feature-measuring').checked) features.push('Measuring Tools Available');
             if (document.getElementById('feature-mats').checked) features.push('Game Mats Available');
             if (document.getElementById('feature-dice').checked) features.push('House Dice/Accessories');
-            
+
             // Prepare table data
             const tableData = {
                 shopId: shopId,
@@ -651,17 +657,17 @@
                 isActive: isActive,
                 updatedAt: firebase.firestore.FieldValue.serverTimestamp()
             };
-            
+
             // If new table, add creation timestamp
             if (isNewTable) {
                 tableData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
             }
-            
+
             // Save to Firestore
-            const tableRef = isNewTable 
-                ? window.shopAuth.db.collection('Tables').doc() 
+            const tableRef = isNewTable
+                ? window.shopAuth.db.collection('Tables').doc()
                 : window.shopAuth.db.collection('Tables').doc(tableId);
-            
+
             tableRef.set(tableData, { merge: !isNewTable })
                 .then(() => {
                     showMessage(`Table ${isNewTable ? 'added' : 'updated'} successfully!`, 'success');
@@ -674,24 +680,68 @@
                     document.getElementById('table-error').classList.remove('hidden');
                 });
         });
-        
+
         // Close a modal
         function closeModal(modalId) {
             document.getElementById(modalId).style.display = 'none';
         }
-        
+
         // Show message
         function showMessage(message, type) {
             const messageElement = document.getElementById('tables-message');
             messageElement.textContent = message;
             messageElement.className = type === 'error' ? 'message error-message' : 'message success-message';
             messageElement.classList.remove('hidden');
-            
+
             // Hide message after 5 seconds
             setTimeout(() => {
                 messageElement.classList.add('hidden');
             }, 5000);
         }
+
+
+        function checkTables() {
+            console.log("Your shop ID:", shopId);
+
+            // Query all tables regardless of shop ID
+            window.shopAuth.db.collection('Tables').get()
+                .then((snapshot) => {
+                    console.log("Total tables in database:", snapshot.size);
+
+                    // Check each table's shop ID
+                    snapshot.forEach(doc => {
+                        const table = doc.data();
+                        console.log(`Table ${table.tableNumber || 'unknown'}: shopId = ${table.shopId}`);
+                    });
+
+                    // Fix tables with a single click
+                    const fixButton = document.createElement('button');
+                    fixButton.textContent = "Fix Tables";
+                    fixButton.className = "danger-btn";
+                    fixButton.style.marginTop = "10px";
+                    fixButton.onclick = function () {
+                        const batch = window.shopAuth.db.batch();
+
+                        snapshot.forEach(doc => {
+                            batch.update(doc.ref, {
+                                shopId: shopId,
+                                isActive: true
+                            });
+                        });
+
+                        batch.commit().then(() => {
+                            alert("All tables fixed! Reloading page...");
+                            location.reload();
+                        });
+                    };
+
+                    document.querySelector('.card-header').appendChild(fixButton);
+                });
+        }
+
+        // Run this check when the page loads
+        window.addEventListener('load', checkTables);
     </script>
 </body>
+
 </html>
