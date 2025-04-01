@@ -4,6 +4,10 @@
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="styles.css">
     <script>
         // Your web app's Firebase configuration
         var firebaseConfig = {
@@ -38,18 +42,27 @@
                 .then((userCredential) => {
                     var user = userCredential.user;
 
-                    // Check user role in Firestore
+                    // First check Users collection
                     db.collection("Users").doc(user.uid).get()
                         .then((doc) => {
-                            if (doc.exists) {
+                            if (doc.exists && doc.data().role) {
+                                // User found in Users collection
                                 var role = doc.data().role;
-                                if (role === "admin") {
-                                    window.location.href = "/adminhome";
-                                } else {
-                                    window.location.href = "/userhome";
-                                }
+                                redirectBasedOnRole(role);
                             } else {
-                                errorMessageElement.textContent = "No user role found.";
+                                // If not found in Users, check Stores collection
+                                db.collection("Stores").doc(user.uid).get()
+                                    .then((storeDoc) => {
+                                        if (storeDoc.exists && storeDoc.data().role) {
+                                            var storeRole = storeDoc.data().role;
+                                            redirectBasedOnRole(storeRole);
+                                        } else {
+                                            errorMessageElement.textContent = "No user role found.";
+                                        }
+                                    })
+                                    .catch((error) => {
+                                        errorMessageElement.textContent = "Error getting role: " + error.message;
+                                    });
                             }
                         })
                         .catch((error) => {
@@ -61,8 +74,19 @@
                 });
         }
 
+        function redirectBasedOnRole(role) {
+            if (role === "admin") {
+                window.location.href = "/adminhome";
+            } else if (role === "shop") {
+                window.location.href = "/userhome.html";
+            } else {
+                // Default case
+                window.location.href = "/userhome.html";
+            }
+        }
+
         function validateEmail(email) {
-            var re = /^[^\s@]+@[^\s@]+$/;
+            var re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             return re.test(String(email).toLowerCase());
         }
 
@@ -77,76 +101,6 @@
             });
         });
     </script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Page</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f4f4f4;
-        }
-        
-        .logo {
-            width: 500px;
-            margin-bottom: 20px;
-        }
-
-        .login-container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            width: 300px;
-            box-sizing: border-box;
-        }
-
-        .login-container input {
-            width: calc(100% - 22px);
-            padding: 10px;
-            margin: 20px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-
-        .login-container button {
-            width: 100%;
-            padding: 10px;
-            border: none;
-            border-radius: 4px;
-            color: #fff;
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-        .login-container button:hover {
-            opacity: 0.9;
-        }
-
-        .login-btn {
-            background-color: #007BFF;
-        }
-
-        .login-btn:hover {
-            background-color: #0056b3;
-        }
-
-        #signup-btn {
-            background-color: #28a745; /* Green */
-            margin-top: 10px;
-        }
-
-        #signup-btn:hover {
-            background-color: #218838;
-        }
-    </style>
 </head>
 <body>
     <img src="logo-transparent-png.png" alt="Tabletop Reserve Logo" class="logo">
@@ -157,8 +111,8 @@
             <input type="password" id="password" placeholder="Password" required>
             <button type="submit" class="login-btn">Log In</button>
         </form>
-        <p id="error-message" style="color: red;"></p>
-        <button id="signup-btn">Sign Up</button> <!-- Fixed button -->
+        <p id="error-message"></p>
+        <button id="signup-btn">Sign Up</button>
     </div>
 </body>
 </html>

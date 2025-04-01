@@ -7,72 +7,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            text-align: center;
-            padding: 20px;
-        }
-
-        .logo {
-            width: 500px;
-            margin-bottom: 30px;
-        }
-
-        .approval-container {
-            background-color: #fff;
-            padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
-            width: 100%;
-        }
-
-        h1 {
-            color: #333;
-            margin-bottom: 20px;
-        }
-
-        p {
-            color: #666;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-
-        .contact-info {
-            background-color: #f9f9f9;
-            padding: 15px;
-            border-radius: 4px;
-            margin-top: 20px;
-        }
-
-        .back-button {
-            display: inline-block;
-            background-color: #28a745;
-            color: white;
-            text-decoration: none;
-            padding: 12px 24px;
-            border-radius: 4px;
-            margin-top: 20px;
-            transition: background-color 0.3s ease;
-        }
-
-        .back-button:hover {
-            background-color: #218838;
-        }
-
-        #error-message {
-            color: red;
-            margin-top: 20px;
-        }
-    </style>
+    <link rel="stylesheet" href="styles.css">       
 </head>
 <body>
     <img src="logo-transparent-png.png" alt="Tabletop Reserve Logo" class="logo">
@@ -121,7 +56,7 @@
                             console.log("Shop pending approval");
                         } else {
                             // Redirect if shop is already approved or not found
-                            window.location.href = "/";
+                            window.location.href = "/homepage.html";
                         }
                     })
                     .catch((error) => {
