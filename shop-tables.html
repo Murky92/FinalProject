@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tables - Tabletop Reserve</title>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-storage.js"></script>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="shop-styles.css">
+    <!-- Load shop authentication script -->
+    <script src="shop-auth.js"></script>
+</head>
+<body>
+    <div id="loading-message">Verifying shop access...</div>
+    
+    <div id="shop-content" class="shop-container hidden">
+        <div class="dashboard-header">
+            <h1>Manage Tables<span id="shop-name-header"></span></h1>
+            <button onclick="window.shopAuth.logout()" class="logout-btn">Logout</button>
+        </div>
+        
+        <div id="approval-banner" class="approval-banner hidden">
+            <div class="approval-message">Your shop is pending approval. Some features may be limited until your shop is approved.</div>
+        </div>
+        
+        <nav class="shop-nav">
+            <ul>
+                <li><a href="shophome.html">Dashboard</a></li>
+                <li><a href="shop-profile.html">Shop Profile</a></li>
+                <li><a href="shop-reservations.html">Reservations</a></li>
+                <li><a href="shop-schedule.html">Schedule</a></li>
+                <li><a href="#" class="active">Tables</a></li>
+            </ul>
+        </nav>
+        
+        <div id="tables-message" class="message hidden"></div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h2>Your Tables</h2>
+                <button onclick="showAddTableModal()" class="success-btn">+ Add New Table</button>
+            </div>
+            
+            <p class="mb-2">Manage the tables available for customers to book in your shop.</p>
+            
+            <div id="tables-list" class="tables-grid">
+                <!-- Tables will be loaded here -->
+                <div class="loading-tables">Loading tables...</div>
+            </div>
+            
+            <div id="empty-tables" class="empty-state hidden">
+                <div class="empty-state-icon">🪑</div>
+                <h3>No Tables Found</h3>
+                <p>You haven't added any tables yet. Click the "Add New Table" button to get started.</p>
+            </div>
+        </div>
+        
+        <div class="card mt-2">
+            <h2>Table Information</h2>
+            <p>Customers will be able to browse and reserve your tables based on:</p>
+            <ul>
+                <li><strong>Table Number:</strong> A unique identifier for each table</li>
+                <li><strong>Capacity:</strong> Number of people that can be seated</li>
+                <li><strong>Type:</strong> Purpose or style of the table</li>
+                <li><strong>Features:</strong> Special amenities or equipment available</li>
+            </ul>
+            <p>Tables that are set as inactive won't appear in search results or be available for booking.</p>
+        </div>
+    </div>
+    
+    <!-- Add/Edit Table Modal -->
+    <div id="table-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="table-modal-title">Add New Table</h2>
+                <button class="close-btn" onclick="closeModal('table-modal')">&times;</button>
+            </div>
+            
+            <form id="table-form">
+                <input type="hidden" id="edit-table-id">
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="table-number">Table Number*</label>
+                        <input type="number" id="table-number" min="1" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="table-capacity">Capacity (People)*</label>
+                        <input type="number" id="table-capacity" min="1" max="99" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="table-type">Table Type*</label>
+                    <select id="table-type" required>
+                        <option value="standard">Standard Gaming Table</option>
+                        <option value="large">Large Gaming Table</option>
+                        <option value="rpg">RPG/D&D Table</option>
+                        <option value="miniatures">Miniatures/Wargaming Table</option>
+                        <option value="card">Card Game Table</option>
+                        <option value="private">Private Room</option>
+                        <option value="warhammer">Warhammer/40K Table</option>
+                        <option value="pokemon">Pokémon TCG Table</option>
+                        <option value="magic">Magic: The Gathering Table</option>
+                        <option value="boardgame">Board Game Table</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="specialized-game">Specialized Game Setup <small>(Optional)</small></label>
+                    <input type="text" id="specialized-game" placeholder="e.g., Warhammer 40K, Pokémon TCG, Blood Bowl, X-Wing">
+                    <small>If this table is set up for a specific game, enter it here</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="table-description">Description</label>
+                    <textarea id="table-description" placeholder="Describe this table and what makes it special..."></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label>Table Features</label>
+                    <div class="checkbox-group">
+                        <div><input type="checkbox" id="feature-terrain"> Terrain/Scenery</div>
+                        <div><input type="checkbox" id="feature-power"> Power Outlets</div>
+                        <div><input type="checkbox" id="feature-lighting"> Special Lighting</div>
+                        <div><input type="checkbox" id="feature-surface"> Premium Playing Surface</div>
+                        <div><input type="checkbox" id="feature-screens"> Screens/Digital Aids</div>
+                        <div><input type="checkbox" id="feature-comfortable"> Comfortable Seating</div>
+                        <div><input type="checkbox" id="feature-painted"> Painted Terrain/Miniatures</div>
+                        <div><input type="checkbox" id="feature-measuring"> Measuring Tools Available</div>
+                        <div><input type="checkbox" id="feature-mats"> Game Mats Available</div>
+                        <div><input type="checkbox" id="feature-dice"> House Dice/Accessories</div>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="hourly-rate">Hourly Rate (£) <small>(Optional)</small></label>
+                        <input type="number" id="hourly-rate" min="0" step="0.01" placeholder="0.00">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="min-booking">Minimum Booking (Hours)</label>
+                        <input type="number" id="min-booking" min="1" max="8" value="1">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="table-active" checked>
+                        Table is active and available for booking
+                    </label>
+                </div>
+                
+                <div id="table-error" class="error-message hidden"></div>
+                
+                <div class="form-buttons">
+                    <button type="button" class="primary-btn" onclick="closeModal('table-modal')">Cancel</button>
+                    <button type="submit" class="success-btn">Save Table</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Delete Table Confirmation Modal -->
+    <div id="delete-table-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Delete Table</h2>
+                <button class="close-btn" onclick="closeModal('delete-table-modal')">&times;</button>
+            </div>
+            
+            <p>Are you sure you want to delete this table? All future reservations for this table will be canceled.</p>
+            
+            <div id="delete-table-warning" class="warning-message hidden">
+                <p><strong>Warning:</strong> This table has upcoming reservations. Deleting it will cancel these bookings.</p>
+            </div>
+            
+            <input type="hidden" id="delete-table-id">
+            
+            <div class="modal-buttons">
+                <button class="primary-btn" onclick="closeModal('delete-table-modal')">Cancel</button>
+                <button class="danger-btn" onclick="confirmDeleteTable()">Delete Table</button>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .tables-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .table-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            background-color: white;
+            position: relative;
+        }
+        
+        .table-card.inactive {
+            opacity: 0.6;
+            background-color: #f9f9f9;
+            border: 1px dashed #ccc;
+        }
+        
+        .inactive-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #ff3b30;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .table-title {
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+        
+        .table-details {
+            margin-bottom: 15px;
+        }
+        
+        .table-detail {
+            margin-bottom: 5px;
+            display: flex;
+        }
+        
+        .detail-label {
+            width: 80px;
+            color: #666;
+            font-weight: bold;
+        }
+        
+        .features-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 10px;
+        }
+        
+        .feature-tag {
+            background-color: #f0f0f0;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+        }
+        
+        .table-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 5px;
+        }
+        
+        .warning-message {
+            background-color: #ffe8cc;
+            color: #ff9500;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+            margin-bottom: 15px;
+        }
+    </style>
+
+    <script>
+        // Store shop ID after verification
+        let shopId = null;
+        let allTables = [];
+        
+        // Verify shop owner access
+        window.shopAuth.verifyShopOwner(function(user, shopData) {
+            // Store shop ID
+            shopId = shopData.id;
+            
+            // Load tables
+            loadTables();
+        });
+        
+        // Load tables for this shop
+        function loadTables() {
+            if (!shopId) {
+                console.error('Shop ID not available');
+                return;
+            }
+            
+            // Show loading state
+            document.getElementById('tables-list').innerHTML = '<div class="loading-tables">Loading tables...</div>';
+            document.getElementById('empty-tables').classList.add('hidden');
+            
+            // Query Firestore for tables
+            window.shopAuth.db.collection('Tables')
+                .where('shopId', '==', shopId)
+                .orderBy('tableNumber')
+                .get()
+                .then((querySnapshot) => {
+                    allTables = [];
+                    
+                    querySnapshot.forEach((doc) => {
+                        const table = doc.data();
+                        table.id = doc.id;
+                        allTables.push(table);
+                    });
+                    
+                    // Display tables
+                    displayTables(allTables);
+                })
+                .catch((error) => {
+                    console.error('Error fetching tables:', error);
+                    document.getElementById('tables-list').innerHTML = `
+                        <div class="error-message">
+                            Error loading tables: ${error.message}
+                        </div>
+                    `;
+                });
+        }
+        
+        // Display tables
+        function displayTables(tables) {
+            const tablesList = document.getElementById('tables-list');
+            tablesList.innerHTML = '';
+            
+            // Show empty state if no tables
+            if (tables.length === 0) {
+                document.getElementById('empty-tables').classList.remove('hidden');
+                return;
+            }
+            
+            document.getElementById('empty-tables').classList.add('hidden');
+            
+            // Create table cards
+            tables.forEach((table) => {
+                const tableCard = document.createElement('div');
+                tableCard.className = table.isActive ? 'table-card' : 'table-card inactive';
+                
+                // Create features list
+                let featuresHtml = '';
+                if (table.features && table.features.length > 0) {
+                    featuresHtml = '<div class="features-list">';
+                    table.features.forEach(feature => {
+                        featuresHtml += `<span class="feature-tag">${feature}</span>`;
+                    });
+                    featuresHtml += '</div>';
+                }
+                
+                // Format table type for display
+                let tableTypeDisplay = 'Standard';
+                switch (table.tableType) {
+                    case 'standard':
+                        tableTypeDisplay = 'Standard Gaming Table';
+                        break;
+                    case 'large':
+                        tableTypeDisplay = 'Large Gaming Table';
+                        break;
+                    case 'rpg':
+                        tableTypeDisplay = 'RPG/D&D Table';
+                        break;
+                    case 'miniatures':
+                        tableTypeDisplay = 'Miniatures/Wargaming Table';
+                        break;
+                    case 'card':
+                        tableTypeDisplay = 'Card Game Table';
+                        break;
+                    case 'private':
+                        tableTypeDisplay = 'Private Room';
+                        break;
+                    case 'other':
+                        tableTypeDisplay = 'Other';
+                        break;
+                }
+                
+                tableCard.innerHTML = `
+                    ${table.isActive ? '' : '<div class="inactive-badge">Inactive</div>'}
+                    <div class="table-header">
+                        <div class="table-title">Table ${table.tableNumber}</div>
+                    </div>
+                    <div class="table-details">
+                        <div class="table-detail">
+                            <div class="detail-label">Capacity:</div>
+                            <div>${table.capacity} people</div>
+                        </div>
+                        <div class="table-detail">
+                            <div class="detail-label">Type:</div>
+                            <div>${tableTypeDisplay}</div>
+                        </div>
+                        ${table.specializedGame ? `
+                        <div class="table-detail">
+                            <div class="detail-label">Game:</div>
+                            <div>${table.specializedGame}</div>
+                        </div>
+                        ` : ''}
+                        ${table.hourlyRate ? `
+                        <div class="table-detail">
+                            <div class="detail-label">Rate:</div>
+                            <div>£${table.hourlyRate.toFixed(2)} / hour</div>
+                        </div>
+                        ` : ''}
+                        ${table.description ? `
+                        <div class="table-detail">
+                            <div style="margin-bottom: 5px; font-weight: bold; color: #666;">Description:</div>
+                            <div>${table.description}</div>
+                        </div>
+                        ` : ''}
+                        ${featuresHtml}
+                    </div>
+                    <div class="table-actions">
+                        <button class="action-btn edit-btn" onclick="editTable('${table.id}')">Edit</button>
+                        <button class="action-btn delete-btn" onclick="deleteTable('${table.id}')">Delete</button>
+                    </div>
+                `;
+                
+                tablesList.appendChild(tableCard);
+            });
+        }
+        
+        // Show Add Table Modal
+        function showAddTableModal() {
+            document.getElementById('table-modal-title').textContent = 'Add New Table';
+            document.getElementById('table-form').reset();
+            document.getElementById('edit-table-id').value = '';
+            document.getElementById('table-error').classList.add('hidden');
+            document.getElementById('table-active').checked = true;
+            document.getElementById('table-modal').style.display = 'block';
+        }
+        
+        // Edit Table
+        function editTable(tableId) {
+            const table = allTables.find(t => t.id === tableId);
+            if (!table) return;
+            
+            document.getElementById('table-modal-title').textContent = 'Edit Table';
+            document.getElementById('edit-table-id').value = tableId;
+            document.getElementById('table-number').value = table.tableNumber || '';
+            document.getElementById('table-capacity').value = table.capacity || '';
+            document.getElementById('table-type').value = table.tableType || 'standard';
+            document.getElementById('table-description').value = table.description || '';
+            document.getElementById('hourly-rate').value = table.hourlyRate || '';
+            document.getElementById('min-booking').value = table.minBookingHours || 1;
+            document.getElementById('table-active').checked = table.isActive !== false;
+            document.getElementById('specialized-game').value = table.specializedGame || '';
+            
+            // Set features
+            if (table.features) {
+                document.getElementById('feature-terrain').checked = table.features.includes('Terrain/Scenery');
+                document.getElementById('feature-power').checked = table.features.includes('Power Outlets');
+                document.getElementById('feature-lighting').checked = table.features.includes('Special Lighting');
+                document.getElementById('feature-surface').checked = table.features.includes('Premium Playing Surface');
+                document.getElementById('feature-screens').checked = table.features.includes('Screens/Digital Aids');
+                document.getElementById('feature-comfortable').checked = table.features.includes('Comfortable Seating');
+                document.getElementById('feature-painted').checked = table.features.includes('Painted Terrain/Miniatures');
+                document.getElementById('feature-measuring').checked = table.features.includes('Measuring Tools Available');
+                document.getElementById('feature-mats').checked = table.features.includes('Game Mats Available');
+                document.getElementById('feature-dice').checked = table.features.includes('House Dice/Accessories');
+            } else {
+                // Reset features
+                document.getElementById('feature-terrain').checked = false;
+                document.getElementById('feature-power').checked = false;
+                document.getElementById('feature-lighting').checked = false;
+                document.getElementById('feature-surface').checked = false;
+                document.getElementById('feature-screens').checked = false;
+                document.getElementById('feature-comfortable').checked = false;
+                document.getElementById('feature-painted').checked = false;
+                document.getElementById('feature-measuring').checked = false;
+                document.getElementById('feature-mats').checked = false;
+                document.getElementById('feature-dice').checked = false;
+            }
+            
+            document.getElementById('table-error').classList.add('hidden');
+            document.getElementById('table-modal').style.display = 'block';
+        }
+        
+        // Delete Table
+        function deleteTable(tableId) {
+            document.getElementById('delete-table-id').value = tableId;
+            document.getElementById('delete-table-warning').classList.add('hidden');
+            
+            // Check for existing reservations
+            checkForReservations(tableId);
+            
+            document.getElementById('delete-table-modal').style.display = 'block';
+        }
+        
+        // Check for existing reservations
+        function checkForReservations(tableId) {
+            const now = new Date();
+            
+            window.shopAuth.db.collection('Reservations')
+                .where('tableId', '==', tableId)
+                .where('reservationTime', '>=', now)
+                .where('status', 'in', ['pending', 'confirmed'])
+                .get()
+                .then((querySnapshot) => {
+                    if (!querySnapshot.empty) {
+                        document.getElementById('delete-table-warning').classList.remove('hidden');
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error checking reservations:', error);
+                });
+        }
+        
+        // Confirm Delete Table
+        function confirmDeleteTable() {
+            const tableId = document.getElementById('delete-table-id').value;
+            
+            window.shopAuth.db.collection('Tables').doc(tableId).delete()
+                .then(() => {
+                    showMessage('Table deleted successfully!', 'success');
+                    closeModal('delete-table-modal');
+                    loadTables();
+                    
+                    // Cancel future reservations for this table
+                    cancelFutureReservations(tableId);
+                })
+                .catch((error) => {
+                    console.error('Error deleting table:', error);
+                    showMessage('Error deleting table: ' + error.message, 'error');
+                });
+        }
+        
+        // Cancel future reservations
+        function cancelFutureReservations(tableId) {
+            const now = new Date();
+            const cancelReason = 'Table has been removed by the shop.';
+            
+            window.shopAuth.db.collection('Reservations')
+                .where('tableId', '==', tableId)
+                .where('reservationTime', '>=', now)
+                .where('status', 'in', ['pending', 'confirmed'])
+                .get()
+                .then((querySnapshot) => {
+                    const batch = window.shopAuth.db.batch();
+                    
+                    querySnapshot.forEach((doc) => {
+                        batch.update(doc.ref, {
+                            status: 'canceled',
+                            canceledAt: firebase.firestore.FieldValue.serverTimestamp(),
+                            canceledBy: 'system',
+                            cancellationReason: cancelReason
+                        });
+                    });
+                    
+                    return batch.commit();
+                })
+                .then(() => {
+                    console.log('Future reservations canceled');
+                })
+                .catch((error) => {
+                    console.error('Error canceling reservations:', error);
+                });
+        }
+        
+        // Handle Table Form Submit
+        document.getElementById('table-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const tableId = document.getElementById('edit-table-id').value;
+            const isNewTable = tableId === '';
+            
+            // Get form values
+            const tableNumber = parseInt(document.getElementById('table-number').value);
+            const capacity = parseInt(document.getElementById('table-capacity').value);
+            const tableType = document.getElementById('table-type').value;
+            const description = document.getElementById('table-description').value;
+            const specializedGame = document.getElementById('specialized-game').value.trim();
+            const hourlyRate = parseFloat(document.getElementById('hourly-rate').value) || null;
+            const minBookingHours = parseInt(document.getElementById('min-booking').value) || 1;
+            const isActive = document.getElementById('table-active').checked;
+            
+            // Validate table number uniqueness for new tables
+            if (isNewTable && allTables.some(t => t.tableNumber === tableNumber)) {
+                document.getElementById('table-error').textContent = 'A table with this number already exists.';
+                document.getElementById('table-error').classList.remove('hidden');
+                return;
+            }
+            
+            // Gather features
+            const features = [];
+            if (document.getElementById('feature-terrain').checked) features.push('Terrain/Scenery');
+            if (document.getElementById('feature-power').checked) features.push('Power Outlets');
+            if (document.getElementById('feature-lighting').checked) features.push('Special Lighting');
+            if (document.getElementById('feature-surface').checked) features.push('Premium Playing Surface');
+            if (document.getElementById('feature-screens').checked) features.push('Screens/Digital Aids');
+            if (document.getElementById('feature-comfortable').checked) features.push('Comfortable Seating');
+            if (document.getElementById('feature-painted').checked) features.push('Painted Terrain/Miniatures');
+            if (document.getElementById('feature-measuring').checked) features.push('Measuring Tools Available');
+            if (document.getElementById('feature-mats').checked) features.push('Game Mats Available');
+            if (document.getElementById('feature-dice').checked) features.push('House Dice/Accessories');
+            
+            // Prepare table data
+            const tableData = {
+                shopId: shopId,
+                tableNumber: tableNumber,
+                capacity: capacity,
+                tableType: tableType,
+                description: description,
+                specializedGame: specializedGame || null,
+                features: features,
+                hourlyRate: hourlyRate,
+                minBookingHours: minBookingHours,
+                isActive: isActive,
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+            };
+            
+            // If new table, add creation timestamp
+            if (isNewTable) {
+                tableData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+            }
+            
+            // Save to Firestore
+            const tableRef = isNewTable 
+                ? window.shopAuth.db.collection('Tables').doc() 
+                : window.shopAuth.db.collection('Tables').doc(tableId);
+            
+            tableRef.set(tableData, { merge: !isNewTable })
+                .then(() => {
+                    showMessage(`Table ${isNewTable ? 'added' : 'updated'} successfully!`, 'success');
+                    closeModal('table-modal');
+                    loadTables();
+                })
+                .catch((error) => {
+                    console.error('Error saving table:', error);
+                    document.getElementById('table-error').textContent = 'Error saving table: ' + error.message;
+                    document.getElementById('table-error').classList.remove('hidden');
+                });
+        });
+        
+        // Close a modal
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+        
+        // Show message
+        function showMessage(message, type) {
+            const messageElement = document.getElementById('tables-message');
+            messageElement.textContent = message;
+            messageElement.className = type === 'error' ? 'message error-message' : 'message success-message';
+            messageElement.classList.remove('hidden');
+            
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                messageElement.classList.add('hidden');
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
