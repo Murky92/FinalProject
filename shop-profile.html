@@ -7,6 +7,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-messaging.js"></script>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="shop-styles.css">
     <!-- Load shop authentication script -->
@@ -32,6 +33,8 @@
                 <li><a href="shop-reservations.html">Reservations</a></li>
                 <li><a href="shop-tables.html">Tables</a></li>
                 <li><a href="shop-schedule.html">Schedule</a></li>
+                <li><a href="shop-events.html">Events</a></li>
+                <li><a href="shop-notifications.html" >Notifications</a></li>
             </ul>
         </nav>
         
@@ -74,6 +77,11 @@
                             <option value="restaurant">Restaurant with Gaming Space</option>
                             <option value="other">Other</option>
                         </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="shop-logo-url">Shop Logo URL</label>
+                        <input type="url" id="shop-logo-url" placeholder="Enter the URL of your shop's logo">
                     </div>
                     
                     <div class="form-buttons">
@@ -216,6 +224,7 @@
             document.getElementById('owner-name').value = shopData.ownerName || '';
             document.getElementById('shop-description').value = shopData.description || '';
             document.getElementById('shop-type').value = shopData.shopType || 'game-store';
+            document.getElementById('shop-logo-url').value = shopData.logoUrl || '';
             
             // Contact Information
             document.getElementById('shop-email').value = shopData.email || '';

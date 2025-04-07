@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications - Tabletop Reserve</title>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-messaging.js"></script>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="shop-styles.css">
+    <!-- Load shop authentication script -->
+    <script src="shop-auth.js"></script>
+    <style>
+        .notification-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .notification-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .notification-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .notification-date {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .notification-content {
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .notification-stats {
+            display: flex;
+            gap: 15px;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .recipients-chip {
+            background-color: #e0f0ff;
+            color: #4a6ee0;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+
+        .form-group textarea {
+            height: 120px;
+            resize: vertical;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .checkbox-label input {
+            margin: 0;
+        }
+
+        .target-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .message-length {
+            color: #666;
+            font-size: 0.8rem;
+            text-align: right;
+            margin-top: 5px;
+        }
+
+        .notification-list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .notification-filters {
+            display: flex;
+            gap: 10px;
+        }
+
+        .filter-button {
+            background-color: #f5f5f5;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            padding: 5px 15px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .filter-button.active {
+            background-color: #4a6ee0;
+            color: white;
+            border-color: #4a6ee0;
+        }
+
+        .notification-type-icon {
+            display: inline-flex;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            justify-content: center;
+            align-items: center;
+            margin-right: 10px;
+            color: white;
+            font-weight: bold;
+        }
+
+        .icon-update {
+            background-color: #4a6ee0;
+        }
+        
+        .icon-promo {
+            background-color: #34c759;
+        }
+        
+        .icon-event {
+            background-color: #ff9500;
+        }
+
+        .tab-header {
+            display: flex;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 20px;
+        }
+
+        .tab-button {
+            padding: 10px 20px;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .tab-button.active {
+            border-bottom-color: #4a6ee0;
+            color: #4a6ee0;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <div id="loading-message">Verifying shop access...</div>
+
+    <div id="shop-content" class="shop-container hidden">
+        <div class="dashboard-header">
+            <h1>Notifications<span id="shop-name-header"></span></h1>
+            <button onclick="window.shopAuth.logout()" class="logout-btn">Logout</button>
+        </div>
+        
+        <div id="approval-banner" class="approval-banner hidden">
+            <div class="approval-message">Your shop is pending approval. Some features may be limited until your shop is approved.</div>
+        </div>
+        
+        <nav class="shop-nav">
+            <ul>
+                <li><a href="shophome.html">Dashboard</a></li>
+                <li><a href="shop-profile.html">Shop Profile</a></li>
+                <li><a href="shop-reservations.html">Reservations</a></li>
+                <li><a href="shop-tables.html">Tables</a></li>
+                <li><a href="shop-schedule.html">Schedule</a></li>
+                <li><a href="shop-events.html">Events</a></li>
+                <li><a href="#" class="active">Notifications</a></li>
+            </ul>
+        </nav>
+
+        <div id="notifications-message" class="message hidden"></div>
+
+        <div class="tab-header">
+            <button class="tab-button active" onclick="switchTab('compose')">Send Notification</button>
+            <button class="tab-button" onclick="switchTab('history')">Notification History</button>
+        </div>
+
+        <!-- Compose Notification Tab -->
+        <div id="compose-tab" class="tab-content active">
+            <div class="card">
+                <h2>Send a Notification</h2>
+                <p>Send push notifications to inform customers about updates, promotions, or special events at your shop.</p>
+                
+                <form id="notification-form">
+                    <div class="form-group">
+                        <label for="notification-type">Notification Type*</label>
+                        <select id="notification-type" required>
+                            <option value="update">Shop Update</option>
+                            <option value="promo">Promotion</option>
+                            <option value="event">Event Announcement</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="notification-title">Title*</label>
+                        <input type="text" id="notification-title" maxlength="50" placeholder="Enter a concise title (max 50 characters)" required>
+                        <div class="message-length"><span id="title-length">0</span>/50</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="notification-message">Message*</label>
+                        <textarea id="notification-message" maxlength="200" placeholder="Enter your message (max 200 characters)" required></textarea>
+                        <div class="message-length"><span id="message-length">0</span>/200</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Target Recipients*</label>
+                        <div class="target-options">
+                            <label class="checkbox-label">
+                                <input type="radio" name="target" value="all" checked>
+                                All Customers
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="radio" name="target" value="followers">
+                                Followers Only
+                            </label>
+                            <label class="checkbox-label">
+                                <input type="radio" name="target" value="recent">
+                                Recent Customers (last 30 days)
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-buttons">
+                        <button type="submit" class="success-btn">Send Notification</button>
+                    </div>
+                </form>
+                
+                <div class="notification-tips mt-2">
+                    <h3>Tips for Effective Notifications</h3>
+                    <ul>
+                        <li><strong>Be concise and clear</strong> - Keep your message short and direct</li>
+                        <li><strong>Provide value</strong> - Send information that's useful to your customers</li>
+                        <li><strong>Don't overdo it</strong> - Limit notifications to important updates to avoid customer fatigue</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notification History Tab -->
+        <div id="history-tab" class="tab-content">
+            <div class="card">
+                <div class="notification-list-header">
+                    <h2>Notification History</h2>
+                    <div class="notification-filters">
+                        <button class="filter-button active" data-filter="all">All</button>
+                        <button class="filter-button" data-filter="update">Updates</button>
+                        <button class="filter-button" data-filter="promo">Promotions</button>
+                        <button class="filter-button" data-filter="event">Events</button>
+                    </div>
+                </div>
+
+                <div id="notification-list">
+                    <!-- Notification items will be loaded here -->
+                    <div class="loading-message">Loading notification history...</div>
+                </div>
+                
+                <div id="empty-notifications" class="hidden" style="text-align: center; padding: 30px;">
+                    <h3>No Notifications Sent Yet</h3>
+                    <p>You haven't sent any notifications to your customers yet.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmation-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Confirm Notification</h2>
+            </div>
+            
+            <p>Are you sure you want to send this notification to <span id="recipient-count">all customers</span>?</p>
+            
+            <div class="notification-preview" style="background-color: #f9f9f9; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                <div style="font-weight: bold;" id="preview-title">Notification Title</div>
+                <div style="margin-top: 5px;" id="preview-message">Notification message will appear here.</div>
+            </div>
+            
+            <div class="modal-buttons">
+                <button onclick="closeModal()" class="primary-btn">Cancel</button>
+                <button onclick="sendNotification()" class="success-btn">Send Notification</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Store shop ID and data after verification
+        let shopId = null;
+        let shopData = null;
+        let notificationsCollection = [];
+        let currentFilter = 'all';
+        
+        // Verify shop owner access
+        window.shopAuth.verifyShopOwner(function(user, shopInfo) {
+            // Store shop ID and data
+            shopId = shopInfo.id;
+            shopData = shopInfo;
+            
+            // Load notifications for this shop
+            loadNotifications();
+        });
+        
+        // Switch between tabs
+        function switchTab(tabId) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Remove active class from all buttons
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show the selected tab
+            document.getElementById(tabId + '-tab').classList.add('active');
+            
+            // Add active class to the clicked button
+            document.querySelectorAll('.tab-button')[tabId === 'compose' ? 0 : 1].classList.add('active');
+            
+            // If switching to history tab, refresh the list
+            if (tabId === 'history') {
+                loadNotifications();
+            }
+        }
+        
+        // Load notifications from Firestore
+        function loadNotifications() {
+            if (!shopId) {
+                console.error('Shop ID not available');
+                return;
+            }
+            
+            // Show loading message
+            document.getElementById('notification-list').innerHTML = '<div class="loading-message">Loading notification history...</div>';
+            
+            // Query Firestore for notifications
+            window.shopAuth.db.collection('Notifications')
+                .where('shopId', '==', shopId)
+                .orderBy('createdAt', 'desc')
+                .get()
+                .then((querySnapshot) => {
+                    notificationsCollection = [];
+                    
+                    querySnapshot.forEach((doc) => {
+                        const notification = doc.data();
+                        notification.id = doc.id;
+                        notificationsCollection.push(notification);
+                    });
+                    
+                    // Display notifications based on current filter
+                    filterNotifications(currentFilter);
+                })
+                .catch((error) => {
+                    console.error('Error loading notifications:', error);
+                    document.getElementById('notification-list').innerHTML = `
+                        <div class="error-message">
+                            Error loading notifications: ${error.message}
+                        </div>
+                    `;
+                });
+        }
+        
+        // Filter notifications by type
+        function filterNotifications(filterType) {
+            currentFilter = filterType;
+            
+            // Update active filter button
+            document.querySelectorAll('.filter-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`.filter-button[data-filter="${filterType}"]`).classList.add('active');
+            
+            // Apply filter
+            let filteredNotifications = notificationsCollection;
+            if (filterType !== 'all') {
+                filteredNotifications = notificationsCollection.filter(n => n.type === filterType);
+            }
+            
+            // Display notifications
+            displayNotifications(filteredNotifications);
+        }
+        
+        // Display notifications in the list
+        function displayNotifications(notifications) {
+            const notificationList = document.getElementById('notification-list');
+            const emptyState = document.getElementById('empty-notifications');
+            
+            if (notifications.length === 0) {
+                notificationList.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+            
+            emptyState.classList.add('hidden');
+            let notificationsHtml = '';
+            
+            notifications.forEach((notification) => {
+                // Format date
+                const createdAt = notification.createdAt ? new Date(notification.createdAt.seconds * 1000) : new Date();
+                const formattedDate = createdAt.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                
+                // Get icon based on type
+                let iconClass = 'icon-update';
+                let typeLabel = 'Update';
+                
+                if (notification.type === 'promo') {
+                    iconClass = 'icon-promo';
+                    typeLabel = 'Promo';
+                } else if (notification.type === 'event') {
+                    iconClass = 'icon-event';
+                    typeLabel = 'Event';
+                }
+                
+                // Format recipients
+                let recipientsText = 'All Customers';
+                if (notification.target === 'followers') {
+                    recipientsText = 'Followers Only';
+                } else if (notification.target === 'recent') {
+                    recipientsText = 'Recent Customers';
+                }
+                
+                // Create notification card
+                notificationsHtml += `
+                    <div class="notification-card">
+                        <div class="notification-header">
+                            <div class="notification-title">
+                                <span class="notification-type-icon ${iconClass}">${typeLabel[0]}</span>
+                                ${notification.title}
+                            </div>
+                            <div class="notification-date">${formattedDate}</div>
+                        </div>
+                        <div class="notification-content">${notification.message}</div>
+                        <div class="notification-stats">
+                            <span class="recipients-chip">${recipientsText}</span>
+                            <span>Delivered: ${notification.delivered || 0}</span>
+                            <span>Opened: ${notification.opened || 0}</span>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            notificationList.innerHTML = notificationsHtml;
+        }
+        
+        // Character counter for title and message
+        document.getElementById('notification-title').addEventListener('input', function() {
+            document.getElementById('title-length').textContent = this.value.length;
+        });
+        
+        document.getElementById('notification-message').addEventListener('input', function() {
+            document.getElementById('message-length').textContent = this.value.length;
+        });
+        
+        // Show confirmation modal
+        function showConfirmationModal() {
+            const title = document.getElementById('notification-title').value;
+            const message = document.getElementById('notification-message').value;
+            const target = document.querySelector('input[name="target"]:checked').value;
+            
+            // Set preview content
+            document.getElementById('preview-title').textContent = title;
+            document.getElementById('preview-message').textContent = message;
+            
+            // Set recipient text
+            let recipientText = 'all customers';
+            if (target === 'followers') {
+                recipientText = 'followers only';
+            } else if (target === 'recent') {
+                recipientText = 'recent customers';
+            }
+            document.getElementById('recipient-count').textContent = recipientText;
+            
+            // Show modal
+            document.getElementById('confirmation-modal').style.display = 'block';
+        }
+        
+        // Close modal
+        function closeModal() {
+            document.getElementById('confirmation-modal').style.display = 'none';
+        }
+        
+        // Send notification
+        function sendNotification() {
+            if (!shopId) {
+                console.error('Shop ID not available');
+                return;
+            }
+            
+            const type = document.getElementById('notification-type').value;
+            const title = document.getElementById('notification-title').value;
+            const message = document.getElementById('notification-message').value;
+            const target = document.querySelector('input[name="target"]:checked').value;
+            
+            // Create notification data
+            const notificationData = {
+                shopId: shopId,
+                shopName: shopData.storeName,
+                type: type,
+                title: title,
+                message: message,
+                target: target,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                delivered: 0,
+                opened: 0
+            };
+            
+            // Save to Firestore
+            window.shopAuth.db.collection('Notifications')
+                .add(notificationData)
+                .then((docRef) => {
+                    // Trigger Cloud Function to send the notification
+                    triggerPushNotification(docRef.id);
+                    
+                    // Show success message
+                    showMessage('Notification sent successfully!', 'success');
+                    
+                    // Reset form and close modal
+                    document.getElementById('notification-form').reset();
+                    document.getElementById('title-length').textContent = '0';
+                    document.getElementById('message-length').textContent = '0';
+                    closeModal();
+                    
+                    // Switch to history tab
+                    switchTab('history');
+                })
+                .catch((error) => {
+                    console.error('Error sending notification:', error);
+                    showMessage('Error sending notification: ' + error.message, 'error');
+                    closeModal();
+                });
+        }
+        
+        // Trigger Cloud Function to send push notification
+        function triggerPushNotification(notificationId) {
+            // This would normally call a Cloud Function to send the actual push notifications
+            console.log('Triggering push notification for ID:', notificationId);
+            
+            // In a real implementation, you would call your Cloud Function via HTTP or directly here
+            
+            // Simulate increasing the delivered count (in a real app, this would be handled by the Cloud Function)
+            setTimeout(() => {
+                window.shopAuth.db.collection('Notifications').doc(notificationId)
+                    .update({
+                        delivered: firebase.firestore.FieldValue.increment(Math.floor(Math.random() * 50) + 10)
+                    })
+                    .then(() => {
+                        console.log('Updated delivered count');
+                        loadNotifications();
+                    });
+            }, 3000);
+        }
+        
+        // Show message
+        function showMessage(message, type) {
+            const messageElement = document.getElementById('notifications-message');
+            messageElement.textContent = message;
+            messageElement.className = 'message ' + (type === 'error' ? 'error-message' : 'success-message');
+            messageElement.classList.remove('hidden');
+            
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                messageElement.classList.add('hidden');
+            }, 5000);
+        }
+        
+        // Submit notification form
+        document.getElementById('notification-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Validate form
+            const title = document.getElementById('notification-title').value;
+            const message = document.getElementById('notification-message').value;
+            
+            if (!title || !message) {
+                showMessage('Please fill out all required fields', 'error');
+                return;
+            }
+            
+            // Show confirmation modal
+            showConfirmationModal();
+        });
+        
+        // Set up filter buttons
+        document.querySelectorAll('.filter-button').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const filterType = this.getAttribute('data-filter');
+                filterNotifications(filterType);
+            });
+        });
+        
+        // Initialize character counters
+        document.getElementById('title-length').textContent = '0';
+        document.getElementById('message-length').textContent = '0';
+        
+        // Close modal when clicking outside
+        window.addEventListener('click', function(event) {
+            const modal = document.getElementById('confirmation-modal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
