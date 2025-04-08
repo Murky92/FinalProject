@@ -1,0 +1,223 @@
+/* Calendar View Styles */
+
+.split-layout {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+@media (max-width: 768px) {
+    .split-layout {
+        flex-direction: column;
+    }
+}
+
+/* Calendar container */
+.calendar-container {
+    flex: 3;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+/* Calendar header */
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.calendar-header h2 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.month-nav {
+    background: #f5f5f5;
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.month-nav:hover {
+    background: #e0e0e0;
+}
+
+/* Calendar grid */
+.calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+}
+
+/* Day headers */
+.day-header {
+    text-align: center;
+    font-weight: bold;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+}
+
+/* Day cells */
+.day {
+    aspect-ratio: 1 / 1;
+    padding: 8px;
+    text-align: right;
+    border-radius: 4px;
+    background-color: #fff;
+    border: 1px solid #eee;
+    position: relative;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.day.empty {
+    border: none;
+    background-color: transparent;
+    cursor: default;
+}
+
+.day:hover {
+    background-color: #f0f7ff;
+}
+
+.day.selected {
+    background-color: #e3f2fd;
+    border-color: #4a6ee0;
+}
+
+.day.today {
+    font-weight: bold;
+    border-color: #4a6ee0;
+}
+
+.day.today .day-number {
+    color: #4a6ee0;
+}
+
+.day-number {
+    font-size: 0.9rem;
+}
+
+/* Reservation indicators */
+.has-reservations {
+    position: relative;
+}
+
+.reservation-indicator {
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background-color: #4a6ee0;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+}
+
+/* Day details panel */
+.calendar-day-details {
+    flex: 2;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    max-height: 600px;
+}
+
+.day-header {
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f9f9f9;
+    border-radius: 8px 8px 0 0;
+}
+
+.day-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.day-reservation-count {
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.calendar-day-reservations {
+    padding: 15px;
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+/* Day reservation items */
+.day-reservation-item {
+    background-color: #f9f9f9;
+    border-radius: 6px;
+    margin-bottom: 12px;
+    padding: 12px;
+    border-left: 4px solid #4a6ee0;
+}
+
+.reservation-item-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+
+.reservation-time {
+    font-weight: bold;
+}
+
+.reservation-status {
+    font-size: 0.8rem;
+    padding: 2px 8px;
+    border-radius: 10px;
+    text-transform: uppercase;
+}
+
+.reservation-item-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 8px;
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+}
+
+.reservation-item-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.view-btn {
+    background-color: #4a6ee0;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 4px 10px;
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+
+.no-reservations-message {
+    text-align: center;
+    color: #666;
+    padding: 30px 0;
+    font-style: italic;
+}

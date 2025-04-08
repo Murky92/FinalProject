@@ -1,0 +1,384 @@
+/* Reservations List View Styles */
+
+/* Tab controls */
+.tab-buttons {
+    display: flex;
+    background-color: #f5f5f5;
+    border-radius: 8px 8px 0 0;
+    overflow: hidden;
+    margin-bottom: 0;
+}
+
+.tab-btn {
+    background-color: transparent;
+    border: none;
+    padding: 15px 20px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    flex: 1;
+    text-align: center;
+}
+
+.tab-btn.active {
+    background-color: #fff;
+    border-bottom: 3px solid #4a6ee0;
+    color: #4a6ee0;
+}
+
+.tab-content {
+    display: none;
+    padding: 20px;
+    background-color: white;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-top: -1px;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Date navigation */
+.date-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    background-color: white;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.date-selector {
+    display: flex;
+    align-items: center;
+}
+
+.date-selector button {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0 10px;
+    color: #4a6ee0;
+}
+
+.current-date {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin: 0 15px;
+    min-width: 180px;
+    text-align: center;
+}
+
+.date-picker {
+    margin-left: 15px;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+/* Reservation status filter */
+.reservation-status-filter {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.status-filter {
+    padding: 8px 15px;
+    border-radius: 20px;
+    border: 1px solid #ddd;
+    background: #f5f5f5;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.status-filter.active {
+    background: #4a6ee0;
+    color: white;
+    border-color: #4a6ee0;
+    font-weight: bold;
+}
+
+/* Reservation items */
+.reservation-item {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    background-color: white;
+    transition: box-shadow 0.2s;
+}
+
+.reservation-item:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.reservation-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.reservation-title {
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+/* Status badges */
+.status-label {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+}
+
+.status-pending {
+    background-color: #ffe8cc;
+    color: #ff9500;
+}
+
+.status-confirmed {
+    background-color: #d4f8d4;
+    color: #34c759;
+}
+
+.status-completed {
+    background-color: #d4f8d4;
+    color: #34c759;
+}
+
+.status-canceled {
+    background-color: #ffd4d4;
+    color: #ff3b30;
+}
+
+/* Reservation details */
+.reservation-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.detail-item {
+    font-size: 0.9rem;
+}
+
+.detail-label {
+    color: #666;
+    margin-bottom: 3px;
+    font-weight: 500;
+}
+
+/* Action buttons */
+.reservation-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.action-btn {
+    padding: 6px 12px;
+    margin-right: 5px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.edit-btn {
+    background-color: #4a6ee0;
+    color: white;
+}
+
+/* Empty state */
+.empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+.empty-state-icon {
+    font-size: 3rem;
+    margin-bottom: 15px;
+    color: #aaa;
+}
+
+/* Notification popup */
+.notification-popup {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background-color: white;
+    color: #333;
+    padding: 15px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transform: translateY(100px);
+    opacity: 0;
+    transition: all 0.3s ease;
+    max-width: 400px;
+}
+
+.notification-popup.active {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.notification-popup.notification-success {
+    border-left: 4px solid #34c759;
+}
+
+.notification-popup.notification-error {
+    border-left: 4px solid #ff3b30;
+}
+
+.notification-popup.notification-warning {
+    border-left: 4px solid #ff9500;
+}
+
+.notification-popup.notification-info {
+    border-left: 4px solid #4a6ee0;
+}
+
+.notification-close {
+    margin-left: 15px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+/* Modal Styles */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    overflow: auto;
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border-radius: 8px;
+    width: 600px;
+    max-width: 90%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.modal-header {
+    margin-bottom: 15px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+.modal-header h2 {
+    margin: 0;
+    color: #4a6ee0;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.form-group textarea {
+    height: 80px;
+    resize: vertical;
+}
+
+.form-row {
+    display: flex;
+    gap: 15px;
+}
+
+.form-row .form-group {
+    flex: 1;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+/* Notes container in view modal */
+.notes-container {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+.notes-label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+    
+    .reservation-details {
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    }
+    
+    .reservation-actions {
+        flex-wrap: wrap;
+    }
+    
+    .modal-content {
+        width: 95%;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+    
+    .date-nav {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .date-selector {
+        width: 100%;
+        justify-content: center;
+    }
+}

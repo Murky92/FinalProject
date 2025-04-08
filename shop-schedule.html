@@ -160,6 +160,48 @@
             gap: 10px;
             margin-top: 20px;
         }
+        
+        /* Notification popup styles */
+        .notification-popup {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 5px;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            z-index: 2000;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            transform: translateY(-100px);
+            opacity: 0;
+        }
+        
+        .notification-popup.success {
+            background-color: #34c759;
+        }
+        
+        .notification-popup.error {
+            background-color: #ff3b30;
+        }
+        
+        .notification-popup.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .notification-popup i {
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+        
+        .notification-close {
+            margin-left: 15px;
+            cursor: pointer;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -183,23 +225,16 @@
                 <li><a href="shop-tables.html">Tables</a></li>
                 <li><a href="#" class="active">Schedule</a></li>
                 <li><a href="shop-events.html">Events</a></li>
-                <li><a href="shop-notifications.html" >Notifications</a></li>
-                
+                <li><a href="shop-notifications.html">Notifications</a></li>
             </ul>
         </nav>
 
-        <nav class="shop-nav">
-            <ul>
-                <li><a href="shop-schedule.html">Shop Schedule</a></li>
-                <li><a href="shop-events.html">Events</a></li>
-            </ul>
         
         <div id="schedule-message" class="message hidden"></div>
         
         <div class="card">
             <div class="card-header">
                 <h2>Shop Schedule</h2>
-                
             </div>
             <p>Set your shop's regular opening hours for each day of the week. These times will be used for table reservations.</p>
             
@@ -416,6 +451,12 @@
             </form>
         </div>
     </div>
+    
+    <!-- Notification Popup -->
+    <div id="notification-popup" class="notification-popup">
+        <span id="notification-message">Notification message</span>
+        <span class="notification-close" onclick="closeNotification()">×</span>
+    </div>
 
     <script>
         // Store shop ID after verification
@@ -482,7 +523,7 @@
                 })
                 .catch((error) => {
                     console.error('Error loading opening hours:', error);
-                    showMessage('Error loading opening hours: ' + error.message, 'error');
+                    showNotification('Error loading opening hours: ' + error.message, 'error');
                 });
         }
         
@@ -517,15 +558,45 @@
                 .doc(shopId)
                 .set(hoursData)
                 .then(() => {
-                    showMessage('Opening hours saved successfully!', 'success');
+                    showNotification('Opening hours saved successfully!', 'success');
                 })
                 .catch((error) => {
                     console.error('Error saving opening hours:', error);
-                    showMessage('Error saving opening hours: ' + error.message, 'error');
+                    showNotification('Error saving opening hours: ' + error.message, 'error');
                 });
         });
         
-       
+        // Show popup notification
+        function showNotification(message, type) {
+            const notificationPopup = document.getElementById('notification-popup');
+            const notificationMessage = document.getElementById('notification-message');
+            
+            // Set message and type
+            notificationMessage.textContent = message;
+            notificationPopup.className = 'notification-popup ' + type;
+            
+            // Show the notification
+            setTimeout(() => {
+                notificationPopup.classList.add('show');
+            }, 10);
+            
+            // Hide after 3 seconds
+            setTimeout(() => {
+                closeNotification();
+            }, 3000);
+        }
+        
+        // Close notification
+        function closeNotification() {
+            const notificationPopup = document.getElementById('notification-popup');
+            notificationPopup.classList.remove('show');
+        }
+        
+        // Close modal
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+    </script>
     </script>
 </body>
 </html>
