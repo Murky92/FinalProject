@@ -99,9 +99,9 @@ const NotificationManager = {
                     title = 'Reservation Confirmed';
                     message = `Your reservation for ${reservation.partySize} people has been confirmed. We look forward to seeing you!`;
                     break;
-                case 'canceled':
-                    title = 'Reservation Canceled';
-                    message = `Your reservation has been canceled.`;
+                case 'cancelled':
+                    title = 'Reservation Cancelled';
+                    message = `Your reservation has been cancelled.`;
                     if (reason) message += ` Reason: ${reason}`;
                     break;
             }

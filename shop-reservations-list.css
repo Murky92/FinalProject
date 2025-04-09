@@ -155,7 +155,7 @@
     color: #34c759;
 }
 
-.status-canceled {
+.status-cancelled {
     background-color: #ffd4d4;
     color: #ff3b30;
 }
@@ -195,9 +195,17 @@
 }
 
 .edit-btn {
-    background-color: #4a6ee0;
-    color: white;
-}
+    background-color: #4a6ee0;  
+    color: white;               
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: normal;
+    text-align: center;
+    margin-right: 5px;
+  }
 
 /* Empty state */
 .empty-state {

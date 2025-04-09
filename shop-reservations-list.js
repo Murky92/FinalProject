@@ -256,9 +256,9 @@ const ReservationsManager = {
                     statusLabel = 'Completed';
                     statusClass = 'status-completed';
                     break;
-                case 'canceled':
-                    statusLabel = 'Canceled';
-                    statusClass = 'status-canceled';
+                case 'cancelled':
+                    statusLabel = 'Cancelled';
+                    statusClass = 'status-cancelled';
                     break;
             }
             
@@ -288,7 +288,7 @@ const ReservationsManager = {
                 <div class="reservation-actions">
                     <button class="action-btn edit-btn" onclick="ReservationsManager.editReservation('${reservation.id}')">Edit</button>
                     <button class="primary-btn" onclick="ReservationsManager.viewReservation('${reservation.id}')">View Details</button>
-                    ${reservation.status !== 'canceled' ? `<button class="danger-btn" onclick="ReservationsManager.showCancelModal('${reservation.id}')">Cancel</button>` : ''}
+                    ${reservation.status !== 'cancelled' ? `<button class="danger-btn" onclick="ReservationsManager.showCancelModal('${reservation.id}')">Cancel</button>` : ''}
                 </div>
             `;
             
@@ -439,9 +439,9 @@ const ReservationsManager = {
                 statusLabel = 'Completed';
                 statusClass = 'status-completed';
                 break;
-            case 'canceled':
-                statusLabel = 'Canceled';
-                statusClass = 'status-canceled';
+            case 'cancelled':
+                statusLabel = 'Cancelled';
+                statusClass = 'status-cancelled';
                 break;
         }
         
@@ -511,8 +511,8 @@ const ReservationsManager = {
             `;
         }
         
-        // Add cancellation info if canceled
-        if (reservation.status === 'canceled' && reservation.cancellationReason) {
+        // Add cancellation info if cancelled
+        if (reservation.status === 'cancelled' && reservation.cancellationReason) {
             detailsContent.innerHTML += `
                 <div class="notes-container" style="background-color: #ffd4d4;">
                     <div class="notes-label">Cancellation Reason:</div>
@@ -601,19 +601,19 @@ const ReservationsManager = {
         const reason = document.getElementById('cancellation-reason').value;
         
         window.shopAuth.db.collection('Reservations').doc(reservationId).update({
-            status: 'canceled',
-            canceledAt: firebase.firestore.FieldValue.serverTimestamp(),
-            canceledBy: window.shopAuth.auth.currentUser.email || window.shopAuth.auth.currentUser.uid,
+            status: 'cancelled',
+            cancelledAt: firebase.firestore.FieldValue.serverTimestamp(),
+            cancelledBy: window.shopAuth.auth.currentUser.email || window.shopAuth.auth.currentUser.uid,
             cancellationReason: reason,
         })
         .then(() => {
-            this.showMessage('Reservation canceled!', 'success');
+            this.showMessage('Reservation cancelled!', 'success');
             this.closeModal('cancel-modal');
             this.loadReservations(this.selectedDate);
             
             // Notify customer if needed
             if (typeof NotificationManager !== 'undefined') {
-                NotificationManager.sendReservationStatusUpdate(reservationId, 'canceled', reason);
+                NotificationManager.sendReservationStatusUpdate(reservationId, 'cancelled', reason);
             }
         })
         .catch((error) => {
@@ -767,9 +767,9 @@ const ReservationsManager = {
                 } else if (status === 'completed') {
                     reservationData.completedAt = firebase.firestore.FieldValue.serverTimestamp();
                     reservationData.completedBy = window.shopAuth.auth.currentUser.email || window.shopAuth.auth.currentUser.uid;
-                } else if (status === 'canceled') {
-                    reservationData.canceledAt = firebase.firestore.FieldValue.serverTimestamp();
-                    reservationData.canceledBy = window.shopAuth.auth.currentUser.email || window.shopAuth.auth.currentUser.uid;
+                } else if (status === 'cancelled') {
+                    reservationData.cancelledAt = firebase.firestore.FieldValue.serverTimestamp();
+                    reservationData.cancelledBy = window.shopAuth.auth.currentUser.email || window.shopAuth.auth.currentUser.uid;
                 }
                 
                 // If new reservation, add createdAt field

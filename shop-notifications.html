@@ -167,6 +167,63 @@
         .tab-content.active {
             display: block;
         }
+        
+        /* Popup styles */
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .popup-container {
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            max-width: 450px;
+            width: 100%;
+        }
+        
+        .popup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .popup-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        
+        .popup-close {
+            font-size: 1.5rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+            padding: 0 5px;
+        }
+        
+        .popup-preview {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+        
+        .popup-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
@@ -289,22 +346,23 @@
         </div>
     </div>
 
-    <!-- Confirmation Modal -->
-    <div id="confirmation-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Confirm Notification</h2>
+    <!-- Notification Preview Popup -->
+    <div id="popup-overlay" class="popup-overlay">
+        <div class="popup-container">
+            <div class="popup-header">
+                <div class="popup-title">Confirm Notification</div>
+                <button class="popup-close" onclick="closePopup()">&times;</button>
             </div>
             
             <p>Are you sure you want to send this notification to <span id="recipient-count">all customers</span>?</p>
             
-            <div class="notification-preview" style="background-color: #f9f9f9; padding: 15px; border-radius: 8px; margin: 15px 0;">
+            <div class="popup-preview">
                 <div style="font-weight: bold;" id="preview-title">Notification Title</div>
                 <div style="margin-top: 5px;" id="preview-message">Notification message will appear here.</div>
             </div>
             
-            <div class="modal-buttons">
-                <button onclick="closeModal()" class="primary-btn">Cancel</button>
+            <div class="popup-buttons">
+                <button onclick="closePopup()" class="primary-btn">Cancel</button>
                 <button onclick="sendNotification()" class="success-btn">Send Notification</button>
             </div>
         </div>
@@ -466,8 +524,6 @@
                         <div class="notification-content">${notification.message}</div>
                         <div class="notification-stats">
                             <span class="recipients-chip">${recipientsText}</span>
-                            <span>Delivered: ${notification.delivered || 0}</span>
-                            <span>Opened: ${notification.opened || 0}</span>
                         </div>
                     </div>
                 `;
@@ -485,8 +541,8 @@
             document.getElementById('message-length').textContent = this.value.length;
         });
         
-        // Show confirmation modal
-        function showConfirmationModal() {
+        // Show popup
+        function showPopup() {
             const title = document.getElementById('notification-title').value;
             const message = document.getElementById('notification-message').value;
             const target = document.querySelector('input[name="target"]:checked').value;
@@ -504,13 +560,13 @@
             }
             document.getElementById('recipient-count').textContent = recipientText;
             
-            // Show modal
-            document.getElementById('confirmation-modal').style.display = 'block';
+            // Show popup
+            document.getElementById('popup-overlay').style.display = 'flex';
         }
         
-        // Close modal
-        function closeModal() {
-            document.getElementById('confirmation-modal').style.display = 'none';
+        // Close popup
+        function closePopup() {
+            document.getElementById('popup-overlay').style.display = 'none';
         }
         
         // Send notification
@@ -533,26 +589,24 @@
                 title: title,
                 message: message,
                 target: target,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                delivered: 0,
-                opened: 0
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
             };
+            
+            // Add this to override any default confirmation dialog
+            window.onbeforeunload = null;
             
             // Save to Firestore
             window.shopAuth.db.collection('Notifications')
                 .add(notificationData)
                 .then((docRef) => {
-                    // Trigger Cloud Function to send the notification
-                    triggerPushNotification(docRef.id);
-                    
                     // Show success message
                     showMessage('Notification sent successfully!', 'success');
                     
-                    // Reset form and close modal
+                    // Reset form and close popup
                     document.getElementById('notification-form').reset();
                     document.getElementById('title-length').textContent = '0';
                     document.getElementById('message-length').textContent = '0';
-                    closeModal();
+                    closePopup();
                     
                     // Switch to history tab
                     switchTab('history');
@@ -560,28 +614,8 @@
                 .catch((error) => {
                     console.error('Error sending notification:', error);
                     showMessage('Error sending notification: ' + error.message, 'error');
-                    closeModal();
+                    closePopup();
                 });
-        }
-        
-        // Trigger Cloud Function to send push notification
-        function triggerPushNotification(notificationId) {
-            // This would normally call a Cloud Function to send the actual push notifications
-            console.log('Triggering push notification for ID:', notificationId);
-            
-            // In a real implementation, you would call your Cloud Function via HTTP or directly here
-            
-            // Simulate increasing the delivered count (in a real app, this would be handled by the Cloud Function)
-            setTimeout(() => {
-                window.shopAuth.db.collection('Notifications').doc(notificationId)
-                    .update({
-                        delivered: firebase.firestore.FieldValue.increment(Math.floor(Math.random() * 50) + 10)
-                    })
-                    .then(() => {
-                        console.log('Updated delivered count');
-                        loadNotifications();
-                    });
-            }, 3000);
         }
         
         // Show message
@@ -610,8 +644,32 @@
                 return;
             }
             
-            // Show confirmation modal
-            showConfirmationModal();
+            // Show popup instead of confirmation modal
+            showPopup();
+            
+            // IMPORTANT: Return false to prevent any default form submission behavior
+            return false;
+        });
+        
+        // Ensure the Send Notification button ONLY triggers our popup
+        document.querySelector('#notification-form .success-btn').addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            // Get form data and validate
+            const title = document.getElementById('notification-title').value;
+            const message = document.getElementById('notification-message').value;
+            
+            if (!title || !message) {
+                showMessage('Please fill out all required fields', 'error');
+                return;
+            }
+            
+            // Show our popup
+            showPopup();
+            
+            // Prevent any default behavior or event bubbling
+            e.stopPropagation();
+            return false;
         });
         
         // Set up filter buttons
@@ -626,11 +684,11 @@
         document.getElementById('title-length').textContent = '0';
         document.getElementById('message-length').textContent = '0';
         
-        // Close modal when clicking outside
+        // Close popup when clicking outside
         window.addEventListener('click', function(event) {
-            const modal = document.getElementById('confirmation-modal');
-            if (event.target === modal) {
-                closeModal();
+            const popup = document.getElementById('popup-overlay');
+            if (event.target === popup) {
+                closePopup();
             }
         });
     </script>

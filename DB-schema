@@ -158,13 +158,13 @@ reservations: {
     gameType: String,  // "board", "rpg", "miniatures", etc.
     
     // Status Information
-    status: String,  // "pending", "confirmed", "completed", "canceled"
+    status: String,  // "pending", "confirmed", "completed", "cancelled"
     confirmedAt: Timestamp,
     confirmedBy: String,
     completedAt: Timestamp,
     completedBy: String,
-    canceledAt: Timestamp,
-    canceledBy: String,
+    cancelledAt: Timestamp,
+    cancelledBy: String,
     cancellationReason: String,
     
     // Payment Information (if applicable)

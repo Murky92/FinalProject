@@ -181,7 +181,7 @@
                 <h2>Delete Table</h2>
             </div>
 
-            <p>Are you sure you want to delete this table? All future reservations for this table will be canceled.</p>
+            <p>Are you sure you want to delete this table? All future reservations for this table will be cancelled.</p>
 
             <div id="delete-table-warning" class="warning-message hidden">
                 <p><strong>Warning:</strong> This table has upcoming reservations. Deleting it will cancel these
@@ -591,9 +591,9 @@
 
                     querySnapshot.forEach((doc) => {
                         batch.update(doc.ref, {
-                            status: 'canceled',
-                            canceledAt: firebase.firestore.FieldValue.serverTimestamp(),
-                            canceledBy: 'system',
+                            status: 'cancelled',
+                            cancelledAt: firebase.firestore.FieldValue.serverTimestamp(),
+                            cancelledBy: 'system',
                             cancellationReason: cancelReason
                         });
                     });
@@ -601,7 +601,7 @@
                     return batch.commit();
                 })
                 .then(() => {
-                    console.log('Future reservations canceled');
+                    console.log('Future reservations cancelled');
                 })
                 .catch((error) => {
                     console.error('Error canceling reservations:', error);

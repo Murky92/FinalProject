@@ -217,9 +217,9 @@ const CalendarView = {
                     statusClass = 'status-completed';
                     statusLabel = 'Completed';
                     break;
-                case 'canceled':
-                    statusClass = 'status-canceled';
-                    statusLabel = 'Canceled';
+                case 'cancelled':
+                    statusClass = 'status-cancelled';
+                    statusLabel = 'Cancelled';
                     break;
             }
             
