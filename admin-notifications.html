@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Notification Management</title>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="admin-styles.css">
+    <!-- Load admin authentication script -->
+    <script src="admin-auth.js"></script>
+    <style>
+        .notification-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .notification-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .notification-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+
+        .notification-date {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .notification-content {
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .notification-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #666;
+            font-size: 0.9rem;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+            margin-top: 10px;
+        }
+
+        .notification-shop {
+            font-weight: 500;
+        }
+
+        .notification-target {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            background-color: #e0f0ff;
+            color: #4a6ee0;
+        }
+
+        .notification-type-icon {
+            display: inline-flex;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            justify-content: center;
+            align-items: center;
+            margin-right: 10px;
+            color: white;
+            font-weight: bold;
+        }
+
+        .icon-update {
+            background-color: #4a6ee0;
+        }
+        
+        .icon-promo {
+            background-color: #34c759;
+        }
+        
+        .icon-event {
+            background-color: #ff9500;
+        }
+
+        .filter-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .filter-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .filter-label {
+            font-weight: 500;
+        }
+
+        .filter-select {
+            padding: 8px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+
+        .notification-actions {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 5px;
+        }
+
+        .delete-notification {
+            background-color: transparent;
+            border: none;
+            color: #ff3b30;
+            cursor: pointer;
+            font-size: 1.2rem;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .delete-notification:hover {
+            background-color: rgba(255, 59, 48, 0.1);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 10px 0;
+            color: #4a6ee0;
+        }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+            gap: 5px;
+        }
+
+        .pagination-btn {
+            padding: 5px 10px;
+            border: 1px solid #ddd;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .pagination-btn.active {
+            background-color: #4a6ee0;
+            color: white;
+            border-color: #4a6ee0;
+        }
+
+        .bulk-actions {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .selection-info {
+            font-weight: 500;
+        }
+
+        .bulk-action-btns {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            overflow: auto;
+        }
+        
+        .modal-content {
+            background-color: #fefefe;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 400px;
+            max-width: 90%;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .modal-header {
+            margin-bottom: 15px;
+        }
+        
+        .modal-header h2 {
+            margin: 0;
+        }
+        
+        .modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .notification-checkbox {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            transform: scale(1.2);
+        }
+
+        .checkbox-spacer {
+            width: 30px;
+        }
+
+        .no-notifications {
+            text-align: center;
+            padding: 50px 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .filter-toolbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .filter-section {
+                width: 100%;
+            }
+            
+            .pagination {
+                flex-wrap: wrap;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="loading-message">Verifying admin access...</div>
+    
+    <div id="admin-content" class="admin-container">
+        <div class="dashboard-header">
+            <h1>Notification Management</h1>
+            <button onclick="window.adminAuth.logout()" class="danger-btn">Logout</button>
+        </div>
+        
+        <nav class="admin-nav">
+            <ul>
+                <li><a href="adminhome.html">Dashboard</a></li>
+                <li><a href="user-management.html">Store Management</a></li>
+                <li><a href="#" class="active">Notification Management</a></li>
+                <li><a href="settings.html">Settings</a></li>
+            </ul>
+        </nav>
+        
+        <button class="back-btn" onclick="window.location.href='adminhome.html'">← Back to Dashboard</button>
+        
+        <div id="notifications-message" class="message hidden"></div>
+        
+        <!-- Notification Statistics -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Total Notifications</h3>
+                <div id="total-notifications" class="stat-value">0</div>
+                <p>All time</p>
+            </div>
+            
+            <div class="stat-card">
+                <h3>Last 24 Hours</h3>
+                <div id="daily-notifications" class="stat-value">0</div>
+                <p>Recent activity</p>
+            </div>
+            
+            <div class="stat-card">
+                <h3>Active Shops</h3>
+                <div id="active-shops" class="stat-value">0</div>
+                <p>Using notifications</p>
+            </div>
+            
+            <div class="stat-card">
+                <h3>Promotions</h3>
+                <div id="promo-count" class="stat-value">0</div>
+                <p>Marketing campaigns</p>
+            </div>
+        </div>
+        
+        <!-- Bulk Actions Bar (initially hidden) -->
+        <div id="bulk-actions" class="bulk-actions" style="display: none;">
+            <div class="selection-info">
+                <span id="selected-count">0</span> notifications selected
+            </div>
+            <div class="bulk-action-btns">
+                <button id="clear-selection-btn" class="primary-btn">Clear Selection</button>
+                <button id="delete-selected-btn" class="danger-btn">Delete Selected</button>
+            </div>
+        </div>
+        
+        <!-- Filter Toolbar -->
+        <div class="filter-toolbar">
+            <div class="filter-section">
+                <span class="filter-label">Filter by Type:</span>
+                <select id="type-filter" class="filter-select">
+                    <option value="all">All Types</option>
+                    <option value="update">Updates</option>
+                    <option value="promo">Promotions</option>
+                    <option value="event">Events</option>
+                </select>
+            </div>
+            
+            <div class="filter-section">
+                <span class="filter-label">Filter by Shop:</span>
+                <select id="shop-filter" class="filter-select">
+                    <option value="all">All Shops</option>
+                    <!-- Shops will be loaded here -->
+                </select>
+            </div>
+            
+            <div class="filter-section">
+                <span class="filter-label">Sort by:</span>
+                <select id="sort-filter" class="filter-select">
+                    <option value="newest">Newest First</option>
+                    <option value="oldest">Oldest First</option>
+                </select>
+                
+                <button id="refresh-btn" class="primary-btn">Refresh</button>
+            </div>
+        </div>
+
+        <!-- Notifications List -->
+        <div id="notifications-list">
+            <!-- Notifications will be loaded here -->
+            <div class="loading-message">Loading notifications...</div>
+        </div>
+        
+        <!-- Pagination -->
+        <div id="pagination" class="pagination">
+            <!-- Pagination buttons will be generated here -->
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="delete-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Delete Notification</h2>
+            </div>
+            
+            <p id="delete-message">Are you sure you want to delete this notification? This action cannot be undone.</p>
+            
+            <input type="hidden" id="delete-notification-id">
+            <input type="hidden" id="delete-bulk" value="false">
+            
+            <div class="modal-buttons">
+                <button class="primary-btn" onclick="closeModal('delete-modal')">Cancel</button>
+                <button class="danger-btn" onclick="confirmDelete()">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // State variables
+        let allNotifications = [];
+        let filteredNotifications = [];
+        let currentShops = [];
+        let currentPage = 1;
+        let itemsPerPage = 10;
+        let selectedNotifications = new Set();
+        
+        // Verify admin access
+        window.adminAuth.verifyAdmin(function(user) {
+            // Admin verified successfully, load notifications
+            loadStats();
+            loadShops();
+            loadNotifications();
+            
+            // Set up event listeners
+            setupEventListeners();
+        });
+        
+        // Setup event listeners
+        function setupEventListeners() {
+            // Filter change listeners
+            document.getElementById('type-filter').addEventListener('change', filterNotifications);
+            document.getElementById('shop-filter').addEventListener('change', filterNotifications);
+            document.getElementById('sort-filter').addEventListener('change', filterNotifications);
+            
+            // Refresh button
+            document.getElementById('refresh-btn').addEventListener('click', () => {
+                loadNotifications();
+                showMessage('Notifications refreshed', 'success');
+            });
+            
+            // Bulk action listeners
+            document.getElementById('clear-selection-btn').addEventListener('click', clearSelection);
+            document.getElementById('delete-selected-btn').addEventListener('click', () => {
+                if (selectedNotifications.size > 0) {
+                    showDeleteConfirmation(null, true);
+                }
+            });
+        }
+        
+        // Load notification statistics
+        function loadStats() {
+            const db = window.adminAuth.db;
+            const now = new Date();
+            const oneDayAgo = new Date(now.getTime() - (24 * 60 * 60 * 1000));
+            
+            // Total notifications
+            db.collection("Notifications")
+                .get()
+                .then((snapshot) => {
+                    document.getElementById('total-notifications').textContent = snapshot.size;
+                    
+                    // Count promo notifications
+                    let promoCount = 0;
+                    snapshot.forEach(doc => {
+                        if (doc.data().type === 'promo') {
+                            promoCount++;
+                        }
+                    });
+                    document.getElementById('promo-count').textContent = promoCount;
+                });
+            
+            // Daily notifications
+            db.collection("Notifications")
+                .where("createdAt", ">=", oneDayAgo)
+                .get()
+                .then((snapshot) => {
+                    document.getElementById('daily-notifications').textContent = snapshot.size;
+                });
+            
+            // Active shops (shops that have sent at least one notification)
+            db.collection("Notifications")
+                .get()
+                .then((snapshot) => {
+                    const shopIds = new Set();
+                    snapshot.forEach(doc => {
+                        shopIds.add(doc.data().shopId);
+                    });
+                    document.getElementById('active-shops').textContent = shopIds.size;
+                });
+        }
+        
+        // Load shops for the filter dropdown
+        function loadShops() {
+            const db = window.adminAuth.db;
+            
+            db.collection("Stores")
+                .where("isApproved", "==", true)
+                .get()
+                .then((snapshot) => {
+                    const shopSelect = document.getElementById('shop-filter');
+                    currentShops = [];
+                    
+                    snapshot.forEach(doc => {
+                        const shop = doc.data();
+                        shop.id = doc.id;
+                        currentShops.push(shop);
+                        
+                        const option = document.createElement('option');
+                        option.value = shop.id;
+                        option.textContent = shop.storeName || 'Shop #' + doc.id.substring(0, 6);
+                        shopSelect.appendChild(option);
+                    });
+                })
+                .catch((error) => {
+                    console.error("Error loading shops:", error);
+                    showMessage("Error loading shops: " + error.message, "error");
+                });
+        }
+        
+        // Load notifications from Firestore
+        function loadNotifications() {
+            const db = window.adminAuth.db;
+            
+            // Reset selection when reloading
+            selectedNotifications.clear();
+            updateBulkActionBar();
+            
+            // Show loading state
+            document.getElementById('notifications-list').innerHTML = '<div class="loading-message">Loading notifications...</div>';
+            
+            // Get all notifications
+            db.collection("Notifications")
+                .orderBy("createdAt", "desc")
+                .get()
+                .then((snapshot) => {
+                    allNotifications = [];
+                    
+                    snapshot.forEach(doc => {
+                        const notification = doc.data();
+                        notification.id = doc.id;
+                        
+                        // Convert Firestore timestamp to JS Date
+                        if (notification.createdAt) {
+                            notification.createdAtDate = notification.createdAt.toDate();
+                        } else {
+                            notification.createdAtDate = new Date();
+                        }
+                        
+                        allNotifications.push(notification);
+                    });
+                    
+                    // Apply filters and display
+                    filterNotifications();
+                })
+                .catch((error) => {
+                    console.error("Error loading notifications:", error);
+                    document.getElementById('notifications-list').innerHTML = 
+                        '<div class="error-message">Error loading notifications: ' + error.message + '</div>';
+                });
+        }
+        
+        // Filter notifications based on selected filters
+        function filterNotifications() {
+            const typeFilter = document.getElementById('type-filter').value;
+            const shopFilter = document.getElementById('shop-filter').value;
+            const sortFilter = document.getElementById('sort-filter').value;
+            
+            // Apply type filter
+            filteredNotifications = allNotifications.filter(notification => {
+                if (typeFilter !== 'all' && notification.type !== typeFilter) {
+                    return false;
+                }
+                
+                // Apply shop filter
+                if (shopFilter !== 'all' && notification.shopId !== shopFilter) {
+                    return false;
+                }
+                
+                return true;
+            });
+            
+            // Apply sorting
+            if (sortFilter === 'oldest') {
+                filteredNotifications.sort((a, b) => a.createdAtDate - b.createdAtDate);
+            } else {
+                // Default is 'newest'
+                filteredNotifications.sort((a, b) => b.createdAtDate - a.createdAtDate);
+            }
+            
+            // Reset to first page when filters change
+            currentPage = 1;
+            
+            // Display the filtered notifications
+            displayNotifications();
+        }
+        
+        // Display notifications with pagination
+        function displayNotifications() {
+            const notificationsList = document.getElementById('notifications-list');
+            
+            // Calculate pagination
+            const totalItems = filteredNotifications.length;
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+            
+            // Get current page items
+            const currentItems = filteredNotifications.slice(startIndex, endIndex);
+            
+            // Check if there are no notifications
+            if (currentItems.length === 0) {
+                notificationsList.innerHTML = `
+                    <div class="no-notifications">
+                        <h3>No Notifications Found</h3>
+                        <p>No notifications match your current filter settings.</p>
+                    </div>
+                `;
+                
+                // Hide pagination
+                document.getElementById('pagination').innerHTML = '';
+                return;
+            }
+            
+            // Generate notification cards
+            let notificationsHTML = '';
+            
+            currentItems.forEach(notification => {
+                // Format date
+                const createdAt = notification.createdAtDate;
+                const formattedDate = createdAt.toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                
+                // Get icon based on type
+                let iconClass = 'icon-update';
+                let typeLabel = 'Update';
+                
+                if (notification.type === 'promo') {
+                    iconClass = 'icon-promo';
+                    typeLabel = 'Promo';
+                } else if (notification.type === 'event') {
+                    iconClass = 'icon-event';
+                    typeLabel = 'Event';
+                }
+                
+                // Format recipients
+                let targetText = 'All Customers';
+                if (notification.target === 'followers') {
+                    targetText = 'Followers Only';
+                } else if (notification.target === 'recent') {
+                    targetText = 'Recent Customers';
+                }
+                
+                // Find shop name
+                let shopName = notification.shopName || 'Unknown Shop';
+                
+                // Check if notification is selected
+                const isChecked = selectedNotifications.has(notification.id) ? 'checked' : '';
+                
+                notificationsHTML += `
+                    <div class="notification-card">
+                        <input type="checkbox" class="notification-checkbox" data-id="${notification.id}" ${isChecked} 
+                            onchange="toggleNotificationSelection('${notification.id}')">
+                        <div class="notification-actions">
+                            <button class="delete-notification" onclick="showDeleteConfirmation('${notification.id}')">×</button>
+                        </div>
+                        <div class="notification-header">
+                            <div class="notification-title">
+                                <div class="checkbox-spacer"></div>
+                                <span class="notification-type-icon ${iconClass}">${typeLabel[0]}</span>
+                                ${notification.title}
+                            </div>
+                            <div class="notification-date">${formattedDate}</div>
+                        </div>
+                        <div class="notification-content">${notification.message}</div>
+                        <div class="notification-meta">
+                            <div class="notification-shop">From: ${shopName}</div>
+                            <div class="notification-target">${targetText}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            notificationsList.innerHTML = notificationsHTML;
+            
+            // Generate pagination
+            generatePagination(totalPages);
+        }
+        
+        // Generate pagination controls
+        function generatePagination(totalPages) {
+            const paginationElement = document.getElementById('pagination');
+            
+            if (totalPages <= 1) {
+                paginationElement.innerHTML = '';
+                return;
+            }
+            
+            let paginationHTML = '';
+            
+            // Previous button
+            paginationHTML += `
+                <button class="pagination-btn ${currentPage === 1 ? 'disabled' : ''}" 
+                    ${currentPage === 1 ? 'disabled' : 'onclick="changePage(' + (currentPage - 1) + ')"'}>
+                    &laquo;
+                </button>
+            `;
+            
+            // Page numbers
+            const maxVisiblePages = 5;
+            let startPage = Math.max(1, currentPage - Math.floor(maxVisiblePages / 2));
+            let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+            
+            if (endPage - startPage + 1 < maxVisiblePages) {
+                startPage = Math.max(1, endPage - maxVisiblePages + 1);
+            }
+            
+            for (let i = startPage; i <= endPage; i++) {
+                paginationHTML += `
+                    <button class="pagination-btn ${i === currentPage ? 'active' : ''}" 
+                        onclick="changePage(${i})">
+                        ${i}
+                    </button>
+                `;
+            }
+            
+            // Next button
+            paginationHTML += `
+                <button class="pagination-btn ${currentPage === totalPages ? 'disabled' : ''}" 
+                    ${currentPage === totalPages ? 'disabled' : 'onclick="changePage(' + (currentPage + 1) + ')"'}>
+                    &raquo;
+                </button>
+            `;
+            
+            paginationElement.innerHTML = paginationHTML;
+        }
+        
+        // Change page
+        function changePage(page) {
+            currentPage = page;
+            displayNotifications();
+            
+            // Scroll to top of list
+            document.getElementById('notifications-list').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Toggle selection of a notification
+        function toggleNotificationSelection(id) {
+            if (selectedNotifications.has(id)) {
+                selectedNotifications.delete(id);
+            } else {
+                selectedNotifications.add(id);
+            }
+            
+            updateBulkActionBar();
+        }
+        
+        // Update the bulk action bar based on selection
+        function updateBulkActionBar() {
+            const bulkActions = document.getElementById('bulk-actions');
+            const selectedCount = document.getElementById('selected-count');
+            
+            if (selectedNotifications.size > 0) {
+                bulkActions.style.display = 'flex';
+                selectedCount.textContent = selectedNotifications.size;
+            } else {
+                bulkActions.style.display = 'none';
+            }
+        }
+        
+        // Clear all selected notifications
+        function clearSelection() {
+            selectedNotifications.clear();
+            
+            // Uncheck all checkboxes
+            document.querySelectorAll('.notification-checkbox').forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            
+            updateBulkActionBar();
+        }
+        
+        // Show delete confirmation modal
+        function showDeleteConfirmation(id, isBulk = false) {
+            const deleteMessage = document.getElementById('delete-message');
+            const deleteModal = document.getElementById('delete-modal');
+            
+            document.getElementById('delete-notification-id').value = id || '';
+            document.getElementById('delete-bulk').value = isBulk ? 'true' : 'false';
+            
+            if (isBulk) {
+                const count = selectedNotifications.size;
+                deleteMessage.textContent = `Are you sure you want to delete ${count} selected notification${count !== 1 ? 's' : ''}? This action cannot be undone.`;
+            } else {
+                deleteMessage.textContent = 'Are you sure you want to delete this notification? This action cannot be undone.';
+            }
+            
+            deleteModal.style.display = 'block';
+        }
+        
+        // Confirm delete action
+        function confirmDelete() {
+            const isBulk = document.getElementById('delete-bulk').value === 'true';
+            const db = window.adminAuth.db;
+            
+            if (isBulk) {
+                // Bulk delete
+                const batch = db.batch();
+                
+                selectedNotifications.forEach(id => {
+                    const docRef = db.collection('Notifications').doc(id);
+                    batch.delete(docRef);
+                });
+                
+                batch.commit()
+                    .then(() => {
+                        showMessage(`${selectedNotifications.size} notifications deleted successfully`, 'success');
+                        closeModal('delete-modal');
+                        selectedNotifications.clear();
+                        updateBulkActionBar();
+                        loadNotifications();
+                    })
+                    .catch((error) => {
+                        console.error("Error deleting notifications:", error);
+                        showMessage("Error deleting notifications: " + error.message, "error");
+                    });
+            } else {
+                // Single delete
+                const notificationId = document.getElementById('delete-notification-id').value;
+                
+                db.collection('Notifications').doc(notificationId).delete()
+                    .then(() => {
+                        showMessage('Notification deleted successfully', 'success');
+                        closeModal('delete-modal');
+                        
+                        // Remove from selected if it was selected
+                        if (selectedNotifications.has(notificationId)) {
+                            selectedNotifications.delete(notificationId);
+                            updateBulkActionBar();
+                        }
+                        
+                        loadNotifications();
+                    })
+                    .catch((error) => {
+                        console.error("Error deleting notification:", error);
+                        showMessage("Error deleting notification: " + error.message, "error");
+                    });
+            }
+        }
+        
+        // Close modal
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+        
+        // Show message
+        function showMessage(message, type) {
+            const messageElement = document.getElementById('notifications-message');
+            messageElement.textContent = message;
+            messageElement.className = type === 'error' ? 'message error-message' : 'message success-message';
+            messageElement.classList.remove('hidden');
+            
+            // Hide message after 5 seconds
+            setTimeout(() => {
+                messageElement.classList.add('hidden');
+            }, 5000);
+        }
+        
+        // Close modals when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        };
+    </script>
+</body>
+</html>

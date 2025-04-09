@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -40,7 +41,8 @@
             margin-bottom: 15px;
         }
 
-        .event-date, .event-time {
+        .event-date,
+        .event-time {
             display: inline-flex;
             align-items: center;
             background-color: #f5f7f9;
@@ -73,8 +75,10 @@
         }
 
         .edit-btn {
-            background-color: #4a6ee0;  /* Blue background */
-            color: white;               /* White text */
+            background-color: #4a6ee0;
+            /* Blue background */
+            color: white;
+            /* White text */
             border: none;
             padding: 8px 16px;
             border-radius: 4px;
@@ -143,7 +147,7 @@
             margin-bottom: 5px;
         }
 
-        .form-group input, 
+        .form-group input,
         .form-group textarea {
             width: 100%;
             padding: 8px;
@@ -172,8 +176,23 @@
             gap: 10px;
             margin-top: 20px;
         }
+
+        /* Attendance info styles */
+        .event-attendance {
+            background-color: #f5f7f9;
+            padding: 8px 12px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+
+        .event-attendance::before {
+            content: "👥";
+            margin-right: 6px;
+        }
     </style>
 </head>
+
 <body>
     <div id="loading-message">Verifying shop access...</div>
 
@@ -182,11 +201,12 @@
             <h1>Shop Events<span id="shop-name-header"></span></h1>
             <button onclick="window.shopAuth.logout()" class="logout-btn">Logout</button>
         </div>
-        
+
         <div id="approval-banner" class="approval-banner hidden">
-            <div class="approval-message">Your shop is pending approval. Some features may be limited until your shop is approved.</div>
+            <div class="approval-message">Your shop is pending approval. Some features may be limited until your shop is
+                approved.</div>
         </div>
-        
+
         <nav class="shop-nav">
             <ul>
                 <li><a href="shophome.html">Dashboard</a></li>
@@ -195,7 +215,7 @@
                 <li><a href="shop-tables.html">Tables</a></li>
                 <li><a href="shop-schedule.html">Schedule</a></li>
                 <li><a href="#" class="active">Events</a></li>
-                <li><a href="shop-notifications.html" >Notifications</a></li>
+                <li><a href="shop-notifications.html">Notifications</a></li>
             </ul>
         </nav>
 
@@ -223,36 +243,42 @@
 
             <form id="event-form">
                 <input type="hidden" id="edit-event-id">
-                
+
                 <div class="form-group">
                     <label for="event-name">Event Name*</label>
                     <input type="text" id="event-name" required>
                 </div>
-                
+
                 <div class="form-row">
                     <div class="form-group">
                         <label for="event-date">Date*</label>
                         <input type="date" id="event-date" required>
                     </div>
                 </div>
-                
+
                 <div class="form-row">
                     <div class="form-group">
                         <label for="event-start-time">Start Time*</label>
                         <input type="time" id="event-start-time" required>
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="event-end-time">End Time*</label>
                         <input type="time" id="event-end-time" required>
                     </div>
                 </div>
-                
+
+                <div class="form-group">
+                    <label for="attendance-limit">Attendance Limit*</label>
+                    <input type="number" id="attendance-limit" min="1" value="20" required>
+                    <small>Maximum number of attendees allowed for this event</small>
+                </div>
+
                 <div class="form-group">
                     <label for="event-description">Description</label>
                     <textarea id="event-description" placeholder="Describe the event..."></textarea>
                 </div>
-                
+
                 <div class="modal-buttons">
                     <button type="button" onclick="closeModal()" class="primary-btn">Cancel</button>
                     <button type="submit" class="success-btn">Save Event</button>
@@ -267,10 +293,10 @@
             <div class="modal-header">
                 <h2>Delete Event</h2>
             </div>
-            
+
             <p>Are you sure you want to delete this event? This action cannot be undone.</p>
             <input type="hidden" id="delete-event-id">
-            
+
             <div class="modal-buttons">
                 <button type="button" onclick="closeModal()" class="primary-btn">Cancel</button>
                 <button type="button" onclick="confirmDelete()" class="danger-btn">Delete</button>
@@ -281,30 +307,30 @@
     <script>
         // Store shop ID after verification
         let shopId = null;
-        
+
         // Verify shop owner access
-        window.shopAuth.verifyShopOwner(function(user, shopData) {
+        window.shopAuth.verifyShopOwner(function (user, shopData) {
             // Store shop ID
             shopId = shopData.id;
-            
+
             // Load shop events
             loadEvents();
         });
-        
+
         // Load events from Firestore
         function loadEvents() {
             if (!shopId) {
                 console.error('Shop ID not available');
                 return;
             }
-            
+
             // Show loading message
             document.getElementById('events-list').innerHTML = '<div class="loading-message">Loading events...</div>';
-            
+
             // Get current date
             const now = new Date();
             now.setHours(0, 0, 0, 0);
-            
+
             // Query Firestore for events
             window.shopAuth.db.collection('Events')
                 .where('shopId', '==', shopId)
@@ -321,13 +347,13 @@
                         `;
                         return;
                     }
-                    
+
                     let eventsHtml = '';
-                    
+
                     querySnapshot.forEach((doc) => {
                         const event = doc.data();
                         event.id = doc.id;
-                        
+
                         // Format date
                         const eventDate = event.date.toDate();
                         const formattedDate = eventDate.toLocaleDateString('en-GB', {
@@ -336,7 +362,12 @@
                             month: 'long',
                             year: 'numeric'
                         });
-                        
+
+                        // Attendance limit display
+                        const attendanceInfo = event.attendanceLimit ?
+                            `Attendance Limit: ${event.attendanceLimit} people` :
+                            'No attendance limit set';
+
                         eventsHtml += `
                             <div class="event-card">
                                 <div class="event-header">
@@ -346,6 +377,7 @@
                                     <div class="event-date">${formattedDate}</div>
                                     <div class="event-time">${event.startTime} - ${event.endTime}</div>
                                 </div>
+                                <div class="event-attendance">${attendanceInfo}</div>
                                 ${event.description ? `<div class="event-description">${event.description}</div>` : ''}
                                 <div class="event-buttons">
                                     <button class="edit-btn" onclick="editEvent('${event.id}')">Edit</button>
@@ -354,7 +386,7 @@
                             </div>
                         `;
                     });
-                    
+
                     document.getElementById('events-list').innerHTML = eventsHtml;
                 })
                 .catch((error) => {
@@ -366,26 +398,27 @@
                     `;
                 });
         }
-        
+
         // Show add event modal
         function showAddEventModal() {
             // Reset form
             document.getElementById('event-form').reset();
             document.getElementById('edit-event-id').value = '';
             document.getElementById('modal-title').textContent = 'Add New Event';
-            
+
             // Set default date to today
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('event-date').value = today;
-            
+
             // Set default times
             document.getElementById('event-start-time').value = '18:00';
             document.getElementById('event-end-time').value = '22:00';
-            
+            document.getElementById('attendance-limit').value = '20';
+
             // Show modal
             document.getElementById('event-modal').style.display = 'block';
         }
-        
+
         // Edit existing event
         function editEvent(eventId) {
             // Get event data from Firestore
@@ -393,22 +426,25 @@
                 .then((doc) => {
                     if (doc.exists) {
                         const event = doc.data();
-                        
+
                         // Set form values
                         document.getElementById('edit-event-id').value = eventId;
                         document.getElementById('modal-title').textContent = 'Edit Event';
                         document.getElementById('event-name').value = event.name;
-                        
+
                         // Format date for input
                         const eventDate = event.date.toDate();
                         const formattedDate = eventDate.toISOString().split('T')[0];
                         document.getElementById('event-date').value = formattedDate;
-                        
+
                         // Set time values
                         document.getElementById('event-start-time').value = event.startTime;
                         document.getElementById('event-end-time').value = event.endTime;
                         document.getElementById('event-description').value = event.description || '';
-                        
+
+                        // Set attendance limit
+                        document.getElementById('attendance-limit').value = event.attendanceLimit || '20';
+
                         // Show modal
                         document.getElementById('event-modal').style.display = 'block';
                     } else {
@@ -420,20 +456,46 @@
                     showMessage('Error getting event: ' + error.message, 'error');
                 });
         }
-        
+
         // Delete event (show confirmation)
         function deleteEvent(eventId) {
             document.getElementById('delete-event-id').value = eventId;
             document.getElementById('delete-modal').style.display = 'block';
         }
-        
+
         // Confirm delete
         function confirmDelete() {
             const eventId = document.getElementById('delete-event-id').value;
-            
-            window.shopAuth.db.collection('Events').doc(eventId).delete()
+
+            // First, get the event details before deleting
+            window.shopAuth.db.collection('Events').doc(eventId).get()
+                .then((doc) => {
+                    if (doc.exists) {
+                        const eventData = doc.data();
+                        const eventName = eventData.name;
+
+                        // Delete the event
+                        return window.shopAuth.db.collection('Events').doc(eventId).delete()
+                            .then(() => {
+                                // After deleting, create a cancellation notification
+                                return window.shopAuth.db.collection('Notifications').add({
+                                    shopId: shopId,
+                                    shopName: window.shopAuth.getShopData().storeName || 'Shop',
+                                    type: 'event',
+                                    title: 'Event Cancelled',
+                                    message: `The event "${eventName}" has been cancelled.`,
+                                    target: 'all', // Send to all users
+                                    isEventCancellation: true,
+                                    cancelledEventId: eventId,
+                                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                                });
+                            });
+                    } else {
+                        throw new Error('Event not found');
+                    }
+                })
                 .then(() => {
-                    showMessage('Event deleted successfully', 'success');
+                    showMessage('Event deleted and cancellation notification sent', 'success');
                     closeModal();
                     loadEvents();
                 })
@@ -442,22 +504,22 @@
                     showMessage('Error deleting event: ' + error.message, 'error');
                 });
         }
-        
+
         // Close modal
         function closeModal() {
             document.getElementById('event-modal').style.display = 'none';
             document.getElementById('delete-modal').style.display = 'none';
         }
-        
+
         // Save event
-        document.getElementById('event-form').addEventListener('submit', function(e) {
+        document.getElementById('event-form').addEventListener('submit', function (e) {
             e.preventDefault();
-            
+
             if (!shopId) {
                 console.error('Shop ID not available');
                 return;
             }
-            
+
             // Get form values
             const eventId = document.getElementById('edit-event-id').value;
             const eventName = document.getElementById('event-name').value;
@@ -465,7 +527,8 @@
             const startTime = document.getElementById('event-start-time').value;
             const endTime = document.getElementById('event-end-time').value;
             const description = document.getElementById('event-description').value;
-            
+            const attendanceLimit = parseInt(document.getElementById('attendance-limit').value);
+
             // Create event data object
             const eventData = {
                 shopId: shopId,
@@ -474,23 +537,24 @@
                 startTime: startTime,
                 endTime: endTime,
                 description: description,
+                attendanceLimit: attendanceLimit,
                 updatedAt: firebase.firestore.FieldValue.serverTimestamp()
             };
-            
+
             // Add createdAt for new events
             if (!eventId) {
                 eventData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
             }
-            
+
             // Save to Firestore
-            const eventRef = eventId ? 
-                window.shopAuth.db.collection('Events').doc(eventId) : 
+            const eventRef = eventId ?
+                window.shopAuth.db.collection('Events').doc(eventId) :
                 window.shopAuth.db.collection('Events').doc();
-            
-            const savePromise = eventId ? 
-                eventRef.update(eventData) : 
+
+            const savePromise = eventId ?
+                eventRef.update(eventData) :
                 eventRef.set(eventData);
-            
+
             savePromise
                 .then(() => {
                     showMessage(eventId ? 'Event updated successfully' : 'Event added successfully', 'success');
@@ -502,22 +566,22 @@
                     showMessage('Error saving event: ' + error.message, 'error');
                 });
         });
-        
+
         // Show message
         function showMessage(message, type) {
             const messageElement = document.getElementById('events-message');
             messageElement.textContent = message;
             messageElement.className = 'message ' + (type === 'error' ? 'error-message' : 'success-message');
             messageElement.classList.remove('hidden');
-            
+
             // Hide message after 5 seconds
             setTimeout(() => {
                 messageElement.classList.add('hidden');
             }, 5000);
         }
-        
+
         // Close modals when clicking outside
-        window.onclick = function(event) {
+        window.onclick = function (event) {
             if (event.target === document.getElementById('event-modal')) {
                 closeModal();
             }
@@ -527,4 +591,5 @@
         };
     </script>
 </body>
+
 </html>

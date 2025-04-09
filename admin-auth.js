@@ -55,7 +55,7 @@ function verifyAdmin(onSuccess, onFailure) {
         
         if (!user) {
             console.log("No user logged in, redirecting to homepage");
-            window.location.href = "/homepage.html";
+            window.location.href = "/index.html";
             return;
         }
         
@@ -121,7 +121,7 @@ function verifyAdmin(onSuccess, onFailure) {
             onFailure(message);
         } else {
             // Default behavior: redirect to homepage
-            window.location.href = "/homepage.html";
+            window.location.href = "/index.html";
         }
     }
 }
@@ -130,7 +130,7 @@ function verifyAdmin(onSuccess, onFailure) {
 function adminLogout() {
     auth.signOut().then(() => {
         console.log("Logged out successfully");
-        window.location.href = "/homepage.html";
+        window.location.href = "/index.html";
     }).catch((error) => {
         console.error("Error signing out:", error);
         alert("Error signing out: " + error.message);
