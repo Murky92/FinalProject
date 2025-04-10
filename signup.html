@@ -8,10 +8,10 @@
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
     
-    <!-- First load the global stylesheet for consistent base styles -->
+    <!-- Global stylesheet -->
     <link rel="stylesheet" href="styles.css">
     
-    <!-- Then load the signup-specific stylesheet that will override conflicting styles -->
+    <!-- Signup-specific stylesheet -->
     <link rel="stylesheet" href="CSS/signup-styles.css">
 </head>
 <body>
@@ -23,18 +23,48 @@
         <div class="signup-container">
             <h2>Shop Registration</h2>
             <form id="store-signup-form">
-                <input type="text" id="storeName" placeholder="Shop Name" required>
-                <input type="text" id="ownerName" placeholder="Shop Owner Name" required>
-                <input type="email" id="email" placeholder="Email Address" required>
-                <input type="password" id="password" placeholder="Password" required>
-                <input type="text" id="address" placeholder="Shop Address" required>
-                <input type="text" id="city" placeholder="Town/City" required>
-                <input type="text" id="county" placeholder="County" required>
-                <input type="text" id="postCode" placeholder="Postcode" required>
-                <input type="tel" id="phoneNumber" placeholder="Phone Number" required>
+                <input type="text" id="storeName" placeholder="Shop Name *" required>
+                <div id="storeName-error" class="error-message-container"></div>
+                
+                <input type="text" id="ownerName" placeholder="Shop Owner Name *" required>
+                <div id="ownerName-error" class="error-message-container"></div>
+                
+                <input type="email" id="email" placeholder="Email Address *" required>
+                <div id="email-error" class="error-message-container"></div>
+                
+                <input type="password" id="password" placeholder="Password *" required>
+                <div id="password-error" class="error-message-container"></div>
+                
+                <input type="text" id="address" placeholder="Shop Address *" required>
+                <div id="address-error" class="error-message-container"></div>
+                
+                <div class="form-row">
+                    <div style="flex: 1;">
+                        <input type="text" id="city" placeholder="Town/City *" required>
+                        <div id="city-error" class="error-message-container"></div>
+                    </div>
+                    <div style="flex: 1;">
+                        <input type="text" id="county" placeholder="County *" required>
+                        <div id="county-error" class="error-message-container"></div>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div style="flex: 1;">
+                        <input type="text" id="postCode" placeholder="Postcode *" required>
+                        <div id="postCode-error" class="error-message-container"></div>
+                    </div>
+                </div>
+                
+                <input type="tel" id="phoneNumber" placeholder="Phone Number *" required>
+                <div id="phoneNumber-error" class="error-message-container"></div>
+                
+                <div class="required-fields-note">* Required fields</div>
+                
                 <button type="submit">Register Shop</button>
             </form>
-            <p id="error-message"></p>
+            <div id="error-message"></div>
+            <div id="success-message"></div>
         </div>
         
         <div class="back-link">
@@ -57,59 +87,9 @@
         firebase.initializeApp(firebaseConfig);
         var auth = firebase.auth();
         var db = firebase.firestore();
-
-        // Store Signup Handler
-        document.getElementById('store-signup-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            var errorMessageElement = document.getElementById('error-message');
-            
-            // Collect form data
-            var storeName = document.getElementById('storeName').value;
-            var ownerName = document.getElementById('ownerName').value;
-            var email = document.getElementById('email').value;
-            var password = document.getElementById('password').value;
-            var address = document.getElementById('address').value;
-            var city = document.getElementById('city').value;
-            var county = document.getElementById('county').value;
-            var postCode = document.getElementById('postCode').value;
-            var phoneNumber = document.getElementById('phoneNumber').value;
-
-            // Basic validation
-            if (password.length < 6) {
-                errorMessageElement.textContent = 'Password must be at least 6 characters long.';
-                return;
-            }
-
-            // Create user with Firebase Authentication
-            auth.createUserWithEmailAndPassword(email, password)
-                .then((userCredential) => {
-                    // User created successfully
-                    var user = userCredential.user;
-
-                    // Store additional store information in Firestore
-                    return db.collection("Stores").doc(user.uid).set({
-                        storeName: storeName,
-                        ownerName: ownerName,
-                        email: email,
-                        address: address,
-                        city: city,
-                        county: county,
-                        postCode: postCode,
-                        phoneNumber: phoneNumber,
-                        role: "shop",
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-                        isApproved: false  // Shops will need admin approval
-                    });
-                })
-                .then(() => {
-                    // Redirect to a store pending approval page
-                    window.location.href = "shop-pending-approval.html";
-                })
-                .catch((error) => {
-                    // Handle errors
-                    errorMessageElement.textContent = error.message;
-                });
-        });
     </script>
+    
+    <!-- Include the validation script -->
+    <script src="functions/signup-validation.js"></script>
 </body>
 </html>
