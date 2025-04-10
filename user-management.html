@@ -8,7 +8,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="admin-styles.css">
+    <link rel="stylesheet" href="css/user-management.css">
     <!-- Load admin authentication script -->
     <script src="admin-auth.js"></script>
 </head>
@@ -24,13 +24,11 @@
         <nav class="admin-nav">
             <ul>
                 <li><a href="adminhome.html">Dashboard</a></li>
-                
                 <li><a href="#" class="active">Store Management</a></li>
                 <li><a href="admin-notifications.html">Notifications Management</a></li>
                 <li><a href="settings.html">Settings</a></li>
             </ul>
         </nav>
-        
         
         <div class="tab-section">
             <h2>Admin Users</h2>
@@ -116,9 +114,8 @@
             <input type="hidden" id="delete-user-type">
             <div id="delete-error" class="error-message hidden"></div>
             <div id="delete-success" class="success-message hidden"></div>
-            <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+            <div class="modal-buttons">
                 <button class="danger-btn" onclick="confirmDelete()">Delete</button>
-                <button class="back-btn" onclick="closeModal('delete-modal')">Cancel</button>
             </div>
         </div>
     </div>
