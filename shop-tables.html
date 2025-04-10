@@ -38,7 +38,6 @@
                 <li><a href="shop-schedule.html">Schedule</a></li>
                 <li><a href="shop-events.html">Events</a></li>
                 <li><a href="shop-notifications.html" >Notifications</a></li>
-
             </ul>
         </nav>
 
@@ -68,7 +67,7 @@
             <h2>Table Information</h2>
             <p>Customers will be able to browse and reserve your tables based on:</p>
             <ul>
-                <li><strong>Table Number:</strong> A unique identifier for each table</li>
+                <li><strong>Table Name/Number:</strong> A unique identifier for each table</li>
                 <li><strong>Capacity:</strong> Number of people that can be seated</li>
                 <li><strong>Type:</strong> Purpose or style of the table</li>
                 <li><strong>Features:</strong> Special amenities or equipment available</li>
@@ -89,8 +88,9 @@
 
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="table-number">Table Number*</label>
-                        <input type="number" id="table-number" min="1" required>
+                        <label for="table-name">Table Name/Number*</label>
+                        <input type="text" id="table-name" required>
+                        <small>You can use names (e.g., "Red Table") or numbers (e.g., "Table 1")</small>
                     </div>
 
                     <div class="form-group">
@@ -131,17 +131,47 @@
 
                 <div class="form-group">
                     <label>Table Features</label>
-                    <div class="checkbox-group">
-                        <div><input type="checkbox" id="feature-terrain"> Terrain/Scenery</div>
-                        <div><input type="checkbox" id="feature-power"> Power Outlets</div>
-                        <div><input type="checkbox" id="feature-lighting"> Special Lighting</div>
-                        <div><input type="checkbox" id="feature-surface"> Premium Playing Surface</div>
-                        <div><input type="checkbox" id="feature-screens"> Screens/Digital Aids</div>
-                        <div><input type="checkbox" id="feature-comfortable"> Comfortable Seating</div>
-                        <div><input type="checkbox" id="feature-painted"> Painted Terrain/Miniatures</div>
-                        <div><input type="checkbox" id="feature-measuring"> Measuring Tools Available</div>
-                        <div><input type="checkbox" id="feature-mats"> Game Mats Available</div>
-                        <div><input type="checkbox" id="feature-dice"> House Dice/Accessories</div>
+                    <div class="feature-tags">
+                        <label class="feature-tag">
+                            <input type="checkbox" id="feature-terrain">
+                            <span>Terrain/Scenery</span>
+                        </label>
+                        <label class="feature-tag">
+                            <input type="checkbox" id="feature-power">
+                            <span>Power Outlets</span>
+                        </label>
+                        <label class="feature-tag">
+                            <input type="checkbox" id="feature-lighting">
+                            <span>Special Lighting</span>
+                        </label>
+                        <label class="feature-tag">
+                            <input type="checkbox" id="feature-surface">
+                            <span>Premium Surface</span>
+                        </label>
+                        <label class="feature-tag">
+                            <input type="checkbox" id="feature-screens">
+                            <span>Screens/Digital</span>
+                        </label>
+                        <label class="feature-tag">
+                            <input type="checkbox" id="feature-comfortable">
+                            <span>Comfortable Seating</span>
+                        </label>
+                        <label class="feature-tag">
+                            <input type="checkbox" id="feature-painted">
+                            <span>Painted Terrain</span>
+                        </label>
+                        <label class="feature-tag">
+                            <input type="checkbox" id="feature-measuring">
+                            <span>Measuring Tools</span>
+                        </label>
+                        <label class="feature-tag">
+                            <input type="checkbox" id="feature-mats">
+                            <span>Game Mats</span>
+                        </label>
+                        <label class="feature-tag">
+                            <input type="checkbox" id="feature-dice">
+                            <span>House Dice</span>
+                        </label>
                     </div>
                 </div>
 
@@ -166,9 +196,9 @@
 
                 <div id="table-error" class="error-message hidden"></div>
 
-                <div class="form-buttons">
-                    <button type="button" class="primary-btn" onclick="closeModal('table-modal')">Cancel</button>
-                    <button type="submit" class="success-btn">Save Table</button>
+                <div class="button-row">
+                    <button type="submit" class="save-btn">Save Table</button>
+                    <button type="button" class="cancel-btn" onclick="closeModal('table-modal')">Cancel</button>
                 </div>
             </form>
         </div>
@@ -278,11 +308,81 @@
             margin-top: 15px;
         }
 
-        .checkbox-group {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        /* Feature tags styling */
+        .feature-tags {
+            display: flex;
+            flex-wrap: wrap;
             gap: 10px;
-            margin-top: 5px;
+            margin-top: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .feature-tag {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: #f0f0f0;
+            border-radius: 20px;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+        
+        .feature-tag:hover {
+            background-color: #e0e0e0;
+        }
+        
+        .feature-tag input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+        
+        .feature-tag input:checked + span {
+            font-weight: bold;
+        }
+        
+        .feature-tag input:checked + span::before {
+            content: "✓ ";
+            color: #34c759;
+        }
+        
+        /* Button styling */
+        .button-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+            padding: 15px 0;
+            border-top: 1px solid #eee;
+        }
+        
+        .save-btn {
+            padding: 10px 24px;
+            background-color: #34c759;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 500;
+        }
+        
+        .save-btn:hover {
+            background-color: #2aaf4c;
+        }
+        
+        .cancel-btn {
+            padding: 10px 24px;
+            background-color: #f8f9fa;
+            color: #333;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 15px;
+        }
+        
+        .cancel-btn:hover {
+            background-color: #e9ecef;
         }
 
         .warning-message {
@@ -345,7 +445,6 @@
             // Query Firestore for tables
             window.shopAuth.db.collection('Tables')
                 .where('shopId', '==', shopId)
-                .orderBy('tableNumber')
                 .get()
                 .then((querySnapshot) => {
                     allTables = [];
@@ -354,6 +453,31 @@
                         const table = doc.data();
                         table.id = doc.id;
                         allTables.push(table);
+                    });
+
+                    // Sort tables by name with proper type handling
+                    allTables.sort((a, b) => {
+                        // Create display names with careful type checking
+                        let nameA, nameB;
+                        
+                        if (a.tableName) {
+                            nameA = String(a.tableName);
+                        } else if (a.tableNumber !== undefined && a.tableNumber !== null) {
+                            nameA = "Table " + a.tableNumber;
+                        } else {
+                            nameA = "Unnamed Table";
+                        }
+                        
+                        if (b.tableName) {
+                            nameB = String(b.tableName);
+                        } else if (b.tableNumber !== undefined && b.tableNumber !== null) {
+                            nameB = "Table " + b.tableNumber;
+                        } else {
+                            nameB = "Unnamed Table";
+                        }
+                        
+                        // Now compare the strings
+                        return nameA.localeCompare(nameB);
                     });
 
                     // Display tables
@@ -423,10 +547,13 @@
                         break;
                 }
 
+                // Get the table name (for backward compatibility, check both tableName and tableNumber)
+                const tableName = table.tableName || (table.tableNumber ? `Table ${table.tableNumber}` : 'Unnamed Table');
+
                 tableCard.innerHTML = `
                     ${table.isActive ? '' : '<div class="inactive-badge">Inactive</div>'}
                     <div class="table-header">
-                        <div class="table-title">Table ${table.tableNumber}</div>
+                        <div class="table-title">${tableName}</div>
                     </div>
                     <div class="table-details">
                         <div class="table-detail">
@@ -484,7 +611,16 @@
 
             document.getElementById('table-modal-title').textContent = 'Edit Table';
             document.getElementById('edit-table-id').value = tableId;
-            document.getElementById('table-number').value = table.tableNumber || '';
+            
+            // Handle table name (for backward compatibility)
+            if (table.tableName) {
+                document.getElementById('table-name').value = table.tableName;
+            } else if (table.tableNumber) {
+                document.getElementById('table-name').value = `Table ${table.tableNumber}`;
+            } else {
+                document.getElementById('table-name').value = '';
+            }
+            
             document.getElementById('table-capacity').value = table.capacity || '';
             document.getElementById('table-type').value = table.tableType || 'standard';
             document.getElementById('table-description').value = table.description || '';
@@ -616,7 +752,7 @@
             const isNewTable = tableId === '';
 
             // Get form values
-            const tableNumber = parseInt(document.getElementById('table-number').value);
+            const tableName = document.getElementById('table-name').value.trim();
             const capacity = parseInt(document.getElementById('table-capacity').value);
             const tableType = document.getElementById('table-type').value;
             const description = document.getElementById('table-description').value;
@@ -625,9 +761,24 @@
             const minBookingHours = parseInt(document.getElementById('min-booking').value) || 1;
             const isActive = document.getElementById('table-active').checked;
 
-            // Validate table number uniqueness for new tables
-            if (isNewTable && allTables.some(t => t.tableNumber === tableNumber)) {
-                document.getElementById('table-error').textContent = 'A table with this number already exists.';
+            // Validate table name is not empty
+            if (!tableName) {
+                document.getElementById('table-error').textContent = 'Table name cannot be empty.';
+                document.getElementById('table-error').classList.remove('hidden');
+                return;
+            }
+
+            // Validate table name uniqueness for new tables (case insensitive comparison)
+            if (isNewTable && allTables.some(t => (t.tableName || '').toLowerCase() === tableName.toLowerCase())) {
+                document.getElementById('table-error').textContent = 'A table with this name already exists.';
+                document.getElementById('table-error').classList.remove('hidden');
+                return;
+            }
+            // Also check uniqueness when editing
+            else if (!isNewTable && allTables.some(t => 
+                t.id !== tableId && 
+                (t.tableName || '').toLowerCase() === tableName.toLowerCase())) {
+                document.getElementById('table-error').textContent = 'Another table with this name already exists.';
                 document.getElementById('table-error').classList.remove('hidden');
                 return;
             }
@@ -648,7 +799,7 @@
             // Prepare table data
             const tableData = {
                 shopId: shopId,
-                tableNumber: tableNumber,
+                tableName: tableName,
                 capacity: capacity,
                 tableType: tableType,
                 description: description,
@@ -700,49 +851,6 @@
                 messageElement.classList.add('hidden');
             }, 5000);
         }
-
-
-        function checkTables() {
-            console.log("Your shop ID:", shopId);
-
-            // Query all tables regardless of shop ID
-            window.shopAuth.db.collection('Tables').get()
-                .then((snapshot) => {
-                    console.log("Total tables in database:", snapshot.size);
-
-                    // Check each table's shop ID
-                    snapshot.forEach(doc => {
-                        const table = doc.data();
-                        console.log(`Table ${table.tableNumber || 'unknown'}: shopId = ${table.shopId}`);
-                    });
-
-                    // Fix tables with a single click
-                    const fixButton = document.createElement('button');
-                    fixButton.textContent = "Fix Tables";
-                    fixButton.className = "danger-btn";
-                    fixButton.style.marginTop = "10px";
-                    fixButton.onclick = function () {
-                        const batch = window.shopAuth.db.batch();
-
-                        snapshot.forEach(doc => {
-                            batch.update(doc.ref, {
-                                shopId: shopId,
-                                isActive: true
-                            });
-                        });
-
-                        batch.commit().then(() => {
-                            alert("All tables fixed! Reloading page...");
-                            location.reload();
-                        });
-                    };
-
-                    document.querySelector('.card-header').appendChild(fixButton);
-                });
-        }
-
-        // Run this check when the page loads
-        window.addEventListener('load', checkTables);
     </script>
 </body>
 

@@ -32,6 +32,9 @@ const { auth, db } = initializeFirebase();
 let currentShopData = null;
 
 // Shop authentication function
+// Updated shop-auth.js function to handle pending approval redirect
+// This is a modification to the verifyShopOwner function
+
 function verifyShopOwner(onSuccess, onFailure) {
     // Show loading state
     const loadingElement = document.getElementById('loading-message') || 
@@ -75,14 +78,25 @@ function verifyShopOwner(onSuccess, onFailure) {
                     currentShopData = doc.data();
                     currentShopData.id = user.uid;
                     
-                    // Check approval status
+                    // Check approval status - UPDATED LOGIC
                     if (currentShopData.registrationStatus === "rejected") {
                         console.log("Shop registration was rejected");
                         handleFailure("Your shop registration has been rejected. Please contact support for more information.");
                         return;
                     }
                     
-                    // Handle successful verification
+                    // NEW: Redirect pending shops to the pending approval page
+                    if (!currentShopData.isApproved) {
+                        // Only allow access to the pending approval page
+                        const currentPage = window.location.pathname.split('/').pop();
+                        if (currentPage !== 'shop-pending-approval.html') {
+                            console.log("Shop is pending approval, redirecting to pending approval page");
+                            window.location.href = "/shop-pending-approval.html";
+                            return;
+                        }
+                    }
+                    
+                    // Handle successful verification for approved shops
                     handleSuccess();
                 } else {
                     // Not a shop owner

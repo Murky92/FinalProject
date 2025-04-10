@@ -7,65 +7,123 @@
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
-    <link rel="stylesheet" href="styles.css">       
+    <link rel="stylesheet" href="styles.css">
+    <script src="shop-auth.js"></script>
+    <style>
+        /* Additional pending approval page styling */
+        .approval-container {
+            max-width: 800px;
+            margin: 100px auto 0 auto;
+            padding: 40px;
+            background-color: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .approval-container h1 {
+            margin-bottom: 30px;
+            color: #333;
+        }
+        
+        .status-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+            color: #ff9500;
+        }
+        
+        .contact-info {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 30px 0;
+            text-align: left;
+        }
+        
+        .contact-info p {
+            margin: 10px 0;
+        }
+        
+        .status-message {
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        
+        .back-button {
+            display: inline-block;
+            background-color: #4a6ee0;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 6px;
+            text-decoration: none;
+            margin-top: 20px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        
+        .back-button:hover {
+            background-color: #3a5bc0;
+        }
+        
+        .logout-section {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .logout-button {
+            display: inline-block;
+            background-color: #f1f1f1;
+            color: #333;
+            padding: 10px 20px;
+            border-radius: 4px;
+            text-decoration: none;
+            border: 1px solid #ddd;
+            cursor: pointer;
+        }
+        
+        .logout-button:hover {
+            background-color: #e5e5e5;
+        }
+    </style>       
 </head>
 <body>
+    <div id="loading-message">Verifying shop access...</div>
     
-    <div class="approval-container">
+    <div id="approval-container" class="approval-container hidden">
+        <div class="status-icon">⏳</div>
         <h1>Shop Registration Pending Approval</h1>
         
-        <p>Thank you for registering your shop with Tabletop Reserve! Your application is currently under review by our admin team.</p>
-        
-        <p>We will verify the details you've provided and ensure your shop meets our requirements. This process typically takes 1-3 business days.</p>
+        <div class="status-message">
+            <p>Thank you for registering your shop with Tabletop Reserve!</p>
+            <p>Your application is currently under review by our admin team.</p>
+            <p>We will verify the details you've provided and ensure your shop meets our requirements.</p>
+            <p>This process typically takes 1-3 business days.</p>
+        </div>
         
         <div class="contact-info">
             <p>If you have any questions or need to provide additional information, please contact our support team at:</p>
-            <p>Email: support@tabletopreserve.com</p>
-            <p>Phone: 0800 123 4567</p>
+            <p><strong>Email:</strong> support@tabletopreserve.com</p>
+            <p><strong>Phone:</strong> 0800 123 4567</p>
         </div>
         
-        <a href="/" class="back-button">Return to Homepage</a>
-        
-        <p id="error-message"></p>
+        <div class="logout-section">
+            <p>Want to log out of your account?</p>
+            <button onclick="window.shopAuth.logout()" class="logout-button">Logout</button>
+        </div>
     </div>
 
     <script>
-        // Firebase Configuration
-        var firebaseConfig = {
-            apiKey: "AIzaSyCu5nNm7f-0fU8tQKNAfMIYnlJrtJBJRMY",
-            authDomain: "tabletop-reserve.firebaseapp.com",
-            projectId: "tabletop-reserve",
-            storageBucket: "tabletop-reserve.firebasestorage.app",
-            messagingSenderId: "178270446013",
-            appId: "1:178270446013:web:b71f5339747750eb3a32d4"
-        };
-
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
-        var auth = firebase.auth();
-        var db = firebase.firestore();
-
-        // Check if user is logged in and has a pending shop registration
-        auth.onAuthStateChanged(function(user) {
-            if (user) {
-                db.collection("Stores").doc(user.uid).get()
-                    .then((doc) => {
-                        if (doc.exists && doc.data().isApproved === false) {
-                            // User is logged in and shop is pending approval
-                            console.log("Shop pending approval");
-                        } else {
-                            // Redirect if shop is already approved or not found
-                            window.location.href = "/index.html";
-                        }
-                    })
-                    .catch((error) => {
-                        document.getElementById('error-message').textContent = 
-                            "Error checking registration status: " + error.message;
-                    });
-            } else {
-                // Redirect to login if no user is logged in
-                window.location.href = "/login.html";
-            }
+        // Verify the user is logged in and has a pending shop
+        window.shopAuth.verifyShopOwner(function(user, shopData) {
+            // Check if the shop is pending approval
+            
+            // Show the approval container
+            document.getElementById('loading-message').style.display = 'none';
+            document.getElementById('approval-container').classList.remove('hidden');
+            
+            console.log("Shop is pending approval, displaying pending page");
         });
     </script>
 </body>
