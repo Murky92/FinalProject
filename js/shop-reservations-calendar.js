@@ -1,5 +1,5 @@
 /**
- * shop-reservations-calendar.js
+ * functions/shop-reservations-calendar.js
  * Manages the calendar view of shop reservations
  */
 

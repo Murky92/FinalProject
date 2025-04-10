@@ -1,4 +1,4 @@
-// admin-auth.js - Common authentication for all admin pages
+// functions/admin-auth.js - Common authentication for all admin pages
 
 // Firebase initialization with check to prevent duplicate initialization
 function initializeFirebase() {

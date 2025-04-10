@@ -1,5 +1,5 @@
 /**
- * shop-notifications.js
+ * functions/shop-notifications.js
  * Manages in-app notifications and customer notification sending
  */
 

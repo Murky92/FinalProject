@@ -20,7 +20,7 @@ body {
     color: var(--text-color);
     line-height: 1.6;
     position: relative;
-    background-image: url('logo-transparent-png.png');
+    background-image: url('images/logo-transparent-png.png');
     background-position: top left;
     background-repeat: no-repeat;
     background-size: 200px;

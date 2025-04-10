@@ -1,5 +1,5 @@
 /**
- * shop-reservations-list.js
+ * functions/shop-reservations-list.js
  * Manages the list view of shop reservations and common reservation functionality
  */
 
