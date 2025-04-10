@@ -7,99 +7,18 @@
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+    
+    <!-- First load the global stylesheet for consistent base styles -->
     <link rel="stylesheet" href="styles.css">
-    <style>
-        body {
-            /* Remove the background image with logo */
-            background-image: none;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            margin: 0;
-            padding: 20px;
-            background-color: #f4f4f4;
-        }
-        
-        .main-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-            max-width: 500px;
-            margin: 0 auto;
-        }
-        
-        .logo {
-            max-width: 300px;
-            margin-bottom: 30px;
-            position: absolute;
-            top: 5px;  /* Adjust top positioning */
-            left: -10px; /* Adjust left positioning */
-        }
-        
-        .signup-container {
-            width: 100%;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-            background: white;
-            margin-bottom: 20px;
-        }
-        
-        .signup-container h2 {
-            margin-top: 0;
-            margin-bottom: 20px;
-            text-align: center;
-            color: #333;
-        }
-        
-        .signup-container input {
-            margin-bottom: 12px;
-        }
-        
-        button[type="submit"] {
-            background-color: #28a745;
-            color: white;
-            border: none;
-            padding: 12px;
-            border-radius: 4px;
-            width: 100%;
-            cursor: pointer;
-            font-size: 16px;
-            margin-top: 10px;
-            transition: background-color 0.3s;
-        }
-        
-        button[type="submit"]:hover {
-            background-color: #218838;
-        }
-        
-        #error-message {
-            color: #dc3545;
-            text-align: center;
-            margin: 10px 0;
-            min-height: 20px;
-        }
-        
-        .back-link {
-            margin-top: 15px;
-            text-align: center;
-        }
-        
-        .back-link a {
-            color: #007BFF;
-            text-decoration: none;
-        }
-        
-        .back-link a:hover {
-            text-decoration: underline;
-        }
-    </style>
+    
+    <!-- Then load the signup-specific stylesheet that will override conflicting styles -->
+    <link rel="stylesheet" href="CSS/signup-styles.css">
 </head>
 <body>
-    <div class="main-container">
-        <img src="logo-transparent-png.png" alt="Tabletop Reserve Logo" class="logo">
+    <div class="signup-main-container">
+        <div class="signup-logo-container">
+            <img src="logo-transparent-png.png" alt="Tabletop Reserve Logo" class="signup-logo">
+        </div>
         
         <div class="signup-container">
             <h2>Shop Registration</h2>

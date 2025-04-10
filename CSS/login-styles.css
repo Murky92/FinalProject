@@ -1,0 +1,136 @@
+/* login-styles.css - Separate styling for login page only */
+
+/* Reset any conflicting styles */
+body {
+    background-image: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background-color: #f4f4f4 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    align-items: center !important;
+    min-height: 100vh !important;
+    font-family: Arial, sans-serif !important;
+}
+
+/* Hide any existing logo that might be positioned at the top left */
+.top-left-logo {
+    display: none !important;
+}
+
+/* Main container for centered content */
+.login-main-container {
+    position: relative !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important; /* Changed from center to flex-start to align content to left */
+    width: 90% !important;
+    max-width: 400px !important;
+    margin: 0 auto !important;
+}
+
+/* Logo styling */
+.login-logo-container {
+    text-align: left !important; /* Changed from center to left */
+    margin-bottom: 40px !important;
+    width: 100% !important;
+    margin-left: -70px !important; /* Negative margin to move logo even more left */
+}
+
+.login-logo {
+    max-width: 540px !important;
+    height: auto !important;
+    position: static !important; /* Override any absolute positioning */
+}
+
+/* Login container */
+.login-container {
+    width: 100% !important;
+    padding: 30px !important;
+    border-radius: 8px !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+    background-color: white !important;
+    text-align: center !important;
+    box-sizing: border-box !important;
+}
+
+.login-container h2 {
+    margin-top: 0 !important;
+    margin-bottom: 25px !important;
+    color: #333 !important;
+    font-size: 24px !important;
+}
+
+/* Form styling */
+.login-container input {
+    width: 100% !important;
+    padding: 12px !important;
+    margin: 8px 0 16px !important;
+    border: 1px solid #ddd !important;
+    border-radius: 4px !important;
+    box-sizing: border-box !important;
+    font-size: 16px !important;
+}
+
+.login-btn, 
+.signup-btn {
+    width: 100% !important;
+    padding: 12px !important;
+    border: none !important;
+    border-radius: 4px !important;
+    color: #fff !important;
+    font-size: 16px !important;
+    cursor: pointer !important;
+    margin: 10px 0 !important;
+    transition: background-color 0.3s !important;
+}
+
+.login-btn {
+    background-color: #007BFF !important;
+}
+
+.login-btn:hover {
+    background-color: #0056b3 !important;
+}
+
+.signup-btn {
+    background-color: #28a745 !important;
+}
+
+.signup-btn:hover {
+    background-color: #218838 !important;
+}
+
+/* Error message */
+#error-message {
+    color: #dc3545 !important;
+    text-align: center !important;
+    margin: 10px 0 !important;
+    min-height: 20px !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .login-logo {
+        max-width: 440px !important; /* Still large but better for tablets */
+    }
+    
+    .login-logo-container {
+        margin-left: -40px !important; /* Less negative margin on medium screens */
+    }
+}
+
+@media (max-width: 480px) {
+    .login-logo {
+        max-width: 320px !important; /* Adjusted for mobile but still larger than original */
+    }
+    
+    .login-container {
+        padding: 20px !important;
+    }
+    
+    .login-logo-container {
+        margin-left: -20px !important; /* Even less negative margin on small screens */
+    }
+}
