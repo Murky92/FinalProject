@@ -7,9 +7,18 @@ const UIManager = {
      * Show a message in the UI
      * @param {string} message - The message to display
      * @param {string} type - Message type ('success' or 'error')
+     * @param {boolean} inModal - Whether to show the message in the modal
      */
-    showMessage: function(message, type) {
-        const messageElement = document.getElementById('events-message');
+    showMessage: function(message, type, inModal = false) {
+        // Determine which message element to use
+        const messageElementId = inModal ? 'modal-message' : 'events-message';
+        const messageElement = document.getElementById(messageElementId);
+        
+        if (!messageElement) {
+            console.error(`Message element with ID ${messageElementId} not found`);
+            return;
+        }
+        
         messageElement.textContent = message;
         messageElement.className = 'message ' + (type === 'error' ? 'error-message' : 'success-message');
         messageElement.classList.remove('hidden');
@@ -26,6 +35,12 @@ const UIManager = {
     closeModal: function() {
         document.getElementById('event-modal').style.display = 'none';
         document.getElementById('delete-modal').style.display = 'none';
+        
+        // Clear any modal messages when closing
+        const modalMessage = document.getElementById('modal-message');
+        if (modalMessage) {
+            modalMessage.classList.add('hidden');
+        }
     },
 
     /**

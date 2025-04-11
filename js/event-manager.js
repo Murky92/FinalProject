@@ -73,6 +73,9 @@ const EventManager = {
         document.getElementById('parent-event-id').value = '';
         document.getElementById('modal-title').textContent = 'Add New Event';
 
+        // Clear any previous modal messages
+        document.getElementById('modal-message').classList.add('hidden');
+
         // Show recurrence options
         document.getElementById('recurrence-toggle-container').style.display = 'block';
 
@@ -98,6 +101,9 @@ const EventManager = {
      * @param {string} eventId - The event ID
      */
     editEvent: function(eventId) {
+        // Clear any previous modal messages
+        document.getElementById('modal-message').classList.add('hidden');
+        
         // Get event data from Firestore
         DataManager.getEvent(eventId)
             .then(event => {
@@ -359,7 +365,7 @@ const EventManager = {
             return;
         }
         
-        // Validate attendance limit field - THIS FIXES THE ORIGINAL ISSUE
+        // Validate attendance limit field
         if (!UIManager.validateAttendanceLimit()) {
             return;
         }
@@ -411,7 +417,7 @@ const EventManager = {
                 })
                 .catch((error) => {
                     console.error('Error updating event:', error);
-                    UIManager.showMessage('Error updating event: ' + error.message, 'error');
+                    UIManager.showMessage('Error updating event: ' + error.message, 'error', true);
                 });
         } else {
             // Get recurrence data for new or parent events
@@ -492,7 +498,7 @@ const EventManager = {
             })
             .catch((error) => {
                 console.error('Error saving recurring events:', error);
-                UIManager.showMessage('Error saving recurring events: ' + error.message, 'error');
+                UIManager.showMessage('Error saving recurring events: ' + error.message, 'error', true);
             });
     },
     
@@ -524,7 +530,7 @@ const EventManager = {
             })
             .catch((error) => {
                 console.error('Error updating event:', error);
-                UIManager.showMessage('Error updating event: ' + error.message, 'error');
+                UIManager.showMessage('Error updating event: ' + error.message, 'error', true);
             });
     },
     
@@ -547,7 +553,7 @@ const EventManager = {
             })
             .catch((error) => {
                 console.error('Error saving event:', error);
-                UIManager.showMessage('Error saving event: ' + error.message, 'error');
+                UIManager.showMessage('Error saving event: ' + error.message, 'error', true);
             });
     }
 };
