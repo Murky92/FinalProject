@@ -1,57 +1,67 @@
+const functions = require('firebase-functions/v1');
+const admin = require('firebase-admin');
 const nodemailer = require('nodemailer');
-const { google } = require('googleapis');
 
-const OAuth2 = google.auth.OAuth2;
+// Initialize Firebase Admin SDK
+admin.initializeApp();
 
-// OAuth2 credentials
-const oauth2Client = new OAuth2(
-    '178270446013-fqr5nh4ec3vav206o2m8djmhe3nn24mp.apps.googleusercontent.com',    // Your OAuth2 Client ID
-    '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', // Your OAuth2 Client Secret
-    'https://developers.google.com/oauthplayground'  // Redirect URI (you can use the OAuth2 Playground for testing)
-);
-
-oauth2Client.setCredentials({
-    refresh_token: '1//04HUJVf8_6QttCgYIARAAGAQSNwF-L9IrkM9JfHG46EnnQiwGUhbqU-z6LyR3JZc58mG4f6tC04IWJIYkji4HjDWnBwRYt1O3YYA' // The refresh token you obtained
-});
-
-// Function to get the access token
-async function getAccessToken() {
-    const accessToken = await oauth2Client.getAccessToken();
-    return accessToken.token;  // Corrected: accessToken is an object containing the token
-}
-
-// Function to send the email
-async function sendSignUpNotification(userEmail) {
-    const accessToken = await getAccessToken();
-
-    // Set up Nodemailer with OAuth2
+// Function that sends the email notification
+async function sendSignUpNotification(storeData) {
+    // Set up Nodemailer with App Password
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            type: 'OAuth2',
-            user: 'murk8619@gmail.com', // Your Gmail address
-            clientId: '178270446013-fqr5nh4ec3vav206o2m8djmhe3nn24mp.apps.googleusercontent.com',
-            clientSecret: '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',
-            refreshToken: '1//04HUJVf8_6QttCgYIARAAGAQSNwF-L9IrkM9JfHG46EnnQiwGUhbqU-z6LyR3JZc58mG4f6tC04IWJIYkji4HjDWnBwRYt1O3YYA',
-            accessToken: accessToken,
-        },
+            user: functions.config().gmail.email,
+            pass: functions.config().gmail.app_password
+        }
     });
 
-    // Email options (send a notification when someone signs up)
+    // Create email content
     const mailOptions = {
-        from: 'murk8619@gmail.com',
-        to: 'admin@tabletopreserve.com', 
-        subject: 'New User Sign Up',
-        text: `A new user has signed up on your website. Their email is: ${userEmail}`,
+        from: `Tabletop Reserve <${functions.config().gmail.email}>`,
+        to: functions.config().admin.email, 
+        subject: 'New Store Registration on Tabletop Reserve',
+        html: `
+            <h2>New Store Registration</h2>
+            <p>A new store has registered on Tabletop Reserve:</p>
+            <ul>
+                <li><strong>Store Name:</strong> ${storeData.storeName || 'Not provided'}</li>
+                <li><strong>Owner:</strong> ${storeData.ownerName || 'Not provided'}</li>
+                <li><strong>Email:</strong> ${storeData.email || 'Not provided'}</li>
+                <li><strong>Phone:</strong> ${storeData.phoneNumber || 'Not provided'}</li>
+                <li><strong>Location:</strong> ${storeData.city || ''}, ${storeData.county || ''}</li>
+
+            </ul>
+            <p>Please review this registration in the admin dashboard.</p>
+            <p>For more information, visit our website: <a href="https://www.tabletopreserve.com" target="_blank">Tabletop Reserve</a></p>
+            <p>Thank you!</p>
+            
+        `,
     };
 
     try {
         const info = await transporter.sendMail(mailOptions);
         console.log('Email sent:', info.response);
+        return info;
     } catch (error) {
         console.error('Error sending email:', error);
+        throw error;
     }
 }
 
-// Example usage when a new user signs up
-sendSignUpNotification('new-user@example.com');
+// Cloud function that triggers when a new store is created
+exports.newStoreSignUp = functions.firestore
+    .document('Stores/{storeId}')
+    .onCreate(async (snapshot, context) => {
+        const storeData = snapshot.data();
+        
+        try {
+            // Send notification email with store details
+            await sendSignUpNotification(storeData);
+            console.log('Store registration notification sent successfully');
+            return null;
+        } catch (error) {
+            console.error('Error sending store registration notification:', error);
+            return null;
+        }
+    });
