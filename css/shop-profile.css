@@ -1,0 +1,256 @@
+/* Tab navigation */
+.tab-buttons {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.tab-btn {
+    padding: 10px 20px;
+    margin-right: 10px;
+    background-color: #f1f1f1;
+    border: 1px solid #ddd;
+    border-radius: 4px 4px 0 0;
+    border-bottom: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.tab-btn.active {
+    background-color: #4a6ee0;
+    color: white;
+}
+
+.tab-btn:hover:not(.active) {
+    background-color: #e1e1e1;
+}
+
+/* Tab content */
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Form styling */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.form-group textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+.form-buttons {
+    margin-top: 25px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.form-row {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.form-row .form-group {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+/* Checkbox group styling */
+.checkbox-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.checkbox-group div {
+    display: flex;
+    align-items: center;
+}
+
+.checkbox-group input[type="checkbox"] {
+    width: auto;
+    margin-right: 8px;
+}
+
+/* Logo upload styling */
+.logo-upload-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 20px;
+    border: 1px dashed #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+.logo-preview {
+    width: 200px;
+    height: 200px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    overflow: hidden;
+}
+
+.logo-preview img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.logo-requirements {
+    background-color: #f0f4ff;
+    border: 1px solid #dae2ff;
+    border-radius: 6px;
+    padding: 12px 15px;
+    margin-bottom: 15px;
+    width: 100%;
+    max-width: 400px;
+}
+
+.logo-requirements h4 {
+    margin-top: 0;
+    margin-bottom: 8px;
+    color: #3a5bc0;
+}
+
+.logo-requirements ul {
+    margin: 0;
+    padding-left: 20px;
+}
+
+.logo-requirements li {
+    margin-bottom: 4px;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.file-input-container {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.file-input-label {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #4a6ee0;
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.file-input-label:hover {
+    background-color: #3a5bc0;
+}
+
+.file-input {
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+}
+
+.upload-status {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.upload-status.warning {
+    color: #e67e22;
+}
+
+.upload-status.error {
+    color: #e74c3c;
+}
+
+.upload-status.success {
+    color: #27ae60;
+}
+
+.upload-progress {
+    width: 100%;
+    height: 10px;
+    margin-top: 10px;
+    border-radius: 5px;
+    background-color: #eee;
+    overflow: hidden;
+    display: none;
+}
+
+.upload-progress-bar {
+    height: 100%;
+    background-color: #34c759;
+    width: 0%;
+    transition: width 0.3s ease;
+}
+
+/* Notification popup */
+.notification-popup {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 25px;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    z-index: 2000;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    transform: translateY(-100px);
+    opacity: 0;
+}
+
+.notification-popup.success {
+    background-color: #34c759;
+}
+
+.notification-popup.error {
+    background-color: #ff3b30;
+}
+
+.notification-popup.show {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.notification-close {
+    margin-left: 15px;
+    cursor: pointer;
+    font-weight: bold;
+}
