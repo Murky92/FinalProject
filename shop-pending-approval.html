@@ -8,85 +8,9 @@
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/shop-pending-approval.css">
     <script src="js/shop-auth.js"></script>
-    <style>
-        /* Additional pending approval page styling */
-        .approval-container {
-            max-width: 800px;
-            margin: 100px auto 0 auto;
-            padding: 40px;
-            background-color: #fff;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            text-align: center;
-        }
-        
-        .approval-container h1 {
-            margin-bottom: 30px;
-            color: #333;
-        }
-        
-        .status-icon {
-            font-size: 60px;
-            margin-bottom: 20px;
-            color: #ff9500;
-        }
-        
-        .contact-info {
-            background-color: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
-            margin: 30px 0;
-            text-align: left;
-        }
-        
-        .contact-info p {
-            margin: 10px 0;
-        }
-        
-        .status-message {
-            font-size: 18px;
-            line-height: 1.6;
-            margin-bottom: 30px;
-        }
-        
-        .back-button {
-            display: inline-block;
-            background-color: #4a6ee0;
-            color: white;
-            padding: 12px 30px;
-            border-radius: 6px;
-            text-decoration: none;
-            margin-top: 20px;
-            font-weight: bold;
-            transition: background-color 0.3s;
-        }
-        
-        .back-button:hover {
-            background-color: #3a5bc0;
-        }
-        
-        .logout-section {
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 1px solid #eee;
-        }
-        
-        .logout-button {
-            display: inline-block;
-            background-color: #f1f1f1;
-            color: #333;
-            padding: 10px 20px;
-            border-radius: 4px;
-            text-decoration: none;
-            border: 1px solid #ddd;
-            cursor: pointer;
-        }
-        
-        .logout-button:hover {
-            background-color: #e5e5e5;
-        }
-    </style>       
+          
 </head>
 <body>
     <div id="loading-message">Verifying shop access...</div>
