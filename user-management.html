@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,15 +13,16 @@
     <!-- Load admin authentication script -->
     <script src="js/admin-auth.js"></script>
 </head>
+
 <body>
     <div id="loading-message">Verifying admin access...</div>
-    
+
     <div id="admin-content" class="admin-container">
         <div class="dashboard-header">
             <h1>User Management</h1>
             <button onclick="window.adminAuth.logout()" class="danger-btn">Logout</button>
         </div>
-        
+
         <nav class="admin-nav">
             <ul>
                 <li><a href="adminhome.html">Dashboard</a></li>
@@ -29,11 +31,11 @@
                 <li><a href="settings.html">Settings</a></li>
             </ul>
         </nav>
-        
+
         <div class="tab-section">
             <h2>Admin Users</h2>
             <button class="success-btn" onclick="showAddAdminModal()">+ Add New Admin</button>
-            
+
             <table class="data-table">
                 <thead>
                     <tr>
@@ -49,7 +51,7 @@
                     </tr>
                 </tbody>
             </table>
-            
+
             <h2>Shop Accounts</h2>
             <table class="data-table">
                 <thead>
@@ -70,7 +72,7 @@
             </table>
         </div>
     </div>
-    
+
     <!-- Add Admin Modal -->
     <div id="add-admin-modal" class="modal">
         <div class="modal-content">
@@ -101,7 +103,7 @@
             </form>
         </div>
     </div>
-    
+
     <!-- Delete Confirmation Modal -->
     <div id="delete-modal" class="modal">
         <div class="modal-content">
@@ -122,31 +124,31 @@
 
     <script>
         // Verify admin access and load user data when verified
-        window.adminAuth.verifyAdmin(function(user) {
+        window.adminAuth.verifyAdmin(function (user) {
             // Admin verified successfully, load user data
             loadUsers();
         });
-        
+
         // Load all users
         function loadUsers() {
             loadAdminUsers();
             loadShopUsers();
         }
-        
+
         // Load Admin Users
         function loadAdminUsers() {
             const db = window.adminAuth.db;
             console.log("Loading admin users...");
-            
+
             db.collection("Users")
                 .where("role", "==", "admin")
                 .get()
                 .then((querySnapshot) => {
                     console.log("Admin users query returned:", querySnapshot.size, "results");
-                    
+
                     const tableBody = document.getElementById('admin-users-table');
                     tableBody.innerHTML = '';
-                    
+
                     if (querySnapshot.empty) {
                         // If no admin users found
                         if (window.adminAuth.auth.currentUser) {
@@ -163,58 +165,58 @@
                         }
                         return;
                     }
-                    
+
                     // Add admin users to table
                     querySnapshot.forEach((doc) => {
                         const userData = doc.data();
                         const row = document.createElement('tr');
-                        
+
                         // Don't allow deleting yourself
                         const isCurrentUser = doc.id === window.adminAuth.auth.currentUser.uid;
-                        const actionButtons = isCurrentUser 
+                        const actionButtons = isCurrentUser
                             ? '<span class="text-success">Current User</span>'
                             : `<button class="action-btn delete-btn" onclick="showDeleteModal('${doc.id}', 'admin')">Delete</button>`;
-                        
+
                         row.innerHTML = `
                             <td>${userData.name || 'No Name'}</td>
                             <td>${userData.email || 'No Email'}</td>
                             <td>${actionButtons}</td>
                         `;
-                        
+
                         tableBody.appendChild(row);
                     });
                 })
                 .catch((error) => {
                     console.error("Error loading admin users: ", error);
-                    document.getElementById('admin-users-table').innerHTML = 
+                    document.getElementById('admin-users-table').innerHTML =
                         '<tr><td colspan="3" class="text-center text-danger">Error loading admin users</td></tr>';
                 });
         }
-        
+
         // Load Shop Users
         function loadShopUsers() {
             const db = window.adminAuth.db;
             console.log("Loading shop accounts...");
-            
+
             db.collection("Stores")
                 .get()
                 .then((querySnapshot) => {
                     console.log("Shop accounts query returned:", querySnapshot.size, "results");
-                    
+
                     const tableBody = document.getElementById('shop-users-table');
                     tableBody.innerHTML = '';
-                    
+
                     if (querySnapshot.empty) {
                         tableBody.innerHTML = '<tr><td colspan="5" class="text-center">No shop accounts found</td></tr>';
                         return;
                     }
-                    
+
                     // Add shops to table
                     querySnapshot.forEach((doc) => {
                         const shopData = doc.data();
                         let status = 'Unknown';
                         let statusClass = '';
-                        
+
                         if (shopData.isApproved === true) {
                             status = 'Approved';
                             statusClass = 'text-success';
@@ -224,14 +226,14 @@
                         } else {
                             status = 'Pending';
                         }
-                        
+
                         const row = document.createElement('tr');
-                        
+
                         // Create approve button for pending shops
-                        const approveButton = (status === 'Pending') 
+                        const approveButton = (status === 'Pending')
                             ? `<button class="action-btn approve-btn" onclick="approveShop('${doc.id}')">Approve</button> `
                             : '';
-                        
+
                         row.innerHTML = `
                             <td>${shopData.storeName || 'No Name'}</td>
                             <td>${shopData.ownerName || 'No Owner'}</td>
@@ -242,17 +244,17 @@
                                 <button class="action-btn delete-btn" onclick="showDeleteModal('${doc.id}', 'shop')">Delete</button>
                             </td>
                         `;
-                        
+
                         tableBody.appendChild(row);
                     });
                 })
                 .catch((error) => {
                     console.error("Error loading shop accounts: ", error);
-                    document.getElementById('shop-users-table').innerHTML = 
+                    document.getElementById('shop-users-table').innerHTML =
                         '<tr><td colspan="5" class="text-center text-danger">Error loading shop accounts</td></tr>';
                 });
         }
-        
+
         // Show Add Admin Modal
         function showAddAdminModal() {
             document.getElementById('add-admin-form').reset();
@@ -260,7 +262,7 @@
             document.getElementById('admin-success').classList.add('hidden');
             document.getElementById('add-admin-modal').style.display = 'block';
         }
-        
+
         // Show Delete Modal
         function showDeleteModal(userId, userType) {
             document.getElementById('delete-user-id').value = userId;
@@ -269,40 +271,40 @@
             document.getElementById('delete-success').classList.add('hidden');
             document.getElementById('delete-modal').style.display = 'block';
         }
-        
+
         // Close Modal
         function closeModal(modalId) {
             document.getElementById(modalId).style.display = 'none';
         }
-        
+
         // Add Admin
-        document.getElementById('add-admin-form').addEventListener('submit', function(e) {
+        document.getElementById('add-admin-form').addEventListener('submit', function (e) {
             e.preventDefault();
-            
+
             const name = document.getElementById('admin-name').value.trim();
             const email = document.getElementById('admin-email').value.trim();
             const password = document.getElementById('admin-password').value;
             const confirmPassword = document.getElementById('admin-confirm-password').value;
-            
+
             const errorElement = document.getElementById('admin-error');
             const successElement = document.getElementById('admin-success');
-            
+
             errorElement.classList.add('hidden');
             successElement.classList.add('hidden');
-            
+
             // Validate passwords match
             if (password !== confirmPassword) {
                 errorElement.textContent = 'Passwords do not match';
                 errorElement.classList.remove('hidden');
                 return;
             }
-            
+
             // Create user with Firebase Authentication
             firebase.auth().createUserWithEmailAndPassword(email, password)
                 .then((userCredential) => {
                     // User created successfully
                     const user = userCredential.user;
-                    
+
                     // Store admin information in Firestore
                     return window.adminAuth.db.collection('Users').doc(user.uid).set({
                         name: name,
@@ -315,13 +317,13 @@
                 .then(() => {
                     successElement.textContent = 'Admin user created successfully';
                     successElement.classList.remove('hidden');
-                    
+
                     // Reset form
                     document.getElementById('add-admin-form').reset();
-                    
+
                     // Reload admin users list
                     loadAdminUsers();
-                    
+
                     // Close modal after a delay
                     setTimeout(() => {
                         closeModal('add-admin-modal');
@@ -332,48 +334,76 @@
                     errorElement.classList.remove('hidden');
                 });
         });
-        
+
+        // Confirm Delete
         // Confirm Delete
         function confirmDelete() {
             const userId = document.getElementById('delete-user-id').value;
             const userType = document.getElementById('delete-user-type').value;
-            
+
             const errorElement = document.getElementById('delete-error');
             const successElement = document.getElementById('delete-success');
-            
+
             errorElement.classList.add('hidden');
             successElement.classList.add('hidden');
-            
+
             // Don't allow deleting your own account
             if (userId === window.adminAuth.auth.currentUser.uid) {
                 errorElement.textContent = 'You cannot delete your own account!';
                 errorElement.classList.remove('hidden');
                 return;
             }
-            
+
             // Determine collection based on user type
             const collection = userType === 'admin' ? 'Users' : 'Stores';
-            
-            // Delete from Firestore
-            window.adminAuth.db.collection(collection).doc(userId).delete()
-                .then(() => {
-                    successElement.textContent = 'User deleted successfully';
-                    successElement.classList.remove('hidden');
-                    
-                    // Reload user lists
-                    loadUsers();
-                    
-                    // Close modal after a delay
-                    setTimeout(() => {
-                        closeModal('delete-modal');
-                    }, 2000);
-                })
-                .catch((error) => {
-                    errorElement.textContent = 'Error deleting user: ' + error.message;
-                    errorElement.classList.remove('hidden');
-                });
+
+            // If deleting a shop, also delete its opening hours
+            if (userType === 'shop') {
+                // First, delete the opening hours
+                window.adminAuth.db.collection('ShopHours').doc(userId).delete()
+                    .then(() => {
+                        console.log('Shop hours deleted successfully');
+                        // Now delete the shop document
+                        return window.adminAuth.db.collection(collection).doc(userId).delete();
+                    })
+                    .then(() => {
+                        successElement.textContent = 'User deleted successfully';
+                        successElement.classList.remove('hidden');
+
+                        // Reload user lists
+                        loadUsers();
+
+                        // Close modal after a delay
+                        setTimeout(() => {
+                            closeModal('delete-modal');
+                        }, 2000);
+                    })
+                    .catch((error) => {
+                        errorElement.textContent = 'Error deleting user: ' + error.message;
+                        errorElement.classList.remove('hidden');
+                    });
+            } else {
+                // Just delete admin user
+                window.adminAuth.db.collection(collection).doc(userId).delete()
+                    .then(() => {
+                        successElement.textContent = 'User deleted successfully';
+                        successElement.classList.remove('hidden');
+
+                        // Reload user lists
+                        loadUsers();
+
+                        // Close modal after a delay
+                        setTimeout(() => {
+                            closeModal('delete-modal');
+                        }, 2000);
+                    })
+                    .catch((error) => {
+                        errorElement.textContent = 'Error deleting user: ' + error.message;
+                        errorElement.classList.remove('hidden');
+                    });
+            }
         }
-        
+
         // Approve Shop
         function approveShop(shopId) {
             window.adminAuth.db.collection("Stores").doc(shopId).update({
@@ -390,4 +420,5 @@
         }
     </script>
 </body>
+
 </html>
