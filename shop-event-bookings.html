@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Bookings - Tabletop Reserve</title>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="/css/shop-styles.css">
+    <link rel="stylesheet" href="css/shop-event-bookings.css">
+    <link rel="stylesheet" href="css/sidebar.css">
+    <!-- Load shop authentication script -->
+    <script src="js/shop-auth.js"></script>
+</head>
+<body>
+    <div id="loading-message">Verifying shop access...</div>
+    
+    <div id="shop-content" class="shop-container hidden">
+        <div class="dashboard-header">
+            <h1>Event Bookings<span id="shop-name-header"></span></h1>
+            <button onclick="window.shopAuth.logout()" class="logout-btn">Logout</button>
+        </div>
+        
+        <div id="approval-banner" class="approval-banner hidden">
+            <div class="approval-message">Your shop is pending approval. Some features may be limited until your shop is approved.</div>
+        </div>
+        
+        <nav class="shop-nav">
+            <ul>
+                <li><a href="shophome.html">Dashboard</a></li>
+                <li><a href="shop-profile.html">Shop Profile</a></li>
+                <li><a href="shop-reservations.html">Reservations</a></li>
+                <li><a href="shop-tables.html">Tables</a></li>
+                <li><a href="shop-schedule.html">Schedule</a></li>
+                <li><a href="shop-events.html">Events</a></li>
+                <li><a href="#" class="active">Event Bookings</a></li>
+                <li><a href="shop-notifications.html">Notifications</a></li>
+            </ul>
+        </nav>
+        
+        <div id="bookings-message" class="message hidden"></div>
+        
+        <div class="tab-buttons">
+            <button id="tab-upcoming" class="tab-btn active" onclick="EventBookingsManager.switchTab('upcoming')">Upcoming Bookings</button>
+            <button id="tab-past" class="tab-btn" onclick="EventBookingsManager.switchTab('past')">Past Bookings</button>
+        </div>
+        
+        <!-- Upcoming Bookings Tab -->
+        <div id="upcoming-content" class="tab-content active">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Upcoming Event Bookings</h2>
+                    <div class="filter-controls">
+                        <button class="refresh-btn primary-btn" onclick="EventBookingsManager.refreshBookings()">
+                            <span>↻</span> Refresh
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="booking-filters">
+                    <div class="filter-group">
+                        <label for="event-filter">Filter by Event:</label>
+                        <select id="event-filter" onchange="EventBookingsManager.applyFilters()">
+                            <option value="all">All Events</option>
+                            <!-- Events will be loaded dynamically -->
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="status-filter">Filter by Status:</label>
+                        <select id="status-filter" onchange="EventBookingsManager.applyFilters()">
+                            <option value="all">All Statuses</option>
+                            <option value="confirmed">Confirmed</option>
+                            <option value="pending">Pending</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div id="upcoming-bookings-list">
+                    <div class="loading-message">Loading event bookings...</div>
+                </div>
+                
+                <div id="no-upcoming-bookings" class="empty-state hidden">
+                    <div class="empty-state-icon">📅</div>
+                    <h3>No Upcoming Bookings</h3>
+                    <p>There are no upcoming event bookings based on your current filters.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Past Bookings Tab -->
+        <div id="past-content" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Past Event Bookings</h2>
+                    <div class="filter-controls">
+                        <button class="refresh-btn primary-btn" onclick="EventBookingsManager.refreshBookings()">
+                            <span>↻</span> Refresh
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="booking-filters">
+                    <div class="filter-group">
+                        <label for="past-event-filter">Filter by Event:</label>
+                        <select id="past-event-filter" onchange="EventBookingsManager.applyFilters()">
+                            <option value="all">All Events</option>
+                            <!-- Events will be loaded dynamically -->
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label for="past-status-filter">Filter by Status:</label>
+                        <select id="past-status-filter" onchange="EventBookingsManager.applyFilters()">
+                            <option value="all">All Statuses</option>
+                            <option value="confirmed">Confirmed</option>
+                            <option value="pending">Pending</option>
+                            <option value="cancelled">Cancelled</option>
+                            <option value="completed">Completed</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div id="past-bookings-list">
+                    <div class="loading-message">Loading past event bookings...</div>
+                </div>
+                
+                <div id="no-past-bookings" class="empty-state hidden">
+                    <div class="empty-state-icon">📅</div>
+                    <h3>No Past Bookings</h3>
+                    <p>There are no past event bookings based on your current filters.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Booking Details Modal -->
+    <div id="booking-details-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Booking Details</h2>
+                <button class="close-btn" onclick="EventBookingsManager.closeModal('booking-details-modal')">&times;</button>
+            </div>
+            
+            <div id="booking-details-content">
+                <!-- Booking details will be loaded here -->
+            </div>
+            
+            <div class="modal-buttons" id="booking-action-buttons">
+                <!-- Action buttons will be added here based on booking status -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/shop-event-bookings.js"></script>
+    <script src="js/sidebar.js"></script>
+    
+    <script>
+        // Initialize the Event Bookings Manager when the document is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            EventBookingsManager.init();
+        });
+    </script>
+</body>
+</html>

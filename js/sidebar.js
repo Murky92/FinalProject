@@ -23,7 +23,9 @@ document.addEventListener('DOMContentLoaded', function() {
     'schedule': '🕒',
     'events': '🎉',
     'notifications': '🔔',
-    'home': '🏠'
+    'home': '🏠',
+    'event bookings': '🎟️'
+
   };
   
   // 4. Determine current page for dynamic title
