@@ -543,20 +543,28 @@ const ReservationsManager = {
         
         if (reservation.status === 'pending') {
             actionsContainer.innerHTML = `
-                <button class="primary-btn" onclick="ReservationsManager.confirmReservation('${reservation.id}')">Confirm</button>
-                <button class="edit-btn" onclick="ReservationsManager.closeModal('view-reservation-modal'); ReservationsManager.editReservation('${reservation.id}')">Edit</button>
-                <button class="danger-btn" onclick="ReservationsManager.showCancelModal('${reservation.id}')">Cancel</button>
+                <button class="back-btn" onclick="ReservationsManager.closeModal('view-reservation-modal')">Back</button>
+                <div style="display: flex; gap: 10px; margin-left: auto;">
+                    <button class="primary-btn" onclick="ReservationsManager.confirmReservation('${reservation.id}')">Confirm</button>
+                    <button class="edit-btn" onclick="ReservationsManager.closeModal('view-reservation-modal'); ReservationsManager.editReservation('${reservation.id}')">Edit</button>
+                    <button class="danger-btn" onclick="ReservationsManager.showCancelModal('${reservation.id}')">Cancel Reservation</button>
+                </div>
             `;
         } else if (reservation.status === 'confirmed') {
             actionsContainer.innerHTML = `
-                
-                <button class="edit-btn" onclick="ReservationsManager.closeModal('view-reservation-modal'); ReservationsManager.editReservation('${reservation.id}')">Edit</button>
-                <button class="danger-btn" onclick="ReservationsManager.showCancelModal('${reservation.id}')">Cancel</button>
+                <button class="back-btn" onclick="ReservationsManager.closeModal('view-reservation-modal')">Back</button>
+                <div style="display: flex; gap: 10px; margin-left: auto;">
+                    <button class="edit-btn" onclick="ReservationsManager.closeModal('view-reservation-modal'); ReservationsManager.editReservation('${reservation.id}')">Edit</button>
+                    <button class="danger-btn" onclick="ReservationsManager.showCancelModal('${reservation.id}')">Cancel Reservation</button>
+                </div>
             `;
         } else {
-            // For completed or cancelled reservations, just show Edit button
+            // For completed or cancelled reservations
             actionsContainer.innerHTML = `
-                <button class="edit-btn" onclick="ReservationsManager.closeModal('view-reservation-modal'); ReservationsManager.editReservation('${reservation.id}')">Edit</button>
+                <button class="back-btn" onclick="ReservationsManager.closeModal('view-reservation-modal')">Back</button>
+                <div style="display: flex; gap: 10px; margin-left: auto;">
+                    <button class="edit-btn" onclick="ReservationsManager.closeModal('view-reservation-modal'); ReservationsManager.editReservation('${reservation.id}')">Edit</button>
+                </div>
             `;
         }
         

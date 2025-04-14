@@ -390,3 +390,24 @@
         justify-content: center;
     }
 }
+
+.back-btn {
+    background-color: #f1f1f1;
+    color: #333;
+    border: 1px solid #ddd;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.back-btn:hover {
+    background-color: #e9ecef;
+}
+
+/* Update the modal-buttons to handle the new layout */
+.modal-buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
