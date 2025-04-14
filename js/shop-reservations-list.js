@@ -549,7 +549,7 @@ const ReservationsManager = {
             `;
         } else if (reservation.status === 'confirmed') {
             actionsContainer.innerHTML = `
-                <button class="success-btn" onclick="ReservationsManager.completeReservation('${reservation.id}')">Mark Completed</button>
+                
                 <button class="edit-btn" onclick="ReservationsManager.closeModal('view-reservation-modal'); ReservationsManager.editReservation('${reservation.id}')">Edit</button>
                 <button class="danger-btn" onclick="ReservationsManager.showCancelModal('${reservation.id}')">Cancel</button>
             `;
