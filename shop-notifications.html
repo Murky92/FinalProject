@@ -14,7 +14,8 @@
     <link rel="stylesheet" href="css/sidebar.css">
     <!-- Load shop authentication script -->
     <script src="js/shop-auth.js"></script>
-    
+    <!-- Load shop notification manager script -->
+    <script src="js/shop-notifications-manager.js"></script>
 </head>
 <body>
     <div id="loading-message">Verifying shop access...</div>
@@ -45,8 +46,8 @@
         <div id="notifications-message" class="message hidden"></div>
 
         <div class="tab-header">
-            <button class="tab-button active" onclick="switchTab('compose')">Send Notification</button>
-            <button class="tab-button" onclick="switchTab('history')">Notification History</button>
+            <button class="tab-button active" onclick="window.shopNotificationManager.switchTab('compose')">Send Notification</button>
+            <button class="tab-button" onclick="window.shopNotificationManager.switchTab('history')">Notification History</button>
         </div>
 
         <!-- Compose Notification Tab -->
@@ -142,7 +143,7 @@
         <div class="popup-container">
             <div class="popup-header">
                 <div class="popup-title">Confirm Notification</div>
-                <button class="popup-close" onclick="closePopup()">&times;</button>
+                <button class="popup-close" onclick="window.shopNotificationManager.closePopup()">&times;</button>
             </div>
             
             <p>Are you sure you want to send this notification to <span id="recipient-count">all customers</span>?</p>
@@ -153,338 +154,19 @@
             </div>
             
             <div class="popup-buttons">
-                <button onclick="closePopup()" class="primary-btn">Cancel</button>
-                <button onclick="sendNotification()" class="success-btn">Send Notification</button>
+                <button onclick="window.shopNotificationManager.closePopup()" class="primary-btn">Cancel</button>
+                <button onclick="window.shopNotificationManager.sendNotification()" class="success-btn">Send Notification</button>
             </div>
         </div>
     </div>
 
     <script>
-        // Store shop ID and data after verification
-        let shopId = null;
-        let shopData = null;
-        let notificationsCollection = [];
-        let currentFilter = 'all';
-        
         // Verify shop owner access
         window.shopAuth.verifyShopOwner(function(user, shopInfo) {
-            // Store shop ID and data
-            shopId = shopInfo.id;
-            shopData = shopInfo;
-            
-            // Load notifications for this shop
-            loadNotifications();
-        });
-        
-        // Switch between tabs
-        function switchTab(tabId) {
-            // Hide all tab contents
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            
-            // Remove active class from all buttons
-            document.querySelectorAll('.tab-button').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            
-            // Show the selected tab
-            document.getElementById(tabId + '-tab').classList.add('active');
-            
-            // Add active class to the clicked button
-            document.querySelectorAll('.tab-button')[tabId === 'compose' ? 0 : 1].classList.add('active');
-            
-            // If switching to history tab, refresh the list
-            if (tabId === 'history') {
-                loadNotifications();
-            }
-        }
-        
-        // Load notifications from Firestore
-        function loadNotifications() {
-            if (!shopId) {
-                console.error('Shop ID not available');
-                return;
-            }
-            
-            // Show loading message
-            document.getElementById('notification-list').innerHTML = '<div class="loading-message">Loading notification history...</div>';
-            
-            // Query Firestore for notifications
-            window.shopAuth.db.collection('Notifications')
-                .where('shopId', '==', shopId)
-                .orderBy('createdAt', 'desc')
-                .get()
-                .then((querySnapshot) => {
-                    notificationsCollection = [];
-                    
-                    querySnapshot.forEach((doc) => {
-                        const notification = doc.data();
-                        notification.id = doc.id;
-                        notificationsCollection.push(notification);
-                    });
-                    
-                    // Display notifications based on current filter
-                    filterNotifications(currentFilter);
-                })
-                .catch((error) => {
-                    console.error('Error loading notifications:', error);
-                    document.getElementById('notification-list').innerHTML = `
-                        <div class="error-message">
-                            Error loading notifications: ${error.message}
-                        </div>
-                    `;
-                });
-        }
-        
-        // Filter notifications by type
-        function filterNotifications(filterType) {
-            currentFilter = filterType;
-            
-            // Update active filter button
-            document.querySelectorAll('.filter-button').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            document.querySelector(`.filter-button[data-filter="${filterType}"]`).classList.add('active');
-            
-            // Apply filter
-            let filteredNotifications = notificationsCollection;
-            if (filterType !== 'all') {
-                filteredNotifications = notificationsCollection.filter(n => n.type === filterType);
-            }
-            
-            // Display notifications
-            displayNotifications(filteredNotifications);
-        }
-        
-        // Display notifications in the list
-        function displayNotifications(notifications) {
-            const notificationList = document.getElementById('notification-list');
-            const emptyState = document.getElementById('empty-notifications');
-            
-            if (notifications.length === 0) {
-                notificationList.innerHTML = '';
-                emptyState.classList.remove('hidden');
-                return;
-            }
-            
-            emptyState.classList.add('hidden');
-            let notificationsHtml = '';
-            
-            notifications.forEach((notification) => {
-                // Format date
-                const createdAt = notification.createdAt ? new Date(notification.createdAt.seconds * 1000) : new Date();
-                const formattedDate = createdAt.toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'short',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                });
-                
-                // Get icon based on type
-                let iconClass = 'icon-update';
-                let typeLabel = 'Update';
-                
-                if (notification.type === 'promo') {
-                    iconClass = 'icon-promo';
-                    typeLabel = 'Promo';
-                } else if (notification.type === 'event') {
-                    iconClass = 'icon-event';
-                    typeLabel = 'Event';
-                }
-                
-                // Format recipients
-                let recipientsText = 'All Customers';
-                if (notification.target === 'followers') {
-                    recipientsText = 'Followers Only';
-                } else if (notification.target === 'recent') {
-                    recipientsText = 'Recent Customers';
-                }
-                
-                // Create notification card
-                notificationsHtml += `
-                    <div class="notification-card">
-                        <div class="notification-header">
-                            <div class="notification-title">
-                                <span class="notification-type-icon ${iconClass}">${typeLabel[0]}</span>
-                                ${notification.title}
-                            </div>
-                            <div class="notification-date">${formattedDate}</div>
-                        </div>
-                        <div class="notification-content">${notification.message}</div>
-                        <div class="notification-stats">
-                            <span class="recipients-chip">${recipientsText}</span>
-                        </div>
-                    </div>
-                `;
-            });
-            
-            notificationList.innerHTML = notificationsHtml;
-        }
-        
-        // Character counter for title and message
-        document.getElementById('notification-title').addEventListener('input', function() {
-            document.getElementById('title-length').textContent = this.value.length;
-        });
-        
-        document.getElementById('notification-message').addEventListener('input', function() {
-            document.getElementById('message-length').textContent = this.value.length;
-        });
-        
-        // Show popup
-        function showPopup() {
-            const title = document.getElementById('notification-title').value;
-            const message = document.getElementById('notification-message').value;
-            const target = document.querySelector('input[name="target"]:checked').value;
-            
-            // Set preview content
-            document.getElementById('preview-title').textContent = title;
-            document.getElementById('preview-message').textContent = message;
-            
-            // Set recipient text
-            let recipientText = 'all customers';
-            if (target === 'followers') {
-                recipientText = 'followers only';
-            } else if (target === 'recent') {
-                recipientText = 'recent customers';
-            }
-            document.getElementById('recipient-count').textContent = recipientText;
-            
-            // Show popup
-            document.getElementById('popup-overlay').style.display = 'flex';
-        }
-        
-        // Close popup
-        function closePopup() {
-            document.getElementById('popup-overlay').style.display = 'none';
-        }
-        
-        // Send notification
-        function sendNotification() {
-            if (!shopId) {
-                console.error('Shop ID not available');
-                return;
-            }
-            
-            const type = document.getElementById('notification-type').value;
-            const title = document.getElementById('notification-title').value;
-            const message = document.getElementById('notification-message').value;
-            const target = document.querySelector('input[name="target"]:checked').value;
-            
-            // Create notification data
-            const notificationData = {
-                shopId: shopId,
-                shopName: shopData.storeName,
-                type: type,
-                title: title,
-                message: message,
-                target: target,
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            };
-            
-            // Add this to override any default confirmation dialog
-            window.onbeforeunload = null;
-            
-            // Save to Firestore
-            window.shopAuth.db.collection('Notifications')
-                .add(notificationData)
-                .then((docRef) => {
-                    // Show success message
-                    showMessage('Notification sent successfully!', 'success');
-                    
-                    // Reset form and close popup
-                    document.getElementById('notification-form').reset();
-                    document.getElementById('title-length').textContent = '0';
-                    document.getElementById('message-length').textContent = '0';
-                    closePopup();
-                    
-                    // Switch to history tab
-                    switchTab('history');
-                })
-                .catch((error) => {
-                    console.error('Error sending notification:', error);
-                    showMessage('Error sending notification: ' + error.message, 'error');
-                    closePopup();
-                });
-        }
-        
-        // Show message
-        function showMessage(message, type) {
-            const messageElement = document.getElementById('notifications-message');
-            messageElement.textContent = message;
-            messageElement.className = 'message ' + (type === 'error' ? 'error-message' : 'success-message');
-            messageElement.classList.remove('hidden');
-            
-            // Hide message after 5 seconds
-            setTimeout(() => {
-                messageElement.classList.add('hidden');
-            }, 5000);
-        }
-        
-        // Submit notification form
-        document.getElementById('notification-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Validate form
-            const title = document.getElementById('notification-title').value;
-            const message = document.getElementById('notification-message').value;
-            
-            if (!title || !message) {
-                showMessage('Please fill out all required fields', 'error');
-                return;
-            }
-            
-            // Show popup instead of confirmation modal
-            showPopup();
-            
-            // IMPORTANT: Return false to prevent any default form submission behavior
-            return false;
-        });
-        
-        // Ensure the Send Notification button ONLY triggers our popup
-        document.querySelector('#notification-form .success-btn').addEventListener('click', function(e) {
-            e.preventDefault();
-            
-            // Get form data and validate
-            const title = document.getElementById('notification-title').value;
-            const message = document.getElementById('notification-message').value;
-            
-            if (!title || !message) {
-                showMessage('Please fill out all required fields', 'error');
-                return;
-            }
-            
-            // Show our popup
-            showPopup();
-            
-            // Prevent any default behavior or event bubbling
-            e.stopPropagation();
-            return false;
-        });
-        
-        // Set up filter buttons
-        document.querySelectorAll('.filter-button').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const filterType = this.getAttribute('data-filter');
-                filterNotifications(filterType);
-            });
-        });
-        
-        // Initialize character counters
-        document.getElementById('title-length').textContent = '0';
-        document.getElementById('message-length').textContent = '0';
-        
-        // Close popup when clicking outside
-        window.addEventListener('click', function(event) {
-            const popup = document.getElementById('popup-overlay');
-            if (event.target === popup) {
-                closePopup();
-            }
+            // Initialize the notification manager with shop data
+            window.shopNotificationManager.initializeShopData(user, shopInfo);
         });
     </script>
     <script src="js/sidebar.js"></script>
-
-
 </body>
 </html>

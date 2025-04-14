@@ -209,3 +209,25 @@
     gap: 10px;
     margin-top: 20px;
 }
+
+.notification-delivery-stats {
+    margin-left: 15px;
+    color: #666;
+    font-size: 0.85rem;
+}
+
+/* Status indicators for delivery */
+.status-warning {
+    background-color: #ffecb8;
+    color: #e6a210;
+}
+
+/* Enhance existing styles for better status display */
+.status-label {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.7rem;
+}

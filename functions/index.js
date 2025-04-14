@@ -5,6 +5,9 @@ const nodemailer = require('nodemailer');
 // Initialize Firebase Admin SDK
 admin.initializeApp();
 
+const notificationFunctions = require('./sendPromotionalNotifications');
+exports.sendPromotionalNotifications = notificationFunctions.sendPromotionalNotifications;
+
 // Function that sends the email notification
 async function sendSignUpNotification(storeData) {
     // Set up Nodemailer with App Password
