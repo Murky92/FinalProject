@@ -198,8 +198,8 @@ const CalendarView = {
                 minute: '2-digit' 
             });
             
-            // Get table info
-            let tableInfo = `Table ${reservation.tableNumber || '#'}`;
+            // Get table info - use tableName when available, fall back to tableNumber
+            let tableInfo = reservation.tableName || (reservation.tableNumber ? `Table ${reservation.tableNumber}` : 'Unknown Table');
             
             // Create status badge class based on status
             let statusClass = '';
@@ -230,10 +230,11 @@ const CalendarView = {
                     <div class="reservation-time">${formattedTime}</div>
                     <div class="reservation-status ${statusClass}">${statusLabel}</div>
                 </div>
-                <div class="reservation-item-details">
-                    <div class="reservation-table">${tableInfo}</div>
-                    <div class="reservation-customer">${reservation.customerName}</div>
-                    <div class="reservation-party">Party of ${reservation.partySize}</div>
+                <div class="reservation-item-details" style="display: flex; flex-direction: column; gap: 5px;">
+                    <div><strong>Table:</strong> ${tableInfo}</div>
+                    <div><strong>Customer:</strong> ${reservation.customerName || 'N/A'}</div>
+                    <div><strong>Party Size:</strong> ${reservation.partySize || 'N/A'} people</div>
+                    <div><strong>Duration:</strong> ${reservation.duration || 'N/A'} hour${reservation.duration !== 1 ? 's' : ''}</div>
                 </div>
                 <div class="reservation-item-actions">
                     <button class="view-btn" onclick="ReservationsManager.viewReservation('${reservation.id}')">View</button>
@@ -241,6 +242,8 @@ const CalendarView = {
             `;
             
             dayReservationsContainer.appendChild(reservationItem);
+        
+    
         });
     },
     

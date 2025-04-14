@@ -96,7 +96,6 @@ const ReservationsManager = {
         // Query ALL tables for this shop
         window.shopAuth.db.collection('Tables')
             .where('shopId', '==', this.shopId)
-            .orderBy('tableNumber')
             .get()
             .then((querySnapshot) => {
                 this.shopTables = [];
@@ -105,6 +104,14 @@ const ReservationsManager = {
                     const table = doc.data();
                     table.id = doc.id;
                     this.shopTables.push(table);
+                });
+                
+                // Sort tables by name
+                this.shopTables.sort((a, b) => {
+                    // Get display names for sorting
+                    const nameA = a.tableName || (a.tableNumber ? `Table ${a.tableNumber}` : 'Unnamed Table');
+                    const nameB = b.tableName || (b.tableNumber ? `Table ${b.tableNumber}` : 'Unnamed Table');
+                    return nameA.localeCompare(nameB);
                 });
                 
                 // Populate table select in add reservation modal
@@ -132,7 +139,11 @@ const ReservationsManager = {
             activeTables.forEach(table => {
                 const option = document.createElement('option');
                 option.value = table.id;
-                option.textContent = `Table ${table.tableNumber} (Capacity: ${table.capacity})`;
+                
+                // Get table display name (support both naming methods)
+                const displayName = table.tableName || (table.tableNumber ? `Table ${table.tableNumber}` : 'Unnamed Table');
+                
+                option.textContent = `${displayName} (Capacity: ${table.capacity})`;
                 tableSelect.appendChild(option);
             });
         }
@@ -233,9 +244,12 @@ const ReservationsManager = {
             if (reservation.tableId) {
                 const table = this.shopTables.find(t => t.id === reservation.tableId);
                 if (table) {
-                    tableDetails = `Table ${table.tableNumber}`;
-                } else {
-                    tableDetails = `Table ${reservation.tableNumber || 'Unknown'}`;
+                    // Use tableName if available, fall back to tableNumber
+                    tableDetails = table.tableName || (table.tableNumber ? `Table ${table.tableNumber}` : 'Unnamed Table');
+                } else if (reservation.tableName) {
+                    tableDetails = reservation.tableName;
+                } else if (reservation.tableNumber) {
+                    tableDetails = `Table ${reservation.tableNumber}`;
                 }
             }
             
@@ -286,8 +300,8 @@ const ReservationsManager = {
                     </div>
                 </div>
                 <div class="reservation-actions">
-                    <button class="action-btn edit-btn" onclick="ReservationsManager.editReservation('${reservation.id}')">Edit</button>
                     <button class="primary-btn" onclick="ReservationsManager.viewReservation('${reservation.id}')">View Details</button>
+                    <button class="edit-btn" onclick="ReservationsManager.editReservation('${reservation.id}')">Edit</button>
                     ${reservation.status !== 'cancelled' ? `<button class="danger-btn" onclick="ReservationsManager.showCancelModal('${reservation.id}')">Cancel</button>` : ''}
                 </div>
             `;
@@ -416,9 +430,12 @@ const ReservationsManager = {
         if (reservation.tableId) {
             const table = this.shopTables.find(t => t.id === reservation.tableId);
             if (table) {
-                tableDetails = `Table ${table.tableNumber}`;
-            } else {
-                tableDetails = `Table ${reservation.tableNumber || 'Unknown'}`;
+                // Use tableName if available, fall back to tableNumber
+                tableDetails = table.tableName || (table.tableNumber ? `Table ${table.tableNumber}` : 'Unnamed Table');
+            } else if (reservation.tableName) {
+                tableDetails = reservation.tableName;
+            } else if (reservation.tableNumber) {
+                tableDetails = `Table ${reservation.tableNumber}`;
             }
         }
         
@@ -527,23 +544,34 @@ const ReservationsManager = {
         if (reservation.status === 'pending') {
             actionsContainer.innerHTML = `
                 <button class="primary-btn" onclick="ReservationsManager.confirmReservation('${reservation.id}')">Confirm</button>
+                <button class="edit-btn" onclick="ReservationsManager.closeModal('view-reservation-modal'); ReservationsManager.editReservation('${reservation.id}')">Edit</button>
                 <button class="danger-btn" onclick="ReservationsManager.showCancelModal('${reservation.id}')">Cancel</button>
             `;
         } else if (reservation.status === 'confirmed') {
             actionsContainer.innerHTML = `
                 <button class="success-btn" onclick="ReservationsManager.completeReservation('${reservation.id}')">Mark Completed</button>
+                <button class="edit-btn" onclick="ReservationsManager.closeModal('view-reservation-modal'); ReservationsManager.editReservation('${reservation.id}')">Edit</button>
                 <button class="danger-btn" onclick="ReservationsManager.showCancelModal('${reservation.id}')">Cancel</button>
+            `;
+        } else {
+            // For completed or cancelled reservations, just show Edit button
+            actionsContainer.innerHTML = `
+                <button class="edit-btn" onclick="ReservationsManager.closeModal('view-reservation-modal'); ReservationsManager.editReservation('${reservation.id}')">Edit</button>
             `;
         }
         
-        // Always add edit and close buttons
-        actionsContainer.innerHTML += `
-            <button class="edit-btn" onclick="ReservationsManager.closeModal('view-reservation-modal'); ReservationsManager.editReservation('${reservation.id}')">Edit</button>
-            <button class="primary-btn" onclick="ReservationsManager.closeModal('view-reservation-modal')">Close</button>
-        `;
+        // Add close event listener to modal background
+        const modal = document.getElementById('view-reservation-modal');
+        const closeOnBackground = function(event) {
+            if (event.target === modal) {
+                ReservationsManager.closeModal('view-reservation-modal');
+                modal.removeEventListener('click', closeOnBackground);
+            }
+        };
+        modal.addEventListener('click', closeOnBackground);
         
         // Show modal
-        document.getElementById('view-reservation-modal').style.display = 'block';
+        modal.style.display = 'block';
     },
     
     // Confirm a reservation
@@ -738,16 +766,18 @@ const ReservationsManager = {
                 
                 // Get table details
                 const table = this.shopTables.find(t => t.id === tableId);
-                let tableNumber = 'Unknown';
+                let tableName = 'Unknown Table';
+                
                 if (table) {
-                    tableNumber = table.tableNumber;
+                    // Use tableName if available, fall back to tableNumber
+                    tableName = table.tableName || (table.tableNumber ? `Table ${table.tableNumber}` : 'Unnamed Table');
                 }
                 
                 // Create reservation data
                 const reservationData = {
                     shopId: this.shopId,
                     tableId: tableId,
-                    tableNumber: tableNumber,
+                    tableName: tableName, // Store the table name instead of number
                     reservationTime: firebase.firestore.Timestamp.fromDate(reservationDateTime),
                     duration: durationHours,
                     status: status,

@@ -14,6 +14,18 @@
     <!-- Load shop authentication script -->
     <script src="js/shop-auth.js"></script>
     
+    <style>
+        .closed-indicator {
+            background-color: #ffebeb;
+            color: #ff3b30;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+    </style>
 </head>
 <body>
     <div id="loading-message">Verifying shop access...</div>
@@ -55,10 +67,13 @@
                     <div class="day-row">
                         <div class="day-header">
                             <div class="day-name">Monday</div>
-                            <label class="toggle-switch">
-                                <input type="checkbox" id="monday-open" onchange="toggleDayOpenStatus('monday')">
-                                <span class="slider"></span>
-                            </label>
+                            <div style="display: flex; align-items: center;">
+                                <div id="monday-closed-indicator" class="closed-indicator" style="margin-right: 10px;">CLOSED</div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="monday-open" onchange="toggleDayOpenStatus('monday')">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
                         </div>
                         <div id="monday-hours" class="hours-inputs">
                             <div class="time-row">
@@ -78,10 +93,13 @@
                     <div class="day-row">
                         <div class="day-header">
                             <div class="day-name">Tuesday</div>
-                            <label class="toggle-switch">
-                                <input type="checkbox" id="tuesday-open" onchange="toggleDayOpenStatus('tuesday')">
-                                <span class="slider"></span>
-                            </label>
+                            <div style="display: flex; align-items: center;">
+                                <div id="tuesday-closed-indicator" class="closed-indicator" style="margin-right: 10px;">CLOSED</div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="tuesday-open" onchange="toggleDayOpenStatus('tuesday')">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
                         </div>
                         <div id="tuesday-hours" class="hours-inputs">
                             <div class="time-row">
@@ -101,10 +119,13 @@
                     <div class="day-row">
                         <div class="day-header">
                             <div class="day-name">Wednesday</div>
-                            <label class="toggle-switch">
-                                <input type="checkbox" id="wednesday-open" onchange="toggleDayOpenStatus('wednesday')">
-                                <span class="slider"></span>
-                            </label>
+                            <div style="display: flex; align-items: center;">
+                                <div id="wednesday-closed-indicator" class="closed-indicator" style="margin-right: 10px;">CLOSED</div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="wednesday-open" onchange="toggleDayOpenStatus('wednesday')">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
                         </div>
                         <div id="wednesday-hours" class="hours-inputs">
                             <div class="time-row">
@@ -124,10 +145,13 @@
                     <div class="day-row">
                         <div class="day-header">
                             <div class="day-name">Thursday</div>
-                            <label class="toggle-switch">
-                                <input type="checkbox" id="thursday-open" onchange="toggleDayOpenStatus('thursday')">
-                                <span class="slider"></span>
-                            </label>
+                            <div style="display: flex; align-items: center;">
+                                <div id="thursday-closed-indicator" class="closed-indicator" style="margin-right: 10px;">CLOSED</div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="thursday-open" onchange="toggleDayOpenStatus('thursday')">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
                         </div>
                         <div id="thursday-hours" class="hours-inputs">
                             <div class="time-row">
@@ -147,10 +171,13 @@
                     <div class="day-row">
                         <div class="day-header">
                             <div class="day-name">Friday</div>
-                            <label class="toggle-switch">
-                                <input type="checkbox" id="friday-open" onchange="toggleDayOpenStatus('friday')">
-                                <span class="slider"></span>
-                            </label>
+                            <div style="display: flex; align-items: center;">
+                                <div id="friday-closed-indicator" class="closed-indicator" style="margin-right: 10px;">CLOSED</div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="friday-open" onchange="toggleDayOpenStatus('friday')">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
                         </div>
                         <div id="friday-hours" class="hours-inputs">
                             <div class="time-row">
@@ -170,10 +197,13 @@
                     <div class="day-row">
                         <div class="day-header">
                             <div class="day-name">Saturday</div>
-                            <label class="toggle-switch">
-                                <input type="checkbox" id="saturday-open" onchange="toggleDayOpenStatus('saturday')">
-                                <span class="slider"></span>
-                            </label>
+                            <div style="display: flex; align-items: center;">
+                                <div id="saturday-closed-indicator" class="closed-indicator" style="margin-right: 10px;">CLOSED</div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="saturday-open" onchange="toggleDayOpenStatus('saturday')">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
                         </div>
                         <div id="saturday-hours" class="hours-inputs">
                             <div class="time-row">
@@ -188,15 +218,18 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <!-- Sunday -->
                     <div class="day-row">
                         <div class="day-header">
                             <div class="day-name">Sunday</div>
-                            <label class="toggle-switch">
-                                <input type="checkbox" id="sunday-open" onchange="toggleDayOpenStatus('sunday')">
-                                <span class="slider"></span>
-                            </label>
+                            <div style="display: flex; align-items: center;">
+                                <div id="sunday-closed-indicator" class="closed-indicator" style="margin-right: 10px;">CLOSED</div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="sunday-open" onchange="toggleDayOpenStatus('sunday')">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
                         </div>
                         <div id="sunday-hours" class="hours-inputs">
                             <div class="time-row">
@@ -286,11 +319,14 @@
         function toggleDayOpenStatus(day) {
             const isOpen = document.getElementById(day + '-open').checked;
             const hoursDiv = document.getElementById(day + '-hours');
+            const closedIndicator = document.getElementById(day + '-closed-indicator');
             
             if (isOpen) {
                 hoursDiv.classList.add('active');
+                closedIndicator.style.display = 'none';
             } else {
                 hoursDiv.classList.remove('active');
+                closedIndicator.style.display = 'block';
             }
         }
         
@@ -326,7 +362,7 @@
                                     document.getElementById(day + '-close-time').value = dayData.closeTime;
                                 }
                                 
-                                // Show/hide time inputs based on open status
+                                // Show/hide time inputs and closed indicator based on open status
                                 toggleDayOpenStatus(day);
                             }
                         });
@@ -407,7 +443,6 @@
         function closeModal(modalId) {
             document.getElementById(modalId).style.display = 'none';
         }
-    </script>
     </script>
     <script src="js/sidebar.js"></script>
 </body>

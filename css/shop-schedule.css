@@ -187,3 +187,14 @@ input:checked + .slider:before {
     cursor: pointer;
     font-weight: bold;
 }
+
+.closed-indicator {
+    background-color: #ffebeb;
+    color: #ff3b30;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
