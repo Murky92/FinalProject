@@ -1,4 +1,3 @@
-// Firebase Cloud Function to send promotional notifications
 const functions = require('firebase-functions/v1');
 const admin = require('firebase-admin');
 
@@ -35,7 +34,7 @@ exports.sendPromotionalNotifications = functions.firestore
       });
       
       // Create a batch to update stats
-      const batch = db.batch();
+      let batch = db.batch();
       let deliveryCount = 0;
       let errorCount = 0;
       
@@ -108,17 +107,23 @@ exports.sendPromotionalNotifications = functions.firestore
       }
       
       // Create FCM message
-      const message = {
+      const messagePayload = {
         notification: {
           title: notification.title,
           body: notification.message
         },
         data: {
-          shopId: notification.shopId,
+          shopId: notification.shopId || '',
           notificationId: context.params.notificationId,
           type: notification.type,
-          timestamp: notification.createdAt.toDate().toISOString()
-        },
+          timestamp: notification.createdAt ? notification.createdAt.toDate().toISOString() : new Date().toISOString()
+        }
+      };
+      
+      // Options for FCM
+      const options = {
+        priority: 'high',
+        timeToLive: 60 * 60 * 24, // 24 hours
         android: {
           notification: {
             icon: 'notification_icon',
@@ -153,24 +158,28 @@ exports.sendPromotionalNotifications = functions.firestore
       const userBatch = [];
       const MAX_BATCH_SIZE = 500;
       
-      // Prepare user batches
+      // Prepare user batches with validation
       eligibleUsersSnapshot.forEach(doc => {
         const user = doc.data();
+        const userId = doc.id; // Use document ID instead of relying on user.id field
         
-        // Only include users with FCM tokens
-        if (user.fcmToken) {
-          userBatch.push({
-            id: user.id,
-            fcmToken: user.fcmToken,
-            email: user.email,
-            name: user.name
-          });
-          
-          // Create new batch when we reach max size
-          if (userBatch.length === MAX_BATCH_SIZE) {
-            tokenBatches.push([...userBatch]);
-            userBatch.length = 0; // Clear the array
-          }
+        // Skip users without FCM tokens (they can't receive push notifications)
+        if (!user.fcmToken) {
+          console.log(`User ${userId} has no FCM token, skipping`);
+          return;
+        }
+        
+        userBatch.push({
+          id: userId, // Use document ID as the user ID
+          fcmToken: user.fcmToken,
+          email: user.email || 'Unknown',
+          name: user.name || 'Unknown'
+        });
+        
+        // Create new batch when we reach max size
+        if (userBatch.length === MAX_BATCH_SIZE) {
+          tokenBatches.push([...userBatch]);
+          userBatch.length = 0; // Clear the array
         }
       });
       
@@ -179,69 +188,101 @@ exports.sendPromotionalNotifications = functions.firestore
         tokenBatches.push([...userBatch]);
       }
       
-      // Send FCM messages in batches
+      // Process tokens one by one
       for (let i = 0; i < tokenBatches.length; i++) {
         const userBatch = tokenBatches[i];
-        const tokens = userBatch.map(user => user.fcmToken);
+        console.log(`Processing batch ${i+1}/${tokenBatches.length} with ${userBatch.length} users`);
         
-        // Log attempt for all users in this batch
+        // Log attempts for this batch
         userBatch.forEach(user => {
-          const logEntry = deliveryLogRef.doc(user.id);
-          batch.set(logEntry, {
-            userId: user.id,
-            userName: user.name || 'Unknown',
-            userEmail: user.email || 'Unknown',
-            deliveryStatus: 'attempted',
-            timestamp: admin.firestore.FieldValue.serverTimestamp()
-          });
+          try {
+            if (!user.id || typeof user.id !== 'string') {
+              console.error('Invalid user ID:', user);
+              errorCount++;
+              return;
+            }
+            
+            const logEntry = deliveryLogRef.doc(user.id);
+            batch.set(logEntry, {
+              userId: user.id,
+              userName: user.name || 'Unknown',
+              userEmail: user.email || 'Unknown',
+              deliveryStatus: 'attempted',
+              timestamp: admin.firestore.FieldValue.serverTimestamp()
+            });
+          } catch (error) {
+            console.error(`Error creating delivery log for user ${user.id}:`, error);
+            errorCount++;
+          }
         });
         
-        try {
-          // Send the batch notification
-          const response = await admin.messaging().sendMulticast({
-            tokens: tokens,
-            ...message
-          });
-          
-          console.log(`Batch ${i+1}/${tokenBatches.length}: ${response.successCount} successful, ${response.failureCount} failed`);
-          
-          // Update delivery logs with success/failure
-          response.responses.forEach((resp, index) => {
-            const user = userBatch[index];
-            const logEntry = deliveryLogRef.doc(user.id);
-            
-            if (resp.success) {
-              batch.update(logEntry, {
-                deliveryStatus: 'delivered',
-                deliveredAt: admin.firestore.FieldValue.serverTimestamp()
-              });
-              deliveryCount++;
-            } else {
-              batch.update(logEntry, {
-                deliveryStatus: 'failed',
-                errorMessage: resp.error ? resp.error.message : 'Unknown error'
-              });
-              errorCount++;
+        // Commit the batch to record all attempts
+        await batch.commit();
+        
+        // Create a new batch for status updates
+        const updateBatch = db.batch();
+        
+        // Send notifications individually
+        for (const user of userBatch) {
+          try {
+            // Skip users with no token or invalid ID
+            if (!user.fcmToken || !user.id) {
+              continue;
             }
-          });
-        } catch (error) {
-          console.error('Error sending notification batch:', error);
-          
-          // Mark all as failed in this batch
-          userBatch.forEach(user => {
+            
+            // Create a message specifically for this device
+            const message = {
+              token: user.fcmToken,
+              notification: {
+                title: notification.title,
+                body: notification.message
+              },
+              data: {
+                shopId: notification.shopId || '',
+                notificationId: context.params.notificationId,
+                type: notification.type,
+                timestamp: notification.createdAt 
+                  ? notification.createdAt.toDate().toISOString() 
+                  : new Date().toISOString()
+              },
+              android: options.android,
+              apns: options.apns,
+              webpush: options.webpush
+            };
+            
+            // Send the message using the send() method
+            const response = await admin.messaging().send(message);
+            console.log(`Successfully sent message to ${user.id}:`, response);
+            
+            // Update the delivery log
             const logEntry = deliveryLogRef.doc(user.id);
-            batch.update(logEntry, {
-              deliveryStatus: 'failed',
-              errorMessage: error.message || 'Batch sending error'
+            updateBatch.update(logEntry, {
+              deliveryStatus: 'delivered',
+              deliveredAt: admin.firestore.FieldValue.serverTimestamp(),
+              messageId: response
             });
-          });
-          
-          errorCount += userBatch.length;
+            
+            deliveryCount++;
+          } catch (error) {
+            console.error(`Error sending to user ${user.id}:`, error);
+            
+            // Log the failure
+            const logEntry = deliveryLogRef.doc(user.id);
+            updateBatch.update(logEntry, {
+              deliveryStatus: 'failed',
+              errorMessage: error.message || 'Unknown error'
+            });
+            
+            errorCount++;
+          }
         }
+        
+        // Commit the status updates
+        await updateBatch.commit();
+        
+        // Create a new batch for the next iteration
+        batch = db.batch();
       }
-      
-      // Commit all the delivery log entries
-      await batch.commit();
       
       // Update the notification with final status
       await snapshot.ref.update({
