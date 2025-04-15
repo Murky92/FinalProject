@@ -73,8 +73,21 @@ document.addEventListener('DOMContentLoaded', function() {
         const footer = document.querySelector('.footer');
         if (!footer) return;
         
+        // Get the current page path
+        const currentPath = window.location.pathname;
+        const isIndexPage = currentPath.endsWith('index.html') || currentPath === '/' || currentPath.endsWith('/');
         
-        const bodyHeight = document.body.clientHeight;
+        // For index page, always use fixed positioning
+        if (isIndexPage) {
+            footer.style.position = 'fixed';
+            footer.style.bottom = '0';
+            footer.style.width = '100%';
+            document.body.style.paddingBottom = footer.offsetHeight + 'px';
+            return;
+        }
+        
+        // For other pages, check if content is shorter than viewport
+        const bodyHeight = document.body.scrollHeight;
         const windowHeight = window.innerHeight;
         const footerHeight = footer.offsetHeight;
         
@@ -82,10 +95,13 @@ document.addEventListener('DOMContentLoaded', function() {
             // Page is shorter than viewport, fix footer to bottom
             footer.style.position = 'fixed';
             footer.style.bottom = '0';
+            footer.style.width = '100%';
             document.body.style.paddingBottom = footerHeight + 'px';
         } else {
             // Page is taller than viewport, let footer flow normally
             footer.style.position = 'relative';
+            footer.style.bottom = 'auto';
+            footer.style.width = 'auto';
             document.body.style.paddingBottom = '0';
         }
     }
@@ -104,8 +120,18 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Add specific class to the footer for signup page
         footer.classList.add('signup-footer');
+    }
+    
+    // Special handling for login page (index.html)
+    if (window.location.pathname.endsWith('index.html') || window.location.pathname === '/' || window.location.pathname.endsWith('/')) {
+        footer.classList.add('login-footer');
         
-        // Make footer position relative for signup page
-        footer.style.position = 'relative';
+        // Set login-specific styles
+        footer.style.position = 'fixed';
+        footer.style.bottom = '0';
+        footer.style.width = '100%';
+        
+        // Add padding to body to prevent content from being hidden by footer
+        document.body.style.paddingBottom = footer.offsetHeight + 'px';
     }
 });

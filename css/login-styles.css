@@ -26,8 +26,8 @@ body {
     flex-direction: column !important;
     align-items: flex-start !important; /* Changed from center to flex-start to align content to left */
     width: 90% !important;
-    max-width: 400px !important;
-    margin: 0 auto !important;
+    max-width: 400px;
+    margin-bottom: 300px;
 }
 
 /* Logo styling */
