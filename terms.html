@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service - Tabletop Reserve</title>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+    
+    <!-- Global stylesheet -->
+    <link rel="stylesheet" href="css/styles.css">
+    
+    <!-- Navigation stylesheet -->
+    <link rel="stylesheet" href="css/nav-styles.css">
+    
+    <!-- Page-specific stylesheet -->
+    <link rel="stylesheet" href="css/terms-styles.css">
+</head>
+<body>
+    <!-- Navigation will be loaded by nav.js -->
+    
+    <div class="terms-container">
+        <div class="terms-hero">
+            <h1>Terms of Service</h1>
+            <p>Please read these terms and conditions carefully before using our service</p>
+        </div>
+        
+        <div class="terms-toc">
+            <h2>Table of Contents</h2>
+            <ul>
+                <li><a href="#introduction">1. Introduction</a></li>
+                <li><a href="#definitions">2. Definitions</a></li>
+                <li><a href="#accounts">3. User Accounts</a></li>
+                <li><a href="#shop-terms">4. Terms for Shop Owners</a></li>
+                <li><a href="#player-terms">5. Terms for Players</a></li>
+                <li><a href="#reservations">6. Reservations and Bookings</a></li>
+                <li><a href="#payments">7. Payments and Fees</a></li>
+                <li><a href="#cancellations">8. Cancellations and Refunds</a></li>
+                <li><a href="#content">9. User Content</a></li>
+                <li><a href="#prohibited">10. Prohibited Activities</a></li>
+                <li><a href="#intellectual-property">11. Intellectual Property</a></li>
+                <li><a href="#privacy">12. Privacy and Data Protection</a></li>
+                <li><a href="#liability">13. Limitation of Liability</a></li>
+                <li><a href="#disputes">14. Dispute Resolution</a></li>
+                <li><a href="#termination">15. Termination</a></li>
+                <li><a href="#changes">16. Changes to Terms</a></li>
+                <li><a href="#contact">17. Contact Information</a></li>
+            </ul>
+        </div>
+        
+        <div class="terms-content">
+            <section id="introduction" class="terms-section">
+                <h2>1. Introduction</h2>
+                <p>Welcome to Tabletop Reserve. These Terms of Service ("Terms") govern your use of the Tabletop Reserve website, mobile applications, and services (collectively, the "Service"). The Service is owned and operated by Tabletop Reserve Ltd ("we," "us," or "our").</p>
+                
+                <p>By accessing or using our Service, you agree to be bound by these Terms. If you disagree with any part of the Terms, you may not access the Service.</p>
+                
+                <p>Our Service provides a platform that connects tabletop gaming shops ("Shops") with individuals seeking to reserve tables or join events at these locations ("Players"). These Terms apply to all users of the Service, including Shops and Players.</p>
+            </section>
+            
+            <section id="definitions" class="terms-section">
+                <h2>2. Definitions</h2>
+                
+                <div class="definition">
+                    <p><strong>"Service"</strong> refers to the Tabletop Reserve website, mobile applications, APIs, and all related services.</p>
+                </div>
+                
+                <div class="definition">
+                    <p><strong>"User"</strong> refers to any individual or entity that accesses or uses the Service, including Shops and Players.</p>
+                </div>
+                
+                <div class="definition">
+                    <p><strong>"Shop"</strong> refers to a business that offers tables and spaces for tabletop gaming and uses our Service to manage and accept reservations.</p>
+                </div>
+                
+                <div class="definition">
+                    <p><strong>"Player"</strong> refers to an individual who uses the Service to find, book, and pay for tables or events at Shops.</p>
+                </div>
+                
+                <div class="definition">
+                    <p><strong>"Reservation"</strong> refers to a booking made by a Player for a table or event at a Shop through the Service.</p>
+                </div>
+                
+                <div class="definition">
+                    <p><strong>"Content"</strong> refers to text, images, photos, audio, video, and all other forms of data or communication posted on or transmitted through the Service.</p>
+                </div>
+                
+                <div class="definition">
+                    <p><strong>"User Content"</strong> refers to Content that users provide to be made available through the Service, including Shop profiles, reviews, and comments.</p>
+                </div>
+            </section>
+            
+            <section id="accounts" class="terms-section">
+                <h2>3. User Accounts</h2>
+                
+                <h3>3.1 Account Creation</h3>
+                <p>To use certain features of the Service, you must create an account. When you create an account, you must provide accurate, current, and complete information. You are responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account.</p>
+                
+                <h3>3.2 Account Types</h3>
+                <p>We offer different types of accounts for Shops and Players, each with different features and requirements. Shop accounts require additional verification and are subject to approval by our team.</p>
+                
+                <h3>3.3 Account Security</h3>
+                <p>You are responsible for maintaining the security of your account and password. We cannot and will not be liable for any loss or damage resulting from your failure to comply with this security obligation.</p>
+                
+                <h3>3.4 Age Restrictions</h3>
+                <p>You must be at least 18 years old to create a Shop account. Player accounts may be created by individuals who are at least 13 years old, but users under 18 must have parental permission and supervision when using the Service.</p>
+            </section>
+            
+            <section id="shop-terms" class="terms-section">
+                <h2>4. Terms for Shop Owners</h2>
+                
+                <h3>4.1 Shop Registration</h3>
+                <p>To register as a Shop, you must provide accurate business information, including but not limited to your business name, address, contact information, and business registration details. We reserve the right to verify this information and to reject or suspend any Shop account that provides false or misleading information.</p>
+                
+                <h3>4.2 Shop Profile</h3>
+                <p>As a Shop, you are responsible for creating and maintaining your profile on the Service, including descriptions, photos, available tables, and events. All information must be accurate, complete, and not misleading.</p>
+                
+                <h3>4.3 Service Standards</h3>
+                <p>Shops agree to provide the services as described in their listings and to honor all confirmed reservations. Shops must maintain reasonable standards of cleanliness, safety, and customer service.</p>
+                
+                <h3>4.4 Cancellation Policies</h3>
+                <p>Shops may set their own cancellation policies, which must be clearly communicated to Players before they make a reservation. Shops must honor these policies and process refunds as appropriate.</p>
+                
+                <h3>4.5 Communications</h3>
+                <p>Shops agree to respond to communications from Players and from us in a timely manner, particularly regarding reservations and customer service issues.</p>
+            </section>
+            
+            <section id="player-terms" class="terms-section">
+                <h2>5. Terms for Players</h2>
+                
+                <h3>5.1 Player Registration</h3>
+                <p>To register as a Player, you must provide accurate personal information. We reserve the right to verify this information and to suspend any Player account that provides false or misleading information.</p>
+                
+                <h3>5.2 Reservation Responsibility</h3>
+                <p>As a Player, you are responsible for making accurate reservations, including the correct date, time, number of attendees, and any special requirements. You agree to honor all reservations you make through the Service.</p>
+                
+                <h3>5.3 Conduct at Shops</h3>
+                <p>Players agree to conduct themselves appropriately while at Shops, to respect the property and rules of the Shop, and to treat Shop staff and other customers with courtesy and respect.</p>
+                
+                <h3>5.4 Reviews and Feedback</h3>
+                <p>Players may leave reviews and feedback for Shops. All reviews must be honest, accurate, and based on personal experience. We reserve the right to remove reviews that violate our content guidelines.</p>
+            </section>
+            
+            <section id="reservations" class="terms-section">
+                <h2>6. Reservations and Bookings</h2>
+                
+                <h3>6.1 Reservation Process</h3>
+                <p>Players can make reservations for tables or events through our Service. A reservation is confirmed only when the Shop accepts it and the Player receives a confirmation notification.</p>
+                
+                <h3>6.2 Reservation Details</h3>
+                <p>All reservations must include accurate information regarding date, time, duration, number of attendees, and any special requirements. Players are responsible for providing accurate information.</p>
+                
+                <h3>6.3 Reservation Modifications</h3>
+                <p>Modifications to reservations may be requested through the Service but are subject to the Shop's approval and availability. Shops may charge additional fees for modifications, as outlined in their policies.</p>
+                
+                <h3>6.4 No-Shows</h3>
+                <p>If a Player fails to arrive for a confirmed reservation ("no-show"), the Shop's cancellation policy will apply, which may include a partial or full charge for the reservation. Repeated no-shows may result in account restrictions.</p>
+            </section>
+            
+            <section id="payments" class="terms-section">
+                <h2>7. Payments and Fees</h2>
+                
+                <h3>7.1 Service Fees</h3>
+                <p>We charge service fees for the use of our platform. These fees vary depending on the type of service and are clearly displayed before a reservation is confirmed. Shop owners may be charged a commission on bookings made through our platform, as outlined in our Shop Agreement.</p>
+                
+                <h3>7.2 Payment Processing</h3>
+                <p>All payments are processed through our secure payment system. We use industry-standard encryption to protect your payment information. By using our Service, you agree to our payment terms and authorize us to charge your payment method for any reservations you make.</p>
+                
+                <h3>7.3 Currency</h3>
+                <p>All payments are processed in the local currency of the Shop location, unless otherwise specified. Currency conversion fees, if applicable, are the responsibility of the Player.</p>
+                
+                <h3>7.4 Taxes</h3>
+                <p>All applicable taxes are calculated and included in the final payment amount. Shops are responsible for reporting and remitting all applicable taxes to the appropriate tax authorities.</p>
+            </section>
+            
+            <section id="cancellations" class="terms-section">
+                <h2>8. Cancellations and Refunds</h2>
+                
+                <h3>8.1 Cancellation by Players</h3>
+                <p>Players may cancel reservations through the Service. Refunds are subject to the Shop's cancellation policy, which is displayed before booking. Generally, cancellations made with sufficient notice (typically 24-48 hours) will receive a full or partial refund.</p>
+                
+                <h3>8.2 Cancellation by Shops</h3>
+                <p>If a Shop cancels a confirmed reservation, the Player will receive a full refund of all fees paid. Shops that frequently cancel reservations may be subject to penalties or removal from our platform.</p>
+                
+                <h3>8.3 Force Majeure</h3>
+                <p>In cases of force majeure (events beyond reasonable control, such as natural disasters, power outages, etc.), different cancellation terms may apply. We will work with both parties to reach a fair resolution.</p>
+                
+                <h3>8.4 Refund Processing</h3>
+                <p>Refunds are processed back to the original payment method and may take 5-10 business days to appear, depending on your financial institution.</p>
+            </section>
+            
+            <section id="content" class="terms-section">
+                <h2>9. User Content</h2>
+                
+                <h3>9.1 Content Ownership</h3>
+                <p>You retain ownership of any Content you submit to the Service. By submitting Content, you grant us a worldwide, non-exclusive, royalty-free license to use, copy, modify, publish, and distribute such Content for the purpose of providing and promoting the Service.</p>
+                
+                <h3>9.2 Content Responsibility</h3>
+                <p>You are solely responsible for all Content you submit to the Service. You represent and warrant that you have all necessary rights to submit the Content and that the Content does not infringe the rights of any third party.</p>
+                
+                <h3>9.3 Content Guidelines</h3>
+                <p>All Content must comply with our Content Guidelines, which prohibit content that is illegal, harmful, threatening, abusive, harassing, defamatory, vulgar, obscene, or otherwise objectionable.</p>
+                
+                <h3>9.4 Content Removal</h3>
+                <p>We reserve the right to remove any Content that violates these Terms or our Content Guidelines, or that we determine is otherwise inappropriate for the Service.</p>
+            </section>
+            
+            <section id="prohibited" class="terms-section">
+                <h2>10. Prohibited Activities</h2>
+                
+                <p>The following activities are prohibited when using our Service:</p>
+                
+                <ul>
+                    <li>Violating any applicable laws or regulations</li>
+                    <li>Using the Service for any illegal purpose</li>
+                    <li>Impersonating another person or entity</li>
+                    <li>Providing false or misleading information</li>
+                    <li>Attempting to access, tamper with, or use non-public areas of the Service</li>
+                    <li>Attempting to circumvent or bypass any security measures</li>
+                    <li>Interfering with or disrupting the Service or servers or networks connected to the Service</li>
+                    <li>Scraping, data mining, or otherwise collecting data from the Service without our express permission</li>
+                    <li>Using the Service to send unsolicited communications</li>
+                    <li>Using the Service to distribute malware or other harmful code</li>
+                </ul>
+                
+                <p>We reserve the right to investigate and take appropriate action against anyone who violates these prohibitions, including removing Content, suspending or terminating accounts, and reporting to law enforcement authorities.</p>
+            </section>
+            
+            <section id="intellectual-property" class="terms-section">
+                <h2>11. Intellectual Property</h2>
+                
+                <h3>11.1 Service Ownership</h3>
+                <p>The Service, including all content, features, and functionality, is owned by Tabletop Reserve Ltd and is protected by copyright, trademark, and other intellectual property laws. These Terms do not grant you any right, title, or interest in the Service.</p>
+                
+                <h3>11.2 Trademarks</h3>
+                <p>The Tabletop Reserve name, logo, and all related names, logos, product and service names, designs, and slogans are trademarks of Tabletop Reserve Ltd or its affiliates. You may not use these marks without our prior written permission.</p>
+                
+                <h3>11.3 Feedback</h3>
+                <p>If you provide us with any feedback or suggestions regarding the Service, you grant us the right to use such feedback without restriction and without compensation to you.</p>
+            </section>
+            
+            <section id="privacy" class="terms-section">
+                <h2>12. Privacy and Data Protection</h2>
+                
+                <p>Your privacy is important to us. Our Privacy Policy explains how we collect, use, and protect your personal information. By using our Service, you agree to the collection and use of information in accordance with our Privacy Policy.</p>
+                
+                <p>We comply with applicable data protection laws, including the UK GDPR and the Data Protection Act 2018. We implement appropriate technical and organizational measures to protect your personal data.</p>
+                
+                <p>For more information about our privacy practices, please review our <a href="privacy.html">Privacy Policy</a>.</p>
+            </section>
+            
+            <section id="liability" class="terms-section">
+                <h2>13. Limitation of Liability</h2>
+                
+                <p>To the maximum extent permitted by law, Tabletop Reserve Ltd and its officers, directors, employees, and agents shall not be liable for any indirect, incidental, special, consequential, or punitive damages, including but not limited to loss of profits, data, use, or goodwill, arising out of or in connection with these Terms or your use of the Service.</p>
+                
+                <p>Our total liability for all claims related to the Service shall not exceed the greater of £100 or the amount you paid us in the past 12 months.</p>
+                
+                <p>Some jurisdictions do not allow the exclusion or limitation of liability for consequential or incidental damages, so the above limitation may not apply to you.</p>
+            </section>
+            
+            <section id="disputes" class="terms-section">
+                <h2>14. Dispute Resolution</h2>
+                
+                <h3>14.1 Governing Law</h3>
+                <p>These Terms shall be governed by and construed in accordance with the laws of England and Wales, without regard to its conflict of law principles.</p>
+                
+                <h3>14.2 Dispute Process</h3>
+                <p>If you have a dispute with us, please contact us first and try to resolve the dispute informally. If we cannot resolve the dispute informally, any legal action must be brought exclusively in the courts of England and Wales.</p>
+                
+                <h3>14.3 Arbitration</h3>
+                <p>For any dispute not resolved informally, you agree to first try to resolve the dispute through mediation with a mutually agreed mediator. If mediation is not successful, the dispute shall be resolved through binding arbitration in accordance with the rules of the London Court of International Arbitration.</p>
+                
+                <h3>14.4 Class Action Waiver</h3>
+                <p>You agree that any dispute resolution proceedings will be conducted only on an individual basis and not in a class, consolidated, or representative action.</p>
+            </section>
+            
+            <section id="termination" class="terms-section">
+                <h2>15. Termination</h2>
+                
+                <p>We may terminate or suspend your account and access to the Service immediately, without prior notice or liability, for any reason, including, without limitation, if you breach these Terms.</p>
+                
+                <p>Upon termination, your right to use the Service will immediately cease. If you wish to terminate your account, you may simply discontinue using the Service or contact us to request account deletion.</p>
+                
+                <p>All provisions of these Terms which by their nature should survive termination shall survive termination, including, without limitation, ownership provisions, warranty disclaimers, indemnity, and limitations of liability.</p>
+            </section>
+            
+            <section id="changes" class="terms-section">
+                <h2>16. Changes to Terms</h2>
+                
+                <p>We reserve the right to modify or replace these Terms at any time. If a revision is material, we will provide at least 30 days' notice prior to any new terms taking effect. What constitutes a material change will be determined at our sole discretion.</p>
+                
+                <p>By continuing to access or use our Service after any revisions become effective, you agree to be bound by the revised terms. If you do not agree to the new terms, you are no longer authorized to use the Service.</p>
+            </section>
+            
+            <section id="contact" class="terms-section">
+                <h2>17. Contact Information</h2>
+                
+                <p>If you have any questions about these Terms, please contact us:</p>
+                
+                <div class="contact-info">
+                    <h3>Tabletop Reserve Ltd</h3>
+                    <p>123 Gaming Street<br>
+                    London, EC1A 1BB<br>
+                    United Kingdom</p>
+                    <p>Email: legal@tabletopreserve.com<br>
+                    Phone: 0800 123 4567</p>
+                </div>
+                
+                <a href="#" class="back-to-top">Back to top</a>
+            </section>
+            
+            <p class="last-updated">Last updated: April 15, 2025</p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/nav.js"></script>
+    <script src="js/footer.js"></script>
+    
+    <script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('.terms-toc a, .back-to-top').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                // Don't scroll if it's the "Back to top" link going to "#"
+                if (this.getAttribute('href') === '#') {
+                    e.preventDefault();
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                    return;
+                }
+                
+                const targetId = this.getAttribute('href');
+                if (targetId.startsWith('#')) {
+                    e.preventDefault();
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 20,
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

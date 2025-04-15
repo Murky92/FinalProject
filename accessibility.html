@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accessibility - Tabletop Reserve</title>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+    
+    <!-- Global stylesheet -->
+    <link rel="stylesheet" href="css/styles.css">
+    
+    <!-- Navigation stylesheet -->
+    <link rel="stylesheet" href="css/nav-styles.css">
+    
+    <!-- Page-specific stylesheet -->
+    <link rel="stylesheet" href="css/accessibility-styles.css">
+</head>
+<body>
+    <!-- Navigation will be loaded by nav.js -->
+    
+    <div class="accessibility-container">
+        <div class="accessibility-hero">
+            <h1>Accessibility Commitment</h1>
+            <p>We are committed to ensuring Tabletop Reserve is accessible to all users, regardless of abilities or disabilities</p>
+        </div>
+        
+        <div class="accessibility-content">
+            <div class="accessibility-section">
+                <h2>Our Commitment to Accessibility</h2>
+                <p>At Tabletop Reserve, we believe that tabletop gaming should be accessible to everyone. We are committed to ensuring that our website and mobile application are accessible to people of all abilities, including those with disabilities.</p>
+                <p>We strive to meet or exceed the requirements of the Web Content Accessibility Guidelines (WCAG) 2.1 Level AA standards. Our goal is to create an inclusive experience that allows all users to navigate, understand, and interact with our services effectively.</p>
+            </div>
+            
+            <div class="accessibility-section">
+                <h2>Accessibility Features</h2>
+                <p>Tabletop Reserve incorporates the following accessibility features to improve usability for all users:</p>
+                
+                <h3>Website Accessibility</h3>
+                <ul>
+                    <li>Semantic HTML structure with proper heading hierarchy</li>
+                    <li>Descriptive alternative text for all images</li>
+                    <li>Color contrast that meets WCAG 2.1 AA standards</li>
+                    <li>Keyboard accessibility for all interactive elements</li>
+                    <li>ARIA labels and landmarks to improve screen reader compatibility</li>
+                    <li>Resizable text without loss of functionality</li>
+                    <li>Focus indicators for keyboard navigation</li>
+                </ul>
+                
+                <h3>Mobile App Accessibility</h3>
+                <ul>
+                    <li>Support for screen readers (VoiceOver on iOS, TalkBack on Android)</li>
+                    <li>Dynamic text sizing compatibility</li>
+                    <li>Voice control support</li>
+                    <li>Sufficient touch target sizes</li>
+                    <li>Label and instructions for interactive elements</li>
+                    <li>Ability to navigate without relying on color cues</li>
+                </ul>
+                
+                <h3>Shop Information for Physical Accessibility</h3>
+                <p>We also encourage our partner shops to provide detailed accessibility information in their profiles, including:</p>
+                <ul>
+                    <li>Wheelchair accessibility</li>
+                    <li>Accessible parking availability</li>
+                    <li>Accessible restroom facilities</li>
+                    <li>Table height and space information</li>
+                    <li>Lighting conditions</li>
+                    <li>Quiet spaces or sensory considerations</li>
+                </ul>
+            </div>
+            
+            <div class="accessibility-section">
+                <h2>Accessibility Standards</h2>
+                <p>Our accessibility efforts are guided by established standards and best practices:</p>
+                
+                <div class="standards-list">
+                    <div class="standard-item">
+                        <h4>WCAG 2.1</h4>
+                        <p>We aim to conform to Web Content Accessibility Guidelines 2.1 Level AA standards across our digital platforms.</p>
+                    </div>
+                    
+                    <div class="standard-item">
+                        <h4>ADA Compliance</h4>
+                        <p>We work to ensure compliance with the Americans with Disabilities Act for our US users.</p>
+                    </div>
+                    
+                    <div class="standard-item">
+                        <h4>Section 508</h4>
+                        <p>Our platforms are designed with Section 508 requirements in mind for government accessibility standards.</p>
+                    </div>
+                    
+                    <div class="standard-item">
+                        <h4>Mobile Accessibility</h4>
+                        <p>We follow mobile accessibility best practices for iOS and Android platforms.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="accessibility-section">
+                <h2>Using Assistive Technologies</h2>
+                <p>Tabletop Reserve is designed to work with a variety of assistive technologies:</p>
+                
+                <h3>Screen Readers</h3>
+                <p>Our website is compatible with popular screen readers including JAWS, NVDA, VoiceOver, and TalkBack. We use semantic HTML and ARIA attributes to ensure screen readers can properly interpret our content.</p>
+                
+                <h3>Keyboard Navigation</h3>
+                <p>All features of our website can be accessed using keyboard-only navigation. Users can use the Tab key to navigate through interactive elements, Enter to activate links and buttons, and appropriate keystrokes for other controls.</p>
+                
+                <h3>Voice Recognition</h3>
+                <p>Our website supports voice recognition software like Dragon NaturallySpeaking, allowing users to navigate and interact with voice commands.</p>
+                
+                <h3>Display Adjustments</h3>
+                <p>Users can adjust text size using browser zoom functions without breaking the layout or functionality of our website. We maintain appropriate color contrast for users with low vision.</p>
+            </div>
+            
+            <div class="accessibility-section">
+                <h2>Known Limitations</h2>
+                <p>While we strive for full accessibility, we acknowledge the following current limitations:</p>
+                <ul>
+                    <li>Some third-party content or embedded maps may not fully meet our accessibility standards</li>
+                    <li>PDF documents may have varying levels of accessibility</li>
+                    <li>Legacy content may not have been fully updated to current standards</li>
+                </ul>
+                <p>We are actively working to address these limitations and improve our overall accessibility.</p>
+            </div>
+            
+            <div class="accessibility-section">
+                <h2>Feedback and Assistance</h2>
+                <p>We welcome your feedback on the accessibility of Tabletop Reserve. If you experience any barriers to accessibility while using our services, or if you have suggestions for improvement, please contact us:</p>
+                
+                <div class="contact-box">
+                    <h3>Contact our Accessibility Team</h3>
+                    <p>We are committed to addressing accessibility issues promptly and effectively.</p>
+                    
+                    <div class="contact-methods">
+                        <div class="contact-method">
+                            <div class="contact-icon">✉️</div>
+                            <span>accessibility@tabletopreserve.com</span>
+                        </div>
+                        
+                        <div class="contact-method">
+                            <div class="contact-icon">📞</div>
+                            <span>0800 123 7890</span>
+                        </div>
+                        
+                        <div class="contact-method">
+                            <div class="contact-icon">🗨️</div>
+                            <span>Live Chat (available 9am - 5pm GMT)</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <p>If you need assistance using our website or mobile app, our customer support team is available to help you navigate or complete tasks.</p>
+            </div>
+            
+            <div class="accessibility-section">
+                <h2>Continuous Improvement</h2>
+                <p>Accessibility is an ongoing process, and we are committed to regular testing and improvements. We conduct:</p>
+                <ul>
+                    <li>Regular automated accessibility testing</li>
+                    <li>Manual testing with assistive technologies</li>
+                    <li>User testing with individuals who have disabilities</li>
+                    <li>Periodic third-party accessibility audits</li>
+                </ul>
+                <p>This accessibility statement was last updated on April 15, 2025. We will review and update this statement regularly as we continue to improve our accessibility features and address any new issues.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/nav.js"></script>
+    <script src="js/footer.js"></script>
+</body>
+</html>

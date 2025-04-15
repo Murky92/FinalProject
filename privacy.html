@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - Tabletop Reserve</title>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+    
+    <!-- Global stylesheet -->
+    <link rel="stylesheet" href="css/styles.css">
+    
+    <!-- Navigation stylesheet -->
+    <link rel="stylesheet" href="css/nav-styles.css">
+    
+    <!-- Page-specific stylesheet -->
+    <link rel="stylesheet" href="css/privacy-styles.css">
+</head>
+<body>
+    <!-- Navigation will be loaded by nav.js -->
+    
+    <div class="privacy-container">
+        <div class="privacy-hero">
+            <h1>Privacy Policy</h1>
+            <p>How we collect, use, and protect your personal information</p>
+        </div>
+        
+        <div class="privacy-toc">
+            <h2>Table of Contents</h2>
+            <ul>
+                <li><a href="#introduction">1. Introduction</a></li>
+                <li><a href="#information">2. Information We Collect</a></li>
+                <li><a href="#usage">3. How We Use Your Information</a></li>
+                <li><a href="#sharing">4. Information Sharing and Disclosure</a></li>
+                <li><a href="#cookies">5. Cookies and Tracking Technologies</a></li>
+                <li><a href="#data-security">6. Data Security</a></li>
+                <li><a href="#data-retention">7. Data Retention</a></li>
+                <li><a href="#your-rights">8. Your Rights and Choices</a></li>
+                <li><a href="#children">9. Children's Privacy</a></li>
+                <li><a href="#international">10. International Data Transfers</a></li>
+                <li><a href="#changes">11. Changes to This Privacy Policy</a></li>
+                <li><a href="#contact">12. Contact Us</a></li>
+            </ul>
+        </div>
+        
+        <div class="privacy-content">
+            <section id="introduction" class="privacy-section">
+                <h2>1. Introduction</h2>
+                <p>Tabletop Reserve Ltd ("we," "our," or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you use our website, mobile application, and related services (collectively, the "Service").</p>
+                
+                <p>We take your privacy seriously and have designed our Service with your privacy in mind. Please read this Privacy Policy carefully. By accessing or using our Service, you acknowledge that you have read, understood, and agree to the practices described in this Privacy Policy.</p>
+                
+                <p>This Privacy Policy applies to all users of our Service, including both players who book tables and shop owners who list their venues.</p>
+                
+                <p>If you do not agree with our policies and practices, please do not use our Service. If you have any questions or concerns, please contact us using the details provided at the end of this Privacy Policy.</p>
+            </section>
+            
+            <section id="information" class="privacy-section">
+                <h2>2. Information We Collect</h2>
+                
+                <p>We collect several types of information from and about users of our Service, including:</p>
+                
+                <h3>2.1 Information You Provide to Us</h3>
+                <p>When you register for an account, make a reservation, list your shop, or otherwise interact with our Service, we may collect the following types of information:</p>
+                
+                <table class="data-table">
+                    <tr>
+                        <th>Category</th>
+                        <th>Examples</th>
+                        <th>Purpose</th>
+                    </tr>
+                    <tr>
+                        <td>Personal Identifiers</td>
+                        <td>Name, email address, phone number, physical address</td>
+                        <td>Account creation, authentication, customer service, reservations, payment processing</td>
+                    </tr>
+                    <tr>
+                        <td>Profile Information</td>
+                        <td>Username, password, profile picture, gaming preferences</td>
+                        <td>Personalization, account management, community features</td>
+                    </tr>
+                    <tr>
+                        <td>Shop Information</td>
+                        <td>Business name, address, contact details, business registration information</td>
+                        <td>Shop verification, profile creation, listing management</td>
+                    </tr>
+                    <tr>
+                        <td>Reservation Details</td>
+                        <td>Date, time, party size, table preferences, special requests</td>
+                        <td>Processing reservations, service delivery</td>
+                    </tr>
+                    <tr>
+                        <td>Payment Information</td>
+                        <td>Credit card details, billing address (note: full payment details are not stored on our servers)</td>
+                        <td>Processing payments and refunds</td>
+                    </tr>
+                    <tr>
+                        <td>Communications</td>
+                        <td>Customer service inquiries, feedback, reviews</td>
+                        <td>Customer support, service improvement</td>
+                    </tr>
+                </table>
+                
+                <h3>2.2 Information We Collect Automatically</h3>
+                <p>When you access or use our Service, we may automatically collect certain information about your device and usage, including:</p>
+                <ul>
+                    <li>Device information: IP address, device type, operating system, browser type, mobile network information</li>
+                    <li>Usage data: Pages visited, features used, time spent on the Service, click-through data</li>
+                    <li>Location data: General location based on IP address, and precise location (with your consent) to find nearby shops</li>
+                    <li>Log data: System activity, hardware settings, browser settings, date and time of your request</li>
+                </ul>
+                
+                <h3>2.3 Information from Third Parties</h3>
+                <p>We may receive information about you from third parties, including:</p>
+                <ul>
+                    <li>Social media platforms, if you choose to connect your social media account</li>
+                    <li>Our business partners, such as payment processors</li>
+                    <li>Public databases and publicly available sources</li>
+                </ul>
+            </section>
+            
+            <section id="usage" class="privacy-section">
+                <h2>3. How We Use Your Information</h2>
+                
+                <p>We use the information we collect for various purposes, including:</p>
+                
+                <h3>3.1 Providing Our Service</h3>
+                <ul>
+                    <li>Creating and managing your account</li>
+                    <li>Processing and fulfilling reservations</li>
+                    <li>Facilitating payments and refunds</li>
+                    <li>Connecting players with shops</li>
+                    <li>Providing customer support</li>
+                </ul>
+                
+                <h3>3.2 Improving and Personalizing Our Service</h3>
+                <ul>
+                    <li>Analyzing usage patterns to improve features</li>
+                    <li>Customizing content and recommendations based on your preferences</li>
+                    <li>Developing new products and services</li>
+                    <li>Conducting research and analysis to improve user experience</li>
+                </ul>
+                
+                <h3>3.3 Communication</h3>
+                <ul>
+                    <li>Sending service-related notifications (e.g., reservation confirmations, reminders)</li>
+                    <li>Responding to your inquiries and requests</li>
+                    <li>Sending promotional communications (with your consent)</li>
+                    <li>Informing you about updates to our Service or policies</li>
+                </ul>
+                
+                <h3>3.4 Security and Compliance</h3>
+                <ul>
+                    <li>Protecting against fraudulent, unauthorized, or illegal activity</li>
+                    <li>Ensuring the security and integrity of our Service</li>
+                    <li>Verifying identity and enforcing our Terms of Service</li>
+                    <li>Complying with legal obligations</li>
+                </ul>
+                
+                <p>We process your personal information based on the following legal grounds:</p>
+                <ul>
+                    <li><strong>Performance of a contract:</strong> Processing necessary to fulfill our contractual obligations to you</li>
+                    <li><strong>Legitimate interests:</strong> Processing necessary for our legitimate business interests, such as improving our Service</li>
+                    <li><strong>Consent:</strong> Processing based on your specific consent, such as for marketing communications</li>
+                    <li><strong>Legal obligation:</strong> Processing necessary to comply with our legal obligations</li>
+                </ul>
+            </section>
+            
+            <section id="sharing" class="privacy-section">
+                <h2>4. Information Sharing and Disclosure</h2>
+                
+                <p>We may share your information in the following circumstances:</p>
+                
+                <h3>4.1 With Other Users</h3>
+                <p>When you make a reservation, we share relevant information with the shop owner, such as your name, contact details, party size, and any special requests. Similarly, when you list your shop, certain information is shared with players who book tables.</p>
+                
+                <h3>4.2 With Service Providers</h3>
+                <p>We may share your information with third-party service providers who help us deliver our Service, including:</p>
+                <ul>
+                    <li>Payment processors for handling transactions</li>
+                    <li>Cloud hosting providers for storing data</li>
+                    <li>Analytics providers to help us understand how our Service is used</li>
+                    <li>Customer service providers to assist with support inquiries</li>
+                    <li>Marketing services to help us communicate with you (with your consent)</li>
+                </ul>
+                <p>These service providers are contractually obligated to use your information only as necessary to provide their services to us and are required to maintain the confidentiality and security of your information.</p>
+                
+                <h3>4.3 For Legal Reasons</h3>
+                <p>We may share your information when we believe in good faith that disclosure is necessary to:</p>
+                <ul>
+                    <li>Comply with applicable law, regulation, legal process, or governmental request</li>
+                    <li>Enforce our Terms of Service and other agreements</li>
+                    <li>Protect the rights, property, or safety of Tabletop Reserve, our users, or others</li>
+                    <li>Detect, prevent, or investigate potential security incidents or fraud</li>
+                </ul>
+                
+                <h3>4.4 Business Transfers</h3>
+                <p>If we are involved in a merger, acquisition, financing, reorganization, bankruptcy, or sale of all or a portion of our assets, your information may be transferred as part of that transaction. We will notify you of any change in ownership or uses of your personal information.</p>
+                
+                <h3>4.5 With Your Consent</h3>
+                <p>We may share your information with third parties when you have given us your consent to do so.</p>
+                
+                <p>We do not sell your personal information to third parties for their marketing purposes.</p>
+            </section>
+            
+            <section id="cookies" class="privacy-section">
+                <h2>5. Cookies and Tracking Technologies</h2>
+                
+                <h3>5.1 What Are Cookies</h3>
+                <p>Cookies are small text files that are placed on your device when you visit a website. We use cookies and similar tracking technologies to enhance your experience, analyze usage, and assist in our marketing efforts.</p>
+                
+                <h3>5.2 Types of Cookies We Use</h3>
+                <ul>
+                    <li><strong>Essential cookies:</strong> Necessary for the Service to function properly</li>
+                    <li><strong>Preference cookies:</strong> Enable us to remember your preferences and settings</li>
+                    <li><strong>Analytics cookies:</strong> Help us understand how visitors interact with our Service</li>
+                    <li><strong>Marketing cookies:</strong> Used to track visitors across websites to display relevant advertisements</li>
+                </ul>
+                
+                <h3>5.3 Your Cookie Choices</h3>
+                <p>You can control cookies through your browser settings. Most browsers allow you to block or delete cookies. However, if you block essential cookies, you may not be able to use all features of our Service.</p>
+                
+                <p>We also offer a cookie preference center where you can choose which non-essential cookies you accept.</p>
+                <a href="#" class="cookie-preferences-btn">Manage Cookie Preferences</a>
+                
+                <h3>5.4 Do Not Track</h3>
+                <p>Some browsers have a "Do Not Track" feature that signals to websites that you do not want to have your online activities tracked. We currently do not respond to "Do Not Track" signals.</p>
+            </section>
+            
+            <section id="data-security" class="privacy-section">
+                <h2>6. Data Security</h2>
+                
+                <p>We implement appropriate technical and organizational measures to protect your personal information against unauthorized access, accidental loss, alteration, or destruction. These measures include:</p>
+                <ul>
+                    <li>Encryption of sensitive data in transit and at rest</li>
+                    <li>Regular security assessments and penetration testing</li>
+                    <li>Access controls and authentication mechanisms</li>
+                    <li>Regular security training for our employees</li>
+                    <li>Incident response procedures</li>
+                </ul>
+                
+                <p>While we take steps to protect your information, no method of transmission over the Internet or electronic storage is 100% secure. Therefore, we cannot guarantee absolute security. If you have reason to believe that your interaction with us is no longer secure, please contact us immediately.</p>
+            </section>
+            
+            <section id="data-retention" class="privacy-section">
+                <h2>7. Data Retention</h2>
+                
+                <p>We retain your personal information for as long as necessary to fulfill the purposes outlined in this Privacy Policy, unless a longer retention period is required or permitted by law. The criteria used to determine our retention periods include:</p>
+                <ul>
+                    <li>The duration of our ongoing relationship with you</li>
+                    <li>Whether there is a legal obligation to which we are subject</li>
+                    <li>Whether retention is advisable considering our legal position (e.g., for statutes of limitations, litigation, or regulatory investigations)</li>
+                </ul>
+                
+                <p>When we no longer need to use your personal information, we will either delete it or anonymize it so that it can no longer be associated with you.</p>
+            </section>
+            
+            <section id="your-rights" class="privacy-section">
+                <h2>8. Your Rights and Choices</h2>
+                
+                <div class="rights-box">
+                    <h3>Your Data Subject Rights</h3>
+                    <p>Depending on your location, you may have certain rights regarding your personal information, including:</p>
+                    <ul>
+                        <li><strong>Access:</strong> The right to request access to your personal information</li>
+                        <li><strong>Rectification:</strong> The right to request correction of inaccurate personal information</li>
+                        <li><strong>Erasure:</strong> The right to request deletion of your personal information in certain circumstances</li>
+                        <li><strong>Restriction:</strong> The right to request restriction of processing of your personal information</li>
+                        <li><strong>Data portability:</strong> The right to receive your personal information in a structured, commonly used format</li>
+                        <li><strong>Objection:</strong> The right to object to processing of your personal information in certain circumstances</li>
+                        <li><strong>Withdraw consent:</strong> The right to withdraw consent where processing is based on consent</li>
+                    </ul>
+                </div>
+                
+                <p>To exercise your rights, please contact us using the details provided at the end of this Privacy Policy. We will respond to your request within the timeframe required by applicable law (generally within 30 days).</p>
+                
+                <h3>8.1 Account Information</h3>
+                <p>You can review and update your account information by logging into your account settings. If you cannot make the changes yourself, please contact us for assistance.</p>
+                
+                <h3>8.2 Communication Preferences</h3>
+                <p>You can opt out of receiving promotional emails by following the unsubscribe instructions in those emails. You may not opt out of service-related communications (e.g., reservation confirmations, security notifications).</p>
+                
+                <h3>8.3 Mobile App Permissions</h3>
+                <p>You can control app permissions (e.g., location, camera, notifications) through your device settings. However, some features may not function properly if certain permissions are disabled.</p>
+                
+                <h3>8.4 Complaints</h3>
+                <p>If you are concerned about our handling of your personal information, you have the right to complain to the data protection authority in your jurisdiction. We encourage you to contact us first so we can address your concerns.</p>
+            </section>
+            
+            <section id="children" class="privacy-section">
+                <h2>9. Children's Privacy</h2>
+                
+                <div class="children-privacy">
+                    <h3>Important Notice Regarding Children's Privacy</h3>
+                    <p>Our Service is not directed to children under the age of 13 (or 16 in the European Economic Area). We do not knowingly collect personal information from children under these ages.</p>
+                    <p>If you are a parent or guardian and believe we have collected information from your child in a manner not permitted by law, please contact us, and we will promptly remove the information.</p>
+                </div>
+                
+                <p>For teen users between the ages of 13 and 18, we encourage parents to monitor their children's online activities and help them understand this Privacy Policy.</p>
+            </section>
+            
+            <section id="international" class="privacy-section">
+                <h2>10. International Data Transfers</h2>
+                
+                <p>We are based in the United Kingdom, and we process and store information on servers located in the UK and European Economic Area (EEA). However, we may transfer, store, and process your information in countries other than your country of residence.</p>
+                
+                <p>When we transfer personal information outside the UK or EEA, we ensure that adequate safeguards are in place to protect your information. These safeguards may include:</p>
+                <ul>
+                    <li>Transferring to countries that have been deemed to provide an adequate level of protection</li>
+                    <li>Using specific contracts approved by relevant authorities (such as Standard Contractual Clauses)</li>
+                    <li>Implementing appropriate supplementary measures where required</li>
+                </ul>
+                
+                <p>By using our Service, you consent to the transfer of your information to these countries, which may have different data protection rules than your country.</p>
+            </section>
+            
+            <section id="changes" class="privacy-section">
+                <h2>11. Changes to This Privacy Policy</h2>
+                
+                <p>We may update this Privacy Policy from time to time to reflect changes in our practices or for other operational, legal, or regulatory reasons. If we make material changes, we will notify you through the Service or by other means, such as email.</p>
+                
+                <p>The date at the bottom of this Privacy Policy indicates when it was last updated. We encourage you to review this Privacy Policy periodically to stay informed about how we are protecting your information.</p>
+                
+                <p>Your continued use of the Service after the revised Privacy Policy has become effective indicates that you have read, understood, and agreed to the current version.</p>
+            </section>
+            
+            <section id="contact" class="privacy-section">
+                <h2>12. Contact Us</h2>
+                
+                <p>If you have any questions, concerns, or requests regarding this Privacy Policy or our privacy practices, please contact us:</p>
+                
+                <div class="contact-info">
+                    <h3>Data Protection Officer</h3>
+                    <p>Tabletop Reserve Ltd<br>
+                    123 Gaming Street<br>
+                    London, EC1A 1BB<br>
+                    United Kingdom</p>
+                    <p>Email: privacy@tabletopreserve.com<br>
+                    Phone: 0800 123 4567</p>
+                </div>
+                
+                <p>For individuals in the European Economic Area, we have appointed a representative who can be contacted at eea-representative@tabletopreserve.com.</p>
+                
+                <a href="#" class="back-to-top">Back to top</a>
+            </section>
+            
+            <p class="last-updated">Last updated: April 15, 2025</p>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/nav.js"></script>
+    <script src="js/footer.js"></script>
+    
+    <script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('.privacy-toc a, .back-to-top').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                // Don't scroll if it's the "Back to top" link going to "#"
+                if (this.getAttribute('href') === '#') {
+                    e.preventDefault();
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                    return;
+                }
+                
+                const targetId = this.getAttribute('href');
+                if (targetId.startsWith('#')) {
+                    e.preventDefault();
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 20,
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+            });
+        });
+        
+        // Cookie preferences button functionality (example)
+        document.querySelector('.cookie-preferences-btn').addEventListener('click', function(e) {
+            e.preventDefault();
+            // This would typically open a cookie preferences modal
+            alert('Cookie preferences would open here. This is a placeholder for demonstration purposes.');
+        });
+    </script>
+</body>
+</html>

@@ -46,8 +46,8 @@ document.addEventListener('DOMContentLoaded', function() {
             <h3>Support</h3>
             <ul>
                 <li><a href="contact.html">Contact Us</a></li>
-                <li><a href="help-center.html">Help Center</a></li>
-                <li><a href="report-issue.html">Report an Issue</a></li>
+                <li><a href="support-center.html">Help Center</a></li>
+                <li><a href="contact.html">Report an Issue</a></li>
                 <li><a href="mailto:support@tabletopreserve.com">support@tabletopreserve.com</a></li>
             </ul>
         </div>
