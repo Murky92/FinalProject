@@ -110,10 +110,12 @@ exports.sendPromotionalNotifications = functions.firestore
       const messagePayload = {
         notification: {
           title: notification.title,
-          body: notification.message
+          // Include the shop name in the message body
+          body: notification.shopName ? `From ${notification.shopName}: ${notification.message}` : notification.message
         },
         data: {
           shopId: notification.shopId || '',
+          shopName: notification.shopName || '',  // Also include shop name in the data
           notificationId: context.params.notificationId,
           type: notification.type,
           timestamp: notification.createdAt ? notification.createdAt.toDate().toISOString() : new Date().toISOString()
@@ -235,10 +237,12 @@ exports.sendPromotionalNotifications = functions.firestore
               token: user.fcmToken,
               notification: {
                 title: notification.title,
-                body: notification.message
+                // Include the shop name in the message body
+                body: notification.shopName ? `From ${notification.shopName}: ${notification.message}` : notification.message
               },
               data: {
                 shopId: notification.shopId || '',
+                shopName: notification.shopName || '',  // Also include shop name in the data
                 notificationId: context.params.notificationId,
                 type: notification.type,
                 timestamp: notification.createdAt 

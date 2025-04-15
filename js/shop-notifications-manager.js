@@ -292,7 +292,10 @@ function showPopup() {
     
     // Set preview content
     document.getElementById('preview-title').textContent = title;
-    document.getElementById('preview-message').textContent = message;
+    
+    // Include shop name in the preview message
+    const storeNameDisplay = shopData && shopData.storeName ? `From ${shopData.storeName}: ` : '';
+    document.getElementById('preview-message').textContent = `${storeNameDisplay}${message}`;
     
     // Set recipient text
     let recipientText = getTargetDescription(target);
@@ -314,15 +317,24 @@ function getTargetDescription(target) {
     }
 }
 
-// Close popup
+// Close popup with button reset
 function closePopup() {
+    // Hide the popup
     document.getElementById('popup-overlay').style.display = 'none';
+    
+    // Reset the button state
+    const sendButton = document.querySelector('#popup-overlay .success-btn');
+    if (sendButton) {
+        sendButton.disabled = false;
+        sendButton.textContent = 'Send Notification';
+    }
 }
 
 // Send notification - ENHANCED VERSION
 function sendNotification() {
     if (!shopId) {
         console.error('Shop ID not available');
+        showMessage('Shop ID not available', 'error');
         return;
     }
     
@@ -333,30 +345,41 @@ function sendNotification() {
     
     // Show sending indicator
     const sendButton = document.querySelector('#popup-overlay .success-btn');
-    const originalText = sendButton.textContent;
+    const originalText = sendButton.textContent || 'Send Notification';
     sendButton.disabled = true;
     sendButton.textContent = 'Sending...';
     
     // Create notification data
     const notificationData = {
         shopId: shopId,
-        shopName: shopData.storeName,
+        shopName: shopData.storeName || 'Shop',
         type: type,
         title: title,
         message: message,
         target: target,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-        createdBy: window.shopAuth.auth.currentUser.email || window.shopAuth.auth.currentUser.uid,
+        createdBy: window.shopAuth.auth.currentUser ? 
+            (window.shopAuth.auth.currentUser.email || window.shopAuth.auth.currentUser.uid) : 
+            'Unknown',
         processingStatus: 'pending'
     };
     
     // Add this to override any default confirmation dialog
     window.onbeforeunload = null;
     
+    // Set a timeout to ensure button is reset even if Firebase fails
+    const resetTimeout = setTimeout(() => {
+        sendButton.disabled = false;
+        sendButton.textContent = originalText;
+    }, 10000); // 10 second safeguard
+    
     // Save to Firestore
     window.shopAuth.db.collection('Notifications')
         .add(notificationData)
         .then((docRef) => {
+            // Clear the safety timeout
+            clearTimeout(resetTimeout);
+            
             // Show success message with enhanced details
             showMessage(`Notification created and queued for delivery to ${getTargetDescription(target)}!`, 'success');
             
@@ -364,6 +387,12 @@ function sendNotification() {
             document.getElementById('notification-form').reset();
             document.getElementById('title-length').textContent = '0';
             document.getElementById('message-length').textContent = '0';
+            
+            // Reset button state BEFORE closing popup
+            sendButton.disabled = false;
+            sendButton.textContent = originalText;
+            
+            // Close the popup
             closePopup();
             
             // Set up a listener to monitor this notification's status
@@ -373,13 +402,18 @@ function sendNotification() {
             switchTab('history');
         })
         .catch((error) => {
+            // Clear the safety timeout
+            clearTimeout(resetTimeout);
+            
             console.error('Error sending notification:', error);
             showMessage('Error sending notification: ' + error.message, 'error');
-            closePopup();
             
-            // Reset button state
+            // Reset button state BEFORE closing popup
             sendButton.disabled = false;
             sendButton.textContent = originalText;
+            
+            // Close popup
+            closePopup();
         });
 }
 
