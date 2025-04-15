@@ -133,12 +133,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         @media (max-width: 768px) {
-            .footer-content {
-                flex-direction: column;
-            }
-            
-            .footer-section {
-                margin-bottom: 30px;
+            .footer {
+                display: none !important;
             }
         }
         
