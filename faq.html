@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ - Tabletop Reserve</title>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+    
+    <!-- Global stylesheet -->
+    <link rel="stylesheet" href="css/styles.css">
+    
+    <!-- Navigation stylesheet -->
+    <link rel="stylesheet" href="css/nav-styles.css">
+    
+    <!-- Page-specific stylesheet -->
+    <link rel="stylesheet" href="css/faq-styles.css">
+</head>
+<body>
+    <!-- Navigation will be loaded by nav.js -->
+    
+    <div class="faq-main-container">
+        <div class="faq-hero">
+            <h1>Frequently Asked Questions</h1>
+            <p>Find answers to common questions about Tabletop Reserve</p>
+            
+            <div class="faq-search">
+                <input type="text" id="faq-search-input" placeholder="Search for questions...">
+                <button id="faq-search-btn">Search</button>
+            </div>
+        </div>
+        
+        <div class="faq-content">
+            <div class="faq-categories">
+                <button class="category-btn active" data-category="general">General</button>
+                <button class="category-btn" data-category="shop-owners">For Shop Owners</button>
+                <button class="category-btn" data-category="players">For Players</button>
+                <button class="category-btn" data-category="account">Account & Billing</button>
+                <button class="category-btn" data-category="technical">Technical</button>
+            </div>
+            
+            <!-- General FAQs -->
+            <div id="general" class="faq-section active">
+                <h2>General Questions</h2>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>What is Tabletop Reserve?</h3>
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Tabletop Reserve is a platform that connects tabletop gaming enthusiasts with local gaming shops. Shop owners can list their tables and special events, while players can discover and book gaming spaces near them.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>How does Tabletop Reserve work?</h3>
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Shop owners register their business and list available tables and events. Players can use our mobile app to discover shops near them, view available tables, and make reservations. The platform handles the booking process, notifications, and helps shops manage their gaming spaces.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>Is Tabletop Reserve available in my area?</h3>
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Tabletop Reserve is currently available throughout the UK. We're expanding to new locations regularly. The best way to check is to download our app and search for shops in your area.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>Do I need an account to use Tabletop Reserve?</h3>
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes, both shop owners and players need to create a free account to use Tabletop Reserve. Shop owners register through this website, while players can create an account through our mobile app.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>How do I get in touch with Tabletop Reserve support?</h3>
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>You can reach our support team through the <a href="contact.html">Contact page</a>, by email at support@tabletopreserve.com, or through the in-app chat support if you're using the mobile app.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Shop Owners FAQs -->
+            <div id="shop-owners" class="faq-section">
+                <h2>For Shop Owners</h2>
+                
+                <div class="faq-item" id="shop-registration">
+                    <div class="faq-question">
+                        <h3>How do I register my shop on Tabletop Reserve?</h3>
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>To register your shop, click on the "Register Shop" button in the top navigation. You'll need to provide basic information about your shop, including contact details and location. After submission, our team will review your application, and you'll receive an email confirmation once approved.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>How much does it cost to list my shop?</h3>
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Tabletop Reserve operates on a simple fee structure. Basic shop listing is free, and we charge a small commission (5%) on each reservation made through the platform. We also offer premium plans with additional features and reduced commission rates. Check our <a href="#">Pricing page</a> for full details.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>How do I set up my tables and events?</h3>
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Once your shop is approved, you can log in to your dashboard where you'll find options to add tables and create events. For tables, you can specify details like table size, game types, and availability. For events, you can set dates, times, attendance limits, and other details. Our <a href="shop-guide.html">Shop Owner Guide</a> provides step-by-step instructions.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>How do refunds and cancellations work?</h3>
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>You can set your own cancellation policy in your shop settings (e.g., 24-hour notice required). When a customer cancels within your policy timeframe, the refund is processed automatically. For cancellations outside the policy timeframe, you can approve or deny them manually. Shop owners can also cancel reservations when necessary, with automatic refunds issued to customers.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>How do I get paid for bookings?</h3>
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Payments are processed through our secure payment system. You'll need to add your bank account details in the Payment section of your shop dashboard. We transfer funds to your account every week for all completed reservations, minus our service fee. You can view detailed payment reports in your dashboard.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Players FAQs -->
+            <div id="players" class="faq-section">
+                <h2>For Players</h2>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>How do I find gaming shops near me?</h3>
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Download the Tabletop Reserve app from the App Store or Google Play Store. After creating an account, the app will show gaming shops near your location. You can filter results by distance, game types, amenities, and availability.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>How do I make a table reservation?</h3>
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>In the app, browse available shops and tables. When you find a table you want to book, select your preferred date and time, specify the number of players, and complete the booking process. You'll receive a confirmation email and notification once your reservation is confirmed by the shop.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>Can I cancel or modify my reservation?</h3>
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes, you can cancel or modify your reservation through the app. Go to your bookings and select the reservation you want to change. Note that cancellation policies vary by shop, and cancellations made too close to the reservation time may not be eligible for a full refund.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>How do I join an event at a gaming shop?</h3>
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>You can browse upcoming events in the Events section of the app. When you find an event you'd like to join, tap the Register button and follow the instructions. Some events are free, while others may have a registration fee. You'll receive event details and reminders via the app.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>How do I leave a review for a shop?</h3>
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>After your reservation is complete, you'll receive a notification asking for your feedback. You can rate your experience and leave a review directly in the app. Your honest feedback helps other players and helps shops improve their services.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Account & Billing FAQs -->
+            <div id="account" class="faq-section">
+                <h2>Account & Billing</h2>
+                
+                <div class="faq-item" id="account-issues">
+                    <div class="faq-question">
+                        <h3>How do I recover my password?</h3>
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>On the login page, click the "Forgot Password" link. Enter your email address, and we'll send you a password reset link. Click the link in the email and follow the instructions to create a new password.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>How do I update my account information?</h3>
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Log in to your account and go to your profile settings. Here, you can update your personal information, contact details, and notification preferences. For shop owners, you can also update your shop details, hours, and payment information in the Shop Settings section.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>What payment methods are accepted?</h3>
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>We accept all major credit and debit cards (Visa, Mastercard, American Express), as well as Apple Pay and Google Pay within the mobile app. Some shops may also offer pay-at-shop options for certain bookings.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>Is my payment information secure?</h3>
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes, all payment information is securely processed through our payment provider, which uses industry-standard encryption and security measures. We never store your full credit card details on our servers. Our platform is fully compliant with PCI DSS requirements.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>How do I get a receipt for my booking?</h3>
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>After each successful booking, a receipt is automatically sent to your registered email address. You can also view and download receipts for all your bookings in the Bookings section of your account.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Technical FAQs -->
+            <div id="technical" class="faq-section">
+                <h2>Technical Questions</h2>
+                
+                <div class="faq-item" id="account-issues">
+                    <div class="faq-question">
+                        <h3>What devices does the Tabletop Reserve app support?</h3>
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Our mobile app is available for iOS devices running iOS 12 or later, and Android devices running Android 8.0 or later. The web dashboard for shop owners works on all modern browsers (Chrome, Firefox, Safari, Edge).</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>The app is crashing on my device. What should I do?</h3>
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>First, make sure your app is updated to the latest version. If problems persist, try these steps: 1) Restart the app, 2) Restart your device, 3) Uninstall and reinstall the app. If you're still experiencing issues, please contact our support team with details about your device model and operating system.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>Does the app work offline?</h3>
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>The app requires an internet connection for most features, including searching for shops, making reservations, and receiving notifications. However, you can view your confirmed bookings offline if you've previously loaded them while connected.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>How do I enable notifications?</h3>
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>When you first install the app, you'll be asked to allow notifications. If you declined initially, you can enable them in your device settings: go to Settings > Apps > Tabletop Reserve > Notifications. In the app, you can customize which types of notifications you receive in your Profile Settings.</p>
+                    </div>
+                </div>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <h3>What permissions does the app require?</h3>
+                        <span class="toggle-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>The app requires the following permissions: Location (to find nearby shops), Camera (optional, for scanning QR codes), Notifications (for booking alerts), and Storage (to cache data for offline use). You can manage these permissions in your device settings.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="no-results hidden">
+                <h3>No matching questions found</h3>
+                <p>Try different search terms or browse the categories above.</p>
+                <button id="clear-search">Clear Search</button>
+            </div>
+        </div>
+        
+        <div class="contact-cta">
+            <h2>Still have questions?</h2>
+            <p>Our support team is ready to help with any questions not covered here.</p>
+            <a href="contact.html" class="contact-btn">Contact Us</a>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/nav.js"></script>
+    <script src="js/footer.js"></script>
+    
+    <script>
+        // Toggle FAQ items
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const parent = question.parentElement;
+                const answer = question.nextElementSibling;
+                const icon = question.querySelector('.toggle-icon');
+                
+                // Toggle this FAQ
+                parent.classList.toggle('active');
+                
+                // Update toggle icon
+                icon.textContent = parent.classList.contains('active') ? '−' : '+';
+                
+                // Smooth animation for answer
+                if (parent.classList.contains('active')) {
+                    answer.style.maxHeight = answer.scrollHeight + 'px';
+                } else {
+                    answer.style.maxHeight = '0';
+                }
+            });
+        });
+        
+        // Switch category tabs
+        document.querySelectorAll('.category-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                // Update active button
+                document.querySelectorAll('.category-btn').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                button.classList.add('active');
+                
+                // Show the correct section
+                const category = button.getAttribute('data-category');
+                document.querySelectorAll('.faq-section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                document.getElementById(category).classList.add('active');
+                
+                // Clear search if any
+                document.getElementById('faq-search-input').value = '';
+                document.querySelectorAll('.faq-item').forEach(item => {
+                    item.classList.remove('hidden');
+                });
+                document.querySelector('.no-results').classList.add('hidden');
+            });
+        });
+        
+        // Search functionality
+        const searchFaqs = () => {
+            const searchTerm = document.getElementById('faq-search-input').value.toLowerCase().trim();
+            const allFaqs = document.querySelectorAll('.faq-item');
+            let matchCount = 0;
+            
+            if (searchTerm === '') {
+                // Reset everything if search is cleared
+                allFaqs.forEach(item => {
+                    item.classList.remove('hidden');
+                });
+                document.querySelector('.no-results').classList.add('hidden');
+                return;
+            }
+            
+            // Show all sections when searching
+            document.querySelectorAll('.faq-section').forEach(section => {
+                section.classList.add('active');
+            });
+            
+            // Reset active category button
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Search through FAQs
+            allFaqs.forEach(item => {
+                const question = item.querySelector('h3').textContent.toLowerCase();
+                const answer = item.querySelector('.faq-answer').textContent.toLowerCase();
+                
+                if (question.includes(searchTerm) || answer.includes(searchTerm)) {
+                    item.classList.remove('hidden');
+                    matchCount++;
+                } else {
+                    item.classList.add('hidden');
+                }
+            });
+            
+            // Show no results message if needed
+            if (matchCount === 0) {
+                document.querySelector('.no-results').classList.remove('hidden');
+            } else {
+                document.querySelector('.no-results').classList.add('hidden');
+            }
+        };
+        
+        document.getElementById('faq-search-btn').addEventListener('click', searchFaqs);
+        document.getElementById('faq-search-input').addEventListener('keyup', event => {
+            if (event.key === 'Enter') {
+                searchFaqs();
+            }
+        });
+        
+        document.getElementById('clear-search').addEventListener('click', () => {
+            document.getElementById('faq-search-input').value = '';
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.remove('hidden');
+            });
+            document.querySelector('.no-results').classList.add('hidden');
+            
+            // Reset to show only General section
+            document.querySelectorAll('.faq-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById('general').classList.add('active');
+            
+            // Reset active category button
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector('[data-category="general"]').classList.add('active');
+        });
+    </script>
+</body>
+</html>

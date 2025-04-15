@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Features - Tabletop Reserve</title>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+    
+    <!-- Global stylesheet -->
+    <link rel="stylesheet" href="css/styles.css">
+    
+    <!-- Navigation stylesheet -->
+    <link rel="stylesheet" href="css/nav-styles.css">
+    
+    <!-- Page-specific stylesheet -->
+    <link rel="stylesheet" href="css/features-styles.css">
+</head>
+<body>
+    <!-- Navigation will be loaded by nav.js -->
+    
+    <div class="features-main-container">
+        <div class="features-hero">
+            <h1>Tabletop Reserve Features</h1>
+            <p>Powerful tools to help shops manage their gaming spaces and connect with players</p>
+        </div>
+        
+        <div class="features-content">
+            <div class="features-tabs">
+                <button class="tab-button active" data-tab="shop-owners">For Shop Owners</button>
+                <button class="tab-button" data-tab="players">For Players</button>
+            </div>
+            
+            <div class="tab-content active" id="shop-owners-content">
+                <div class="feature-section">
+                    <div class="feature-image">
+                        <img src="images/placeholder-reservation-system.jpg" alt="Reservation System">
+                    </div>
+                    <div class="feature-details">
+                        <h2>Easy Table Management</h2>
+                        <p>Manage your gaming tables with our intuitive dashboard. Define table types, capacities, and special features to help players find exactly what they're looking for.</p>
+                        <ul class="feature-list">
+                            <li>Set up multiple table types (standard, premium, private rooms)</li>
+                            <li>Define special features (terrain, power outlets, etc.)</li>
+                            <li>Set table availability hours and blackout periods</li>
+                            <li>Track table usage statistics and optimize your space</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="feature-section reverse">
+                    <div class="feature-image">
+                        <img src="images/placeholder-events.jpg" alt="Events Calendar">
+                    </div>
+                    <div class="feature-details">
+                        <h2>Event Management</h2>
+                        <p>Create and promote gaming events to attract players to your shop. Our event management system handles registrations, reminders, and even waitlists.</p>
+                        <ul class="feature-list">
+                            <li>Create one-time or recurring events</li>
+                            <li>Set attendance limits and registration requirements</li>
+                            <li>Collect event RSVPs and manage check-ins</li>
+                            <li>Send automated reminders to registered players</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="feature-section">
+                    <div class="feature-image">
+                        <img src="images/placeholder-notifications.jpg" alt="Push Notifications">
+                    </div>
+                    <div class="feature-details">
+                        <h2>Customer Communication</h2>
+                        <p>Stay connected with your customers through our integrated notification system. Send updates about new events, promotions, or last-minute table availability.</p>
+                        <ul class="feature-list">
+                            <li>Send targeted push notifications to app users</li>
+                            <li>Create custom promotions and special offers</li>
+                            <li>Automated reservation confirmations and reminders</li>
+                            <li>Gather customer feedback after visits</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="feature-section reverse">
+                    <div class="feature-image">
+                        <img src="images/placeholder-analytics.jpg" alt="Analytics Dashboard">
+                    </div>
+                    <div class="feature-details">
+                        <h2>Business Analytics</h2>
+                        <p>Make data-driven decisions with our comprehensive analytics dashboard. Track table bookings, monitor busy periods, and identify opportunities for growth.</p>
+                        <ul class="feature-list">
+                            <li>Visual reports of booking trends and patterns</li>
+                            <li>Customer retention and return visit metrics</li>
+                            <li>Event attendance and registration analytics</li>
+                            <li>Export data for further analysis</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="players-content">
+                <div class="feature-section">
+                    <div class="feature-image">
+                        <img src="images/placeholder-discover.jpg" alt="Discover Shops">
+                    </div>
+                    <div class="feature-details">
+                        <h2>Discover Gaming Spaces</h2>
+                        <p>Find the perfect gaming venue near you with our intuitive search and filter system. Browse shops based on location, table types, games, and amenities.</p>
+                        <ul class="feature-list">
+                            <li>Location-based search with map integration</li>
+                            <li>Filter by table types and special features</li>
+                            <li>View shop profiles with photos and details</li>
+                            <li>Read reviews from other players</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="feature-section reverse">
+                    <div class="feature-image">
+                        <img src="images/placeholder-booking.jpg" alt="Easy Booking">
+                    </div>
+                    <div class="feature-details">
+                        <h2>Seamless Reservations</h2>
+                        <p>Book gaming tables with just a few taps. Our mobile app makes it easy to find available tables, reserve your spot, and manage your bookings.</p>
+                        <ul class="feature-list">
+                            <li>Real-time availability calendar</li>
+                            <li>Quick booking process with saved preferences</li>
+                            <li>Manage, modify, or cancel reservations</li>
+                            <li>Reservation confirmation and reminders</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="feature-section">
+                    <div class="feature-image">
+                        <img src="images/placeholder-events-player.jpg" alt="Join Events">
+                    </div>
+                    <div class="feature-details">
+                        <h2>Join Gaming Events</h2>
+                        <p>Never miss a game night again. Discover and register for events at your favorite shops, from tournaments to paint nights to new game demonstrations.</p>
+                        <ul class="feature-list">
+                            <li>Browse upcoming events in your area</li>
+                            <li>RSVP and secure your spot</li>
+                            <li>Get notified about new events matching your interests</li>
+                            <li>Connect with other attendees</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="feature-section reverse">
+                    <div class="feature-image">
+                        <img src="images/placeholder-community.jpg" alt="Player Community">
+                    </div>
+                    <div class="feature-details">
+                        <h2>Player Community</h2>
+                        <p>Connect with fellow gamers who share your interests. Our community features help you find gaming groups, make new friends, and get more game sessions on your calendar.</p>
+                        <ul class="feature-list">
+                            <li>Create a player profile with game preferences</li>
+                            <li>Find players with similar interests</li>
+                            <li>Join game-specific communities</li>
+                            <li>Share photos and experiences from your sessions</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="cta-section">
+            <h2>Ready to transform your gaming experience?</h2>
+            <p>Whether you're a shop owner looking to grow your business or a player seeking your next game night destination, Tabletop Reserve has you covered.</p>
+            <div class="cta-buttons">
+                <a href="signup.html" class="cta-button shop-cta">Register Your Shop</a>
+                <a href="#" class="cta-button app-cta">Download the App</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/nav.js"></script>
+    <script src="js/footer.js"></script>
+    
+    <script>
+        // Tab switching functionality
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', function() {
+                // Remove active class from all buttons
+                document.querySelectorAll('.tab-button').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                
+                // Add active class to clicked button
+                this.classList.add('active');
+                
+                // Hide all tab content
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                
+                // Show selected tab content
+                const tabId = this.getAttribute('data-tab');
+                document.getElementById(tabId + '-content').classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

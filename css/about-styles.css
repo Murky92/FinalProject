@@ -1,0 +1,228 @@
+/* about-styles.css - Styles for the About page */
+
+.about-main-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+}
+
+.about-logo-container {
+    text-align: center;
+    margin-bottom: 30px;
+    display: none; /* Hide this since we now have the navbar logo */
+}
+
+.about-logo {
+    max-width: 200px;
+    height: auto;
+}
+
+.about-content {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    margin-bottom: 40px;
+}
+
+.about-header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.about-header h1 {
+    font-size: 2.5rem;
+    color: #4a6ee0;
+    margin-bottom: 10px;
+}
+
+.tagline {
+    font-size: 1.1rem;
+    color: #666;
+    font-style: italic;
+}
+
+.about-section {
+    margin-bottom: 50px;
+}
+
+.about-section h2 {
+    color: #4a6ee0;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.about-section p {
+    line-height: 1.6;
+    margin-bottom: 15px;
+    font-size: 1.05rem;
+}
+
+.team-list {
+    padding-left: 30px;
+    margin: 20px 0;
+}
+
+.team-list li {
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+.how-it-works {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-top: 30px;
+}
+
+.step {
+    background-color: #f8f9fa;
+    padding: 25px;
+    border-radius: 8px;
+    position: relative;
+    border-top: 5px solid #4a6ee0;
+}
+
+.step-number {
+    position: absolute;
+    top: -20px;
+    left: 25px;
+    width: 40px;
+    height: 40px;
+    background-color: #4a6ee0;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.step h3 {
+    margin-top: 10px;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.values-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.value-item {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    border-left: 4px solid #4a6ee0;
+}
+
+.value-item h3 {
+    color: #4a6ee0;
+    margin-bottom: 10px;
+}
+
+.value-item p {
+    margin-bottom: 0;
+    font-size: 0.95rem;
+}
+
+.cta-section {
+    text-align: center;
+    background-color: #f0f7ff;
+    padding: 40px;
+    border-radius: 8px;
+    margin-bottom: 0;
+}
+
+.cta-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 30px;
+    flex-wrap: wrap;
+}
+
+.cta-button {
+    display: inline-block;
+    padding: 12px 25px;
+    border-radius: 6px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.shop-cta {
+    background-color: #4a6ee0;
+    color: white;
+}
+
+.shop-cta:hover {
+    background-color: #3a5bc0;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.app-cta {
+    background-color: #34c759;
+    color: white;
+}
+
+.app-cta:hover {
+    background-color: #2aaf4c;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .about-content {
+        padding: 25px;
+    }
+    
+    .about-header h1 {
+        font-size: 2rem;
+    }
+    
+    .how-it-works {
+        grid-template-columns: 1fr;
+    }
+    
+    .values-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .cta-button {
+        width: 100%;
+        max-width: 300px;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .about-content {
+        padding: 20px;
+    }
+    
+    .about-header h1 {
+        font-size: 1.8rem;
+    }
+    
+    .about-section h2 {
+        font-size: 1.5rem;
+    }
+}

@@ -1,0 +1,212 @@
+/* nav-styles.css - Styles for the main navigation bar */
+
+.main-nav {
+    background-color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    width: 100%;
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.nav-logo {
+    flex: 0 0 auto;
+}
+
+.nav-logo img {
+    height: 40px;
+    width: auto;
+}
+
+.nav-links {
+    display: flex;
+    gap: 25px;
+}
+
+.nav-links a {
+    color: #333;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 5px 0;
+    position: relative;
+    transition: color 0.3s;
+}
+
+.nav-links a:hover {
+    color: #4a6ee0;
+}
+
+.nav-links a.active {
+    color: #4a6ee0;
+}
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: #4a6ee0;
+    transition: width 0.3s;
+}
+
+.nav-links a:hover::after,
+.nav-links a.active::after {
+    width: 100%;
+}
+
+.nav-buttons {
+    display: flex;
+    gap: 15px;
+}
+
+.nav-login-btn {
+    padding: 8px 15px;
+    color: #4a6ee0;
+    text-decoration: none;
+    border: 1px solid #4a6ee0;
+    border-radius: 5px;
+    transition: all 0.3s;
+}
+
+.nav-login-btn:hover {
+    background-color: #f0f7ff;
+}
+
+.nav-signup-btn {
+    padding: 8px 15px;
+    background-color: #4a6ee0;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: all 0.3s;
+}
+
+.nav-signup-btn:hover {
+    background-color: #3a5bc0;
+}
+
+.mobile-menu-btn {
+    display: none;
+    border: none;
+    background: none;
+    cursor: pointer;
+    padding: 10px;
+}
+
+.menu-icon {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background-color: #333;
+    position: relative;
+    transition: background-color 0.3s;
+}
+
+.menu-icon::before,
+.menu-icon::after {
+    content: '';
+    position: absolute;
+    width: 25px;
+    height: 3px;
+    background-color: #333;
+    transition: transform 0.3s;
+}
+
+.menu-icon::before {
+    top: -8px;
+}
+
+.menu-icon::after {
+    bottom: -8px;
+}
+
+.mobile-menu-btn.active .menu-icon {
+    background-color: transparent;
+}
+
+.mobile-menu-btn.active .menu-icon::before {
+    transform: translateY(8px) rotate(45deg);
+}
+
+.mobile-menu-btn.active .menu-icon::after {
+    transform: translateY(-8px) rotate(-45deg);
+}
+
+.mobile-menu {
+    display: none;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    flex-direction: column;
+    gap: 15px;
+}
+
+.mobile-menu a {
+    color: #333;
+    text-decoration: none;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.mobile-menu a:hover {
+    color: #4a6ee0;
+}
+
+.mobile-menu a.active {
+    color: #4a6ee0;
+    font-weight: 500;
+}
+
+.mobile-menu-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.mobile-menu-buttons a {
+    text-align: center;
+    padding: 12px;
+    border-radius: 5px;
+    border: none;
+}
+
+/* Adjust container for pages that use the navbar */
+.about-main-container,
+.faq-main-container,
+.contact-main-container,
+.help-main-container,
+.privacy-main-container,
+.terms-main-container {
+    padding-top: 20px;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .nav-links {
+        display: none;
+    }
+    
+    .nav-buttons {
+        display: none;
+    }
+    
+    .mobile-menu-btn {
+        display: block;
+    }
+    
+    .mobile-menu.active {
+        display: flex;
+    }
+}
