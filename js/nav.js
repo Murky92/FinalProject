@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <a href="faq.html">FAQ</a>
                 <a href="contact.html">Contact</a>
                 <a href="about.html">About</a>
+                <a href="feedback.html">Feedback</a>
             </div>
             
             <div class="nav-buttons">

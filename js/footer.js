@@ -39,6 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <li><a href="terms.html">Terms of Service</a></li>
                 <li><a href="privacy.html">Privacy Policy</a></li>
                 <li><a href="accessibility.html">Accessibility</a></li>
+                <li><a href="feedback.html">Feedback</a></li>
             </ul>
         </div>
         
@@ -175,4 +176,6 @@ document.addEventListener('DOMContentLoaded', function() {
             signupContainer.style.paddingBottom = footer.offsetHeight + 'px';
         }
     }
+
+    
 });

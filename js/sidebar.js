@@ -24,7 +24,8 @@ document.addEventListener('DOMContentLoaded', function() {
     'events': '🎉',
     'notifications': '🔔',
     'home': '🏠',
-    'event bookings': '🎟️'
+    'event bookings': '🎟️',
+    'feedback': '📝'
 
   };
   
@@ -187,7 +188,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // 19. Hide the original navigation
   existingNav.style.display = 'none';
   
-  // Make sure .dashboard-header .logout-btn is hidden via JavaScript as well
+  
   if (existingLogoutBtn) {
     existingLogoutBtn.style.display = 'none';
   }
