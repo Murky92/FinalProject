@@ -24,10 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 <a href="feedback.html">Feedback</a>
             </div>
             
-            <div class="nav-buttons">
-                <a href="index.html" class="nav-login-btn">Login</a>
-                <a href="signup.html" class="nav-signup-btn">Register Shop</a>
-            </div>
+            
             
             <button class="mobile-menu-btn">
                 <span class="menu-icon"></span>

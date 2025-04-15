@@ -1,5 +1,4 @@
 /* nav-styles.css - Styles for the main navigation bar */
-
 .main-nav {
     background-color: white;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -7,19 +6,20 @@
     top: 0;
     z-index: 1000;
     width: 100%;
+    align-items: center;
 }
 
 .nav-container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 15px 20px;
-    display: flex;
+    display: grid;
+    grid-template-columns: 200px 1fr 200px;
     align-items: center;
-    justify-content: space-between;
 }
 
 .nav-logo {
-    flex: 0 0 auto;
+    grid-column: 1;
 }
 
 .nav-logo img {
@@ -30,6 +30,8 @@
 .nav-links {
     display: flex;
     gap: 25px;
+    justify-content: center;
+    grid-column: 2;
 }
 
 .nav-links a {
@@ -60,14 +62,15 @@
     transition: width 0.3s;
 }
 
-.nav-links a:hover::after,
-.nav-links a.active::after {
+.nav-links a:hover::after, .nav-links a.active::after {
     width: 100%;
 }
 
 .nav-buttons {
     display: flex;
     gap: 15px;
+    grid-column: 3;
+    justify-self: end;
 }
 
 .nav-login-btn {
@@ -113,8 +116,7 @@
     transition: background-color 0.3s;
 }
 
-.menu-icon::before,
-.menu-icon::after {
+.menu-icon::before, .menu-icon::after {
     content: '';
     position: absolute;
     width: 25px;
@@ -183,17 +185,16 @@
 }
 
 /* Adjust container for pages that use the navbar */
-.about-main-container,
-.faq-main-container,
-.contact-main-container,
-.help-main-container,
-.privacy-main-container,
-.terms-main-container {
+.about-main-container, .faq-main-container, .contact-main-container, .help-main-container, .privacy-main-container, .terms-main-container {
     padding-top: 20px;
 }
 
 /* Responsive styles */
 @media (max-width: 768px) {
+    .nav-container {
+        grid-template-columns: auto auto;
+    }
+    
     .nav-links {
         display: none;
     }
@@ -204,6 +205,8 @@
     
     .mobile-menu-btn {
         display: block;
+        grid-column: 2;
+        justify-self: end;
     }
     
     .mobile-menu.active {
