@@ -188,25 +188,52 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Function to check auto-approval setting and auto-approve if enabled
     function checkAutoApproval(shopId) {
-        return db.collection("appSettings").doc("appSettings").get()
+        console.log("Checking auto-approval for shop ID:", shopId);
+        
+        // Use the correct path to your settings: SystemSettings/appSettings
+        return db.collection("SystemSettings").doc("appSettings").get()
             .then((doc) => {
-                if (doc.exists && doc.data().autoApproveShops === true) {
-                    console.log("Auto-approval enabled, automatically approving shop");
-                    // Auto-approve the shop
-                    return db.collection("Stores").doc(shopId).update({
-                        isApproved: true,
-                        approvedAt: firebase.firestore.FieldValue.serverTimestamp(),
-                        approvedBy: "system (auto-approval)",
-                        registrationStatus: "approved"
-                    });
+                // Add detailed logging to see what's in the document
+                console.log("Settings document exists:", doc.exists);
+                if (doc.exists) {
+                    const data = doc.data();
+                    console.log("Settings document data:", data);
+                    
+                    // Check autoApproveShops property (case-sensitive)
+                    const autoApproveEnabled = 
+                        data.autoApproveShops === true || 
+                        data.autoApproveShops === "true";
+                    
+                    if (autoApproveEnabled) {
+                        console.log("Auto-approval enabled, automatically approving shop:", shopId);
+                        
+                        // Auto-approve the shop
+                        return db.collection("Stores").doc(shopId).update({
+                            isApproved: true,
+                            approvedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                            approvedBy: "system (auto-approval)",
+                            registrationStatus: "approved"
+                        })
+                        .then(() => {
+                            console.log("Shop successfully auto-approved:", shopId);
+                            return true; // Return true to indicate approval was done
+                        })
+                        .catch((error) => {
+                            console.error("Error updating shop approval status:", error);
+                            throw error; // Rethrow to be caught by outer catch
+                        });
+                    } else {
+                        console.log("Auto-approval disabled or setting not found, shop pending manual approval");
+                        return false; // Return false to indicate no approval was done
+                    }
                 } else {
-                    console.log("Auto-approval disabled, shop pending manual approval");
-                    return Promise.resolve(); // Continue without auto-approval
+                    console.log("Settings document not found, defaulting to manual approval");
+                    return false;
                 }
             })
             .catch((error) => {
                 console.error("Error checking auto-approval setting:", error);
-                return Promise.resolve(); // Continue without auto-approval on error
+                return false; // Return false on error
             });
     }
 
