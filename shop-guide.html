@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop Owner Guide - Tabletop Reserve</title>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+    
+    <!-- Global stylesheet -->
+    <link rel="stylesheet" href="css/styles.css">
+    
+    <!-- Navigation stylesheet -->
+    <link rel="stylesheet" href="css/nav-styles.css">
+    
+    <!-- Page-specific stylesheet -->
+    <link rel="stylesheet" href="css/shop-guide-styles.css">
+</head>
+<body>
+    <!-- Navigation will be loaded by nav.js -->
+    
+    <div class="guide-main-container">
+        <div class="guide-hero">
+            <h1>Shop Owner Guide</h1>
+            <p>Everything you need to know to get the most out of Tabletop Reserve</p>
+        </div>
+        
+        <div class="guide-content">
+            <div class="guide-nav">
+                <div class="guide-nav-header">Guide Contents</div>
+                <ul class="guide-nav-list">
+                    <li><a href="#getting-started" class="active">Getting Started</a></li>
+                    <li><a href="#setting-up-profile">Setting Up Your Profile</a></li>
+                    <li><a href="#managing-tables">Managing Tables</a></li>
+                    <li><a href="#scheduling">Setting Your Schedule</a></li>
+                    <li><a href="#events">Creating Events</a></li>
+                    <li><a href="#reservations">Managing Reservations</a></li>
+                    <li><a href="#notifications">Customer Communication</a></li>
+                    <li><a href="#payments">Payments & Billing</a></li>
+                    <li><a href="#marketing">Marketing Tips</a></li>
+                    <li><a href="#analytics">Understanding Analytics</a></li>
+                </ul>
+                
+            </div>
+            
+            <div class="guide-sections">
+                <section id="getting-started" class="guide-section">
+                    <h2>Getting Started</h2>
+                    
+                    <div class="section-intro">
+                        <p>Welcome to Tabletop Reserve! This guide will walk you through everything you need to know to make the most of our platform for your gaming shop.</p>
+                    </div>
+                    
+                    <h3>Registration Process</h3>
+                    <p>To begin using Tabletop Reserve, you'll need to complete the shop registration process:</p>
+                    <ol>
+                        <li>Click the "Register Shop" button in the top navigation</li>
+                        <li>Complete the registration form with your shop details</li>
+                        <li>Submit your application for review</li>
+                        <li>Receive approval email (usually within 1-2 business days)</li>
+                        <li>Login to access your shop dashboard</li>
+                    </ol>
+                    
+                    <div class="note-box">
+                        <div class="note-icon">ℹ️</div>
+                        <div class="note-content">
+                            <strong>Note:</strong> Your shop will need to be approved by our team before it appears in the player app. Make sure to provide accurate information to speed up the approval process.
+                        </div>
+                    </div>
+                    
+                    <h3>Dashboard Overview</h3>
+                    <p>Once approved, you'll have access to your shop dashboard, which includes:</p>
+                    <ul>
+                        <li><strong>Dashboard Home:</strong> See an overview of your shop's performance</li>
+                        <li><strong>Shop Profile:</strong> Manage your shop's basic information</li>
+                        <li><strong>Tables:</strong> Set up and manage your gaming tables</li>
+                        <li><strong>Schedule:</strong> Define your opening hours</li>
+                        <li><strong>Events:</strong> Create and manage special gaming events</li>
+                        <li><strong>Reservations:</strong> View and manage table bookings</li>
+                        <li><strong>Notifications:</strong> Communicate with your customers</li>
+                    </ul>
+                    
+                    <div class="screenshot">
+                        <img src="images/placeholder-dashboard.jpg" alt="Dashboard Overview">
+                        <p class="caption">The shop owner dashboard gives you quick access to all features</p>
+                    </div>
+                    
+                    
+                
+                <section id="setting-up-profile" class="guide-section">
+                    <h2>Setting Up Your Profile</h2>
+                    
+                    <div class="section-intro">
+                        <p>Your shop profile is your digital storefront in the Tabletop Reserve app. A complete, attractive profile significantly increases your chances of attracting players.</p>
+                    </div>
+                    
+                    <h3>Basic Information</h3>
+                    <p>Start by filling out your basic shop information:</p>
+                    <ul>
+                        <li><strong>Shop Name:</strong> Your official business name</li>
+                        <li><strong>Owner Name:</strong> Your name or the primary contact</li>
+                        <li><strong>Description:</strong> A compelling description of your shop (250-300 words recommended)</li>
+                        <li><strong>Shop Type:</strong> Select the category that best fits your establishment</li>
+                    </ul>
+                    
+                    <h3>Logo and Images</h3>
+                    <p>Visual elements are crucial for attracting customers:</p>
+                    <ul>
+                        <li>Upload a high-quality logo (recommended size: 500x500px or larger)</li>
+                        <li>Add at least 5-10 photos of your shop, focusing on gaming spaces</li>
+                        <li>Include images of special features (terrain, premium tables, etc.)</li>
+                        <li>Consider adding photos from events to showcase your community</li>
+                    </ul>
+                    
+                    <div class="tip-box">
+                        <div class="tip-icon">💡</div>
+                        <div class="tip-content">
+                            <strong>Pro Tip:</strong> High-quality photos significantly increase booking rates. Consider hiring a professional photographer or using a smartphone with good lighting.
+                        </div>
+                    </div>
+                    
+                    <h3>Contact Information</h3>
+                    <p>Ensure your contact information is accurate and up-to-date:</p>
+                    <ul>
+                        <li><strong>Email:</strong> The primary contact email (will receive booking notifications)</li>
+                        <li><strong>Phone:</strong> Your shop's phone number</li>
+                        <li><strong>Address:</strong> Complete physical address with postal code</li>
+                        <li><strong>Website:</strong> Your shop's website (if applicable)</li>
+                        <li><strong>Social Media:</strong> Links to your Facebook, Instagram, Twitter, etc.</li>
+                    </ul>
+                    
+                    <h3>Shop Details</h3>
+                    <p>Add specific details about your shop to help customers find what they're looking for:</p>
+                    <ul>
+                        <li><strong>Amenities:</strong> Wi-Fi, food, drinks, parking, accessibility features</li>
+                        <li><strong>Specialties:</strong> Particular games or genres you focus on</li>
+                        <li><strong>Payment Methods:</strong> What payment types you accept</li>
+                        <li><strong>House Rules:</strong> Any specific rules players should know</li>
+                    </ul>
+                </section>
+                
+                <section id="managing-tables" class="guide-section">
+                    <h2>Managing Tables</h2>
+                    
+                    <div class="section-intro">
+                        <p>Setting up your tables correctly is essential for managing bookings effectively. Each table represents a bookable space in your shop.</p>
+                    </div>
+                    
+                    <h3>Adding Tables</h3>
+                    <p>To add a new table to your inventory:</p>
+                    <ol>
+                        <li>Go to the "Tables" section in your dashboard</li>
+                        <li>Click "Add New Table"</li>
+                        <li>Fill out the required information</li>
+                        <li>Save the table</li>
+                    </ol>
+                    
+                    <div class="screenshot">
+                        <img src="images/placeholder-tables.jpg" alt="Adding a New Table">
+                        <p class="caption">The table creation form with sample data</p>
+                    </div>
+                    
+                    <h3>Table Information</h3>
+                    <p>When setting up a table, include these details:</p>
+                    <ul>
+                        <li><strong>Table Name/Number:</strong> A unique identifier (e.g., "Table 1" or "Red Dragon Table")</li>
+                        <li><strong>Capacity:</strong> Maximum number of players the table can accommodate</li>
+                        <li><strong>Table Type:</strong> Standard, Large, RPG, Miniatures, Card Game, etc.</li>
+                        <li><strong>Description:</strong> Details about the table's features and best uses</li>
+                        <li><strong>Specialized Game:</strong> If the table is set up for a specific game</li>
+                        <li><strong>Features:</strong> Special amenities like terrain, power outlets, lighting</li>
+                        <li><strong>Hourly Rate:</strong> Cost per hour (if applicable)</li>
+                        <li><strong>Minimum Booking:</strong> Minimum time required for a booking</li>
+                    </ul>
+                    
+                    <h3>Table Visibility</h3>
+                    <p>Control when and how your tables appear to customers:</p>
+                    <ul>
+                        <li>Use the "Active" toggle to show/hide tables from search results</li>
+                        <li>Temporarily deactivate tables that are undergoing maintenance</li>
+                        <li>Set blackout dates for tables that aren't available during specific events</li>
+                    </ul>
+                    
+                    <div class="tip-box">
+                        <div class="tip-icon">💡</div>
+                        <div class="tip-content">
+                            <strong>Pro Tip:</strong> Create different table types with varied amenities and price points to cater to different customer needs and maximize your space usage.
+                        </div>
+                    </div>
+                    
+                    <h3>Managing Multiple Tables</h3>
+                    <p>If you have many tables to manage:</p>
+                    <ul>
+                        <li>Use the bulk edit feature to update multiple tables at once</li>
+                        <li>Create table templates for faster setup of similar tables</li>
+                        <li>Use table categories to organize your inventory (e.g., RPG tables, wargaming tables)</li>
+                        <li>Consider using table zones if your shop has distinct areas</li>
+                    </ul>
+                </section>
+                
+                <section id="scheduling" class="guide-section">
+                    <h2>Setting Your Schedule</h2>
+                    
+                    <div class="section-intro">
+                        <p>Your shop schedule determines when customers can book tables. Setting accurate hours is crucial for managing expectations.</p>
+                    </div>
+                    
+                    <h3>Regular Opening Hours</h3>
+                    <p>To set your regular opening hours:</p>
+                    <ol>
+                        <li>Go to the "Schedule" section in your dashboard</li>
+                        <li>For each day of the week, toggle whether you're open or closed</li>
+                        <li>Set opening and closing times for each day you're open</li>
+                        <li>Save your changes</li>
+                    </ol>
+                    
+                    <div class="screenshot">
+                        <img src="images/placeholder-schedule.jpg" alt="Setting Opening Hours">
+                        <p class="caption">The schedule interface showing weekly opening hours</p>
+                    </div>
+                    
+                    <h3>Special Hours and Closures</h3>
+                    <p>For holidays, special events, or temporary changes:</p>
+                    <ul>
+                        <li>Use the "Special Hours" feature to set one-time schedule changes</li>
+                        <li>Add holiday closures in advance</li>
+                        <li>Set extended hours for special events</li>
+                    </ul>
+                    
+                    <div class="note-box">
+                        <div class="note-icon">ℹ️</div>
+                        <div class="note-content">
+                            <strong>Note:</strong> Customers will be notified automatically if your hours change and they have an existing reservation.
+                        </div>
+                    </div>
+                    
+                    <h3>Booking Windows</h3>
+                    <p>Control when and how far in advance customers can make reservations:</p>
+                    <ul>
+                        <li><strong>Minimum Notice:</strong> How far in advance bookings must be made (e.g., 2 hours)</li>
+                        <li><strong>Maximum Advance:</strong> How far in the future customers can book (e.g., 30 days)</li>
+                        <li><strong>Booking Intervals:</strong> Time slots available for booking (e.g., hourly, half-hourly)</li>
+                    </ul>
+                    
+                    <h3>Time Slot Management</h3>
+                    <p>Optimize your schedule with these strategies:</p>
+                    <ul>
+                        <li>Consider staggering reservation start times to manage customer flow</li>
+                        <li>Add buffer time between bookings for cleaning if needed</li>
+                        <li>Create peak and off-peak pricing by adjusting hourly rates for different times</li>
+                    </ul>
+                </section>
+                
+                <section id="events" class="guide-section">
+                    <h2>Creating Events</h2>
+                    
+                    <div class="section-intro">
+                        <p>Events are a powerful way to attract new customers and build community around your shop. Tabletop Reserve makes it easy to create, promote, and manage gaming events.</p>
+                    </div>
+                    
+                    <h3>Adding a New Event</h3>
+                    <p>To create a new event:</p>
+                    <ol>
+                        <li>Go to the "Events" section in your dashboard</li>
+                        <li>Click "Add New Event"</li>
+                        <li>Fill out the event details</li>
+                        <li>Set recurrence options if applicable</li>
+                        <li>Save and publish the event</li>
+                    </ol>
+                    
+                    <div class="screenshot">
+                        <img src="images/placeholder-events.jpg" alt="Creating a New Event">
+                        <p class="caption">The event creation form with example data</p>
+                    </div>
+                    
+                    <h3>Event Information</h3>
+                    <p>Include these key details for each event:</p>
+                    <ul>
+                        <li><strong>Event Name:</strong> Clear, descriptive title</li>
+                        <li><strong>Date and Time:</strong> When the event takes place</li>
+                        <li><strong>Duration:</strong> How long the event will last</li>
+                        <li><strong>Description:</strong> Detailed information about the event</li>
+                        <li><strong>Game System:</strong> What game will be played</li>
+                        <li><strong>Experience Level:</strong> Beginner-friendly, all levels, experienced players only</li>
+                        <li><strong>Attendance Limit:</strong> Maximum number of participants</li>
+                        <li><strong>Registration Fee:</strong> Cost to participate (if any)</li>
+                        <li><strong>Prize Information:</strong> Details about prizes or tournaments</li>
+                    </ul>
+                    
+                    <h3>Recurring Events</h3>
+                    <p>For regular events like weekly game nights or monthly tournaments:</p>
+                    <ul>
+                        <li>Enable the "Recurring Event" option</li>
+                        <li>Select frequency (daily, weekly, monthly)</li>
+                        <li>Choose specific days for weekly events</li>
+                        <li>Set an end date or number of occurrences</li>
+                    </ul>
+                    
+                    <div class="tip-box">
+                        <div class="tip-icon">💡</div>
+                        <div class="tip-content">
+                            <strong>Pro Tip:</strong> Regular events build community! Shops with weekly recurring events see up to 40% higher customer retention rates.
+                        </div>
+                    </div>
+                    
+                    <h3>Event Promotion</h3>
+                    <p>Maximize attendance with these promotion strategies:</p>
+                    <ul>
+                        <li>Use the "Send Notification" feature to alert customers about new events</li>
+                        <li>Add eye-catching event images</li>
+                        <li>Highlight special guests, prizes, or unique aspects</li>
+                        <li>Schedule events at least 2 weeks in advance for better visibility</li>
+                        <li>Share the event link on your social media channels</li>
+                    </ul>
+                    
+                    <h3>Managing Event Registrations</h3>
+                    <p>Track and manage event participants:</p>
+                    <ul>
+                        <li>View the list of registered participants in the event dashboard</li>
+                        <li>Send updates or changes to all registered players</li>
+                        <li>Enable waitlists for popular events</li>
+                        <li>Process check-ins on the day of the event</li>
+                    </ul>
+                </section>
+                
+                <section id="reservations" class="guide-section">
+                    <h2>Managing Reservations</h2>
+                    
+                    <div class="section-intro">
+                        <p>The reservations system is at the core of Tabletop Reserve. Learning to manage bookings effectively will help you provide a smooth experience for your customers.</p>
+                    </div>
+                    
+                    <h3>Viewing Reservations</h3>
+                    <p>Access your reservations in two different views:</p>
+                    <ul>
+                        <li><strong>List View:</strong> Chronological list of all reservations</li>
+                        <li><strong>Calendar View:</strong> Visual calendar showing bookings across all tables</li>
+                    </ul>
+                    
+                    <div class="screenshot">
+                        <img src="images/placeholder-reservations.jpg" alt="Reservation Calendar View">
+                        <p class="caption">The calendar view provides a visual overview of all bookings</p>
+                    </div>
+                    
+                    <h3>Reservation Statuses</h3>
+                    <p>Understand the different reservation statuses:</p>
+                    <ul>
+                        <li><strong>Pending:</strong> New reservations awaiting confirmation</li>
+                        <li><strong>Confirmed:</strong> Reservations you've approved</li>
+                        <li><strong>Completed:</strong> Past reservations that were fulfilled</li>
+                        <li><strong>Cancelled:</strong> Reservations that were cancelled by you or the customer</li>
+                    </ul>
+                    
+                    <h3>Manual Reservations</h3>
+                    <p>Create reservations on behalf of customers who call or visit:</p>
+                    <ol>
+                        <li>Go to the "Reservations" section</li>
+                        <li>Click "Add Reservation"</li>
+                        <li>Fill in the customer and reservation details</li>
+                        <li>Select "Confirmed" status to bypass the confirmation step</li>
+                        <li>Save the reservation</li>
+                    </ol>
+                    
+                    <div class="note-box">
+                        <div class="note-icon">ℹ️</div>
+                        <div class="note-content">
+                            <strong>Note:</strong> Consider collecting a deposit for manual reservations, especially during peak times or for large groups.
+                        </div>
+                    </div>
+                    
+                    <h3>Managing Changes and Cancellations</h3>
+                    <p>Handle reservation modifications:</p>
+                    <ul>
+                        <li>Edit any reservation details by clicking the "Edit" button</li>
+                        <li>Process cancellations with the "Cancel" button</li>
+                        <li>Provide a reason when cancelling to help with customer communication</li>
+                        <li>Check table availability before changing dates or times</li>
+                    </ul>
+                    
+                    <h3>Cancellation Policy</h3>
+                    <p>Set a clear cancellation policy in your shop settings:</p>
+                    <ul>
+                        <li>Define how much notice is required for cancellations</li>
+                        <li>Set different policies for different table types if needed</li>
+                        <li>Determine refund amounts for late cancellations</li>
+                        <li>Consider no-show policies to protect your business</li>
+                    </ul>
+                    
+                    <div class="tip-box">
+                        <div class="tip-icon">💡</div>
+                        <div class="tip-content">
+                            <strong>Pro Tip:</strong> Send a confirmation message to customers after each booking to reduce no-shows. Shops with automated confirmations see up to 30% fewer missed appointments.
+                        </div>
+                    </div>
+                </section>
+                
+                <section id="notifications" class="guide-section">
+                    <h2>Customer Communication</h2>
+                    
+                    <div class="section-intro">
+                        <p>Effective communication with your customers is key to building loyalty and increasing return visits. Tabletop Reserve provides several tools to stay connected.</p>
+                    </div>
+                    
+                    <h3>Notification Types</h3>
+                    <p>You can send three types of notifications to customers:</p>
+                    <ul>
+                        <li><strong>Shop Updates:</strong> General information about your shop</li>
+                        <li><strong>Promotions:</strong> Special offers, discounts, or deals</li>
+                        <li><strong>Event Announcements:</strong> Information about upcoming events</li>
+                    </ul>
+                    
+                    <div class="screenshot">
+                        <img src="images/placeholder-notifications.jpg" alt="Sending a Notification">
+                        <p class="caption">The notification creation interface</p>
+                    </div>
+                    
+                    <h3>Sending Notifications</h3>
+                    <p>To send a notification to your customers:</p>
+                    <ol>
+                        <li>Go to the "Notifications" section</li>
+                        <li>Click "Send Notification"</li>
+                        <li>Select the notification type</li>
+                        <li>Write a clear title and message</li>
+                        <li>Choose target recipients</li>
+                        <li>Review and send</li>
+                    </ol>
+                    
+                    <h3>Target Audiences</h3>
+                    <p>Send messages to specific customer segments:</p>
+                    <ul>
+                        <li><strong>All Customers:</strong> Everyone who has the app and follows your shop</li>
+                        <li><strong>Followers Only:</strong> Customers who have favorited your shop</li>
+                        <li><strong>Recent Customers:</strong> People who have visited in the last 30 days</li>
+                        <li><strong>Event Participants:</strong> People registered for a specific event</li>
+                    </ul>
+                    
+                    <div class="note-box">
+                        <div class="note-icon">ℹ️</div>
+                        <div class="note-content">
+                            <strong>Note:</strong> To comply with communication regulations, customers can opt out of promotional messages while still receiving essential booking notifications.
+                        </div>
+                    </div>
+                    
+                    <h3>Notification Best Practices</h3>
+                    <p>Maximize the effectiveness of your communications:</p>
+                    <ul>
+                        <li>Keep messages concise (under 200 characters for best results)</li>
+                        <li>Use clear, action-oriented language</li>
+                        <li>Limit promotional notifications to 1-2 per week</li>
+                        <li>Time promotions strategically (e.g., weekend announcements on Thursday)</li>
+                        <li>Include essential information (what, when, where)</li>
+                        <li>Add value with each notification (avoid "noise")</li>
+                    </ul>
+                    
+                    <div class="tip-box">
+                        <div class="tip-icon">💡</div>
+                        <div class="tip-content">
+                            <strong>Pro Tip:</strong> The most effective notifications promote time-limited offers or events with clear value propositions. Try "Friday Night Magic: 20% off entry this week only!" rather than "We have Magic events."
+                        </div>
+                    </div>
+                </section>
+                
+                <section id="payments" class="guide-section">
+                    <h2>Payments & Billing</h2>
+                    
+                    <div class="section-intro">
+                        <p>Understanding how payments work on Tabletop Reserve will help you manage your business finances effectively.</p>
+                    </div>
+                    
+                    <h3>Payment Setup</h3>
+                    <p>To receive payments through the platform:</p>
+                    <ol>
+                        <li>Go to "Payment Settings" in your shop dashboard</li>
+                        <li>Connect your bank account</li>
+                        <li>Provide your tax information</li>
+                        <li>Set up your payout method and frequency</li>
+                    </ol>
+                    
+                    <h3>Commission Structure</h3>
+                    <p>Tabletop Reserve operates on a simple fee structure:</p>
+                    <ul>
+                        <li>5% commission on standard reservations</li>
+                        <li>3% commission for premium account holders</li>
+                        <li>7% commission on event registrations</li>
+                        <li>Payment processing fees (typically 1.9% + £0.20) passed through</li>
+                    </ul>
+                    
+                    <div class="note-box">
+                        <div class="note-icon">ℹ️</div>
+                        <div class="note-content">
+                            <strong>Note:</strong> You'll only be charged a commission on completed bookings. Cancelled reservations and no-shows do not incur commission fees.
+                        </div>
+                    </div>
+                    
+                    <h3>Setting Prices</h3>
+                    <p>Effectively price your tables and events:</p>
+                    <ul>
+                        <li>Research local market rates for similar gaming spaces</li>
+                        <li>Consider variable pricing based on table type and features</li>
+                        <li>Implement peak and off-peak pricing to maximize occupancy</li>
+                        <li>Create special rates for regular customers or longer bookings</li>
+                    </ul>
+                    
+                    <h3>Payment Reports</h3>
+                    <p>Access detailed financial information:</p>
+                    <ul>
+                        <li>View transaction history in the Reports section</li>
+                        <li>Filter by date range, table, or payment status</li>
+                        <li>Export reports for accounting purposes</li>
+                        <li>Track commissions and payment processing fees</li>
+                    </ul>
+                    
+                    <h3>Handling Refunds</h3>
+                    <p>Process refunds when necessary:</p>
+                    <ul>
+                        <li>Full refunds can be processed up to 7 days after the reservation</li>
+                        <li>Partial refunds are available based on your cancellation policy</li>
+                        <li>Issue store credit as an alternative to refunds</li>
+                        <li>Refunded reservations will not incur commission fees</li>
+                    </ul>
+                </section>
+                
+                <section id="marketing" class="guide-section">
+                    <h2>Marketing Tips</h2>
+                    
+                    <div class="section-intro">
+                        <p>Use these marketing strategies to attract more players to your shop and maximize your booking revenue.</p>
+                    </div>
+                    
+                    <h3>Optimizing Your Profile</h3>
+                    <p>Make your shop stand out in search results:</p>
+                    <ul>
+                        <li>Use high-quality photos that showcase your gaming spaces</li>
+                        <li>Write a detailed description highlighting what makes your shop unique</li>
+                        <li>Include relevant keywords (e.g., "Warhammer," "D&D," "board games")</li>
+                        <li>Keep your information up-to-date, especially opening hours</li>
+                    </ul>
+                    
+                    <h3>Special Promotions</h3>
+                    <p>Create enticing offers to attract new customers:</p>
+                    <ul>
+                        <li>Weekday discounts during slower periods</li>
+                        <li>Package deals (e.g., table reservation + food voucher)</li>
+                        <li>New customer specials (first hour free)</li>
+                        <li>Seasonal promotions tied to game releases</li>
+                    </ul>
+                    
+                    <div class="tip-box">
+                        <div class="tip-icon">💡</div>
+                        <div class="tip-content">
+                            <strong>Pro Tip:</strong> Create a "Game Night Package" that combines table reservation with snacks and drinks for a complete experience. This increases average booking value by 25%.
+                        </div>
+                    </div>
+                    
+                    <h3>Building Community</h3>
+                    <p>Foster a loyal customer base:</p>
+                    <ul>
+                        <li>Host regular events for popular game systems</li>
+                        <li>Create a loyalty program for frequent visitors</li>
+                        <li>Recognize and reward your "regulars"</li>
+                        <li>Facilitate connections between players with similar interests</li>
+                    </ul>
+                    
+                    <h3>Cross-Promotion</h3>
+                    <p>Leverage your existing channels:</p>
+                    <ul>
+                        <li>Add your Tabletop Reserve profile link to your website and social media</li>
+                        <li>Include QR codes in your physical shop that link to your profile</li>
+                        <li>Mention special events in your email newsletter</li>
+                        <li>Create social media posts about your bookable tables and events</li>
+                    </ul>
+                    
+                    <div class="note-box">
+                        <div class="note-icon">ℹ️</div>
+                        <div class="note-content">
+                            <strong>Note:</strong> The most successful shops on our platform update their content at least once a week and send 2-3 targeted notifications per month.
+                        </div>
+                    </div>
+                </section>
+                
+                <section id="analytics" class="guide-section">
+                    <h2>Understanding Analytics</h2>
+                    
+                    <div class="section-intro">
+                        <p>Tabletop Reserve provides powerful analytics to help you understand your business performance and make data-driven decisions.</p>
+                    </div>
+                    
+                    <h3>Dashboard Overview</h3>
+                    <p>The analytics dashboard provides a quick snapshot of key metrics:</p>
+                    <ul>
+                        <li>Total reservations and revenue</li>
+                        <li>Table utilization rate</li>
+                        <li>Comparison to previous periods</li>
+                        <li>Top-performing tables and events</li>
+                    </ul>
+                    
+                    <div class="screenshot">
+                        <img src="images/placeholder-analytics.jpg" alt="Analytics Dashboard">
+                        <p class="caption">The analytics dashboard showing key performance metrics</p>
+                    </div>
+                    
+                    <h3>Reservation Insights</h3>
+                    <p>Analyze your booking patterns:</p>
+                    <ul>
+                        <li><strong>Peak Times:</strong> When your shop is busiest</li>
+                        <li><strong>Slow Periods:</strong> Times with available capacity</li>
+                        <li><strong>Booking Lead Time:</strong> How far in advance people typically book</li>
+                        <li><strong>Repeat Customers:</strong> Percentage of return visitors</li>
+                    </ul>
+                    
+                    <h3>Table Performance</h3>
+                    <p>Evaluate how each table is performing:</p>
+                    <ul>
+                        <li>Occupancy rate by table</li>
+                        <li>Revenue generated per table</li>
+                        <li>Most frequently booked tables</li>
+                        <li>Least utilized tables</li>
+                    </ul>
+                    
+                    <div class="tip-box">
+                        <div class="tip-icon">💡</div>
+                        <div class="tip-content">
+                            <strong>Pro Tip:</strong> If certain tables consistently underperform, consider remodeling them or changing their purpose based on customer preferences.
+                        </div>
+                    </div>
+                    
+                    <h3>Event Analytics</h3>
+                    <p>Measure the success of your events:</p>
+                    <ul>
+                        <li>Registration rates and attendance</li>
+                        <li>Most popular event types</li>
+                        <li>Revenue from event registrations</li>
+                        <li>Customer feedback and ratings</li>
+                    </ul>
+                    
+                    <h3>Using Data to Grow</h3>
+                    <p>Apply analytical insights to improve your business:</p>
+                    <ul>
+                        <li>Adjust pricing based on demand patterns</li>
+                        <li>Optimize your opening hours to match peak times</li>
+                        <li>Create targeted promotions for slow periods</li>
+                        <li>Invest in table upgrades for high-demand game types</li>
+                        <li>Schedule events when you have more capacity</li>
+                    </ul>
+                </section>
+            </div>
+        </div>
+        
+        <div class="next-steps">
+            <h2>Ready to Get Started?</h2>
+            <p>Now that you understand how to make the most of Tabletop Reserve, it's time to put your knowledge into action!</p>
+            <div class="next-step-buttons">
+                <a href="signup.html" class="primary-btn">Register Your Shop</a>
+                <a href="contact.html" class="secondary-btn">Contact Support</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/nav.js"></script>
+    <script src="js/footer.js"></script>
+    
+    <script>
+        // Highlight the active section in the navigation
+        function highlightActiveSection() {
+            // Get all section elements
+            const sections = document.querySelectorAll('.guide-section');
+            
+            // Set up Intersection Observer
+            const options = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.3
+            };
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const id = entry.target.getAttribute('id');
+                        
+                        // Remove active class from all nav links
+                        document.querySelectorAll('.guide-nav-list a').forEach(link => {
+                            link.classList.remove('active');
+                        });
+                        
+                        // Add active class to the corresponding nav link
+                        const activeLink = document.querySelector(`.guide-nav-list a[href="#${id}"]`);
+                        if (activeLink) {
+                            activeLink.classList.add('active');
+                        }
+                    }
+                });
+            }, options);
+            
+            // Observe all sections
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+        }
+        
+        // Smooth scroll to section when clicking on nav links
+        document.querySelectorAll('.guide-nav-list a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href').substring(1);
+                const targetSection = document.getElementById(targetId);
+                
+                if (targetSection) {
+                    window.scrollTo({
+                        top: targetSection.offsetTop - 100,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Initialize when the document is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            highlightActiveSection();
+        });
+        
+        
+    </script>
+</body>
+</html>

@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support Center - Tabletop Reserve</title>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+    
+    <!-- Global stylesheet -->
+    <link rel="stylesheet" href="css/styles.css">
+    
+    <!-- Navigation stylesheet -->
+    <link rel="stylesheet" href="css/nav-styles.css">
+    
+    <!-- Page-specific stylesheet -->
+    <link rel="stylesheet" href="css/support-center-styles.css">
+</head>
+<body>
+    <!-- Navigation will be loaded by nav.js -->
+    
+    <div class="support-main-container">
+        <div class="support-hero">
+            <h1>Support Center</h1>
+            <p>We're here to help you get the most out of Tabletop Reserve</p>
+            
+            <div class="support-search">
+                <input type="text" placeholder="Search for help topics...">
+                <button class="search-btn">Search</button>
+            </div>
+        </div>
+        
+        <div class="support-content">
+            <div class="support-grid">
+                <div class="support-card">
+                    <div class="card-icon">📋</div>
+                    <h2>Getting Started</h2>
+                    <ul>
+                        <li><a href="#">New Shop Owner Walkthrough</a></li>
+                        <li><a href="#">Setting Up Your Profile</a></li>
+                        <li><a href="#">Managing Tables</a></li>
+                        <li><a href="#">Creating Events</a></li>
+                    </ul>
+                    <a href="#" class="view-all">View all guides →</a>
+                </div>
+                
+                <div class="support-card">
+                    <div class="card-icon">❓</div>
+                    <h2>Frequently Asked Questions</h2>
+                    <ul>
+                        <li><a href="faq.html#general">General FAQs</a></li>
+                        <li><a href="faq.html#shop-owners">Shop Owner FAQs</a></li>
+                        <li><a href="faq.html#account">Account & Billing FAQs</a></li>
+                        <li><a href="faq.html#players">Player FAQs</a></li>
+                    </ul>
+                    <a href="faq.html" class="view-all">View all FAQs →</a>
+                </div>
+                
+                <div class="support-card">
+                    <div class="card-icon">🎮</div>
+                    <h2>Platform Features</h2>
+                    <ul>
+                        <li><a href="#">Reservation System</a></li>
+                        <li><a href="#">Event Management</a></li>
+                        <li><a href="#">Push Notifications</a></li>
+                        <li><a href="#">Mobile App Integration</a></li>
+                    </ul>
+                    <a href="features.html" class="view-all">View all features →</a>
+                </div>
+                
+                <div class="support-card">
+                    <div class="card-icon">📱</div>
+                    <h2>App Support</h2>
+                    <ul>
+                        <li><a href="#">Mobile App Installation</a></li>
+                        <li><a href="#">Troubleshooting the App</a></li>
+                        <li><a href="#">App Features Guide</a></li>
+                        <li><a href="#">App Updates</a></li>
+                    </ul>
+                    <a href="#" class="view-all">View app support →</a>
+                </div>
+                
+                <div class="support-card">
+                    <div class="card-icon">💼</div>
+                    <h2>Business Resources</h2>
+                    <ul>
+                        <li><a href="#">Increasing Table Bookings</a></li>
+                        <li><a href="#">Marketing Your Events</a></li>
+                        <li><a href="#">Customer Management</a></li>
+                        <li><a href="#">Analyzing Booking Data</a></li>
+                    </ul>
+                    <a href="#" class="view-all">View business guides →</a>
+                </div>
+                
+                <div class="support-card">
+                    <div class="card-icon">📞</div>
+                    <h2>Contact Support</h2>
+                    <ul>
+                        <li><a href="contact.html">Email Support</a></li>
+                        <li><a href="#">Live Chat Support</a></li>
+                        <li><a href="report-issue.html">Report an Issue</a></li>
+                        <li><a href="#">Feedback & Suggestions</a></li>
+                    </ul>
+                    <a href="contact.html" class="view-all">Contact us →</a>
+                </div>
+            </div>
+            
+            <div class="popular-topics">
+                <h2>Popular Support Topics</h2>
+                <div class="topics-grid">
+                    <a href="#" class="topic-item">
+                        <span class="topic-icon">🔄</span>
+                        <span class="topic-text">How to handle cancellations</span>
+                    </a>
+                    <a href="#" class="topic-item">
+                        <span class="topic-icon">📅</span>
+                        <span class="topic-text">Setting up recurring events</span>
+                    </a>
+                    <a href="#" class="topic-item">
+                        <span class="topic-icon">🔔</span>
+                        <span class="topic-text">Customer notifications</span>
+                    </a>
+                    <a href="#" class="topic-item">
+                        <span class="topic-icon">💰</span>
+                        <span class="topic-text">Payment processing</span>
+                    </a>
+                    <a href="#" class="topic-item">
+                        <span class="topic-icon">🔑</span>
+                        <span class="topic-text">Account recovery</span>
+                    </a>
+                    <a href="#" class="topic-item">
+                        <span class="topic-icon">🎲</span>
+                        <span class="topic-text">Table management</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="contact-banner">
+            <div class="banner-content">
+                <h2>Can't find what you're looking for?</h2>
+                <p>Our support team is available to help you with any questions or issues.</p>
+                <div class="banner-buttons">
+                    <a href="contact.html" class="primary-btn">Contact Support</a>
+                    <a href="#" class="secondary-btn">Live Chat</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/nav.js"></script>
+    <script src="js/footer.js"></script>
+    
+    <script>
+        // Simple search functionality
+        document.querySelector('.search-btn').addEventListener('click', function() {
+            const searchInput = document.querySelector('.support-search input').value.trim().toLowerCase();
+            if (searchInput) {
+                // In a real implementation, this would search through support articles
+                alert('Search functionality would be implemented here for: ' + searchInput);
+            }
+        });
+        
+        // Allow pressing Enter to search
+        document.querySelector('.support-search input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.querySelector('.search-btn').click();
+            }
+        });
+    </script>
+</body>
+</html>

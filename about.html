@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Tabletop Reserve</title>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
+    
+    <!-- Global stylesheet -->
+    <link rel="stylesheet" href="css/styles.css">
+    
+    <!-- Navigation stylesheet -->
+    <link rel="stylesheet" href="css/nav-styles.css">
+    
+    <!-- Page-specific stylesheet -->
+    <link rel="stylesheet" href="css/about-styles.css">
+</head>
+<body>
+    <!-- Navigation will be loaded by nav.js -->
+    
+    <div class="about-main-container">
+        <div class="about-logo-container">
+            <a href="index.html">
+                <img src="images/logo-transparent-png.png" alt="Tabletop Reserve Logo" class="about-logo">
+            </a>
+        </div>
+        
+        <div class="about-content">
+            <div class="about-header">
+                <h1>About Tabletop Reserve</h1>
+                <p class="tagline">Connecting tabletop gaming enthusiasts with local shops and events since 2023</p>
+            </div>
+            
+            <div class="about-section">
+                <h2>Our Mission</h2>
+                <p>Tabletop Reserve was created with a simple mission: to make tabletop gaming more accessible and help local gaming shops thrive in an increasingly digital world.</p>
+                <p>We believe that tabletop gaming creates unique social experiences and builds communities in ways that digital gaming cannot replicate. Our platform helps players discover local shops, reserve tables, and join events - ensuring that the tabletop gaming tradition continues to flourish.</p>
+            </div>
+            
+            <div class="about-section">
+                <h2>Who We Are</h2>
+                <p>We're a team of passionate tabletop gamers who understand both the joy of playing and the challenges of running a gaming business. Our diverse team includes:</p>
+                <ul class="team-list">
+                    <li>Experienced tabletop gamers across multiple genres</li>
+                    <li>Former and current game shop owners</li>
+                    <li>Software developers with a passion for gaming</li>
+                    <li>Community organizers from various gaming scenes</li>
+                </ul>
+                <p>This combination of perspectives allows us to create a platform that truly serves the needs of both players and shop owners.</p>
+            </div>
+            
+            <div class="about-section">
+                <h2>How It Works</h2>
+                <div class="how-it-works">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h3>For Shop Owners</h3>
+                        <p>Register your gaming space, set up your tables, and manage your calendar through our simple dashboard. Our platform helps you fill empty tables and attract new customers.</p>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h3>For Gamers</h3>
+                        <p>Download our mobile app to discover nearby gaming shops, browse available tables, and make reservations. You can also find and register for local events all in one place.</p>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h3>Creating Community</h3>
+                        <p>Both players and shops can build profiles, earn reputation, and connect with the local gaming community. Our optional matchmaking features even help you find fellow players.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="about-section">
+                <h2>Our Values</h2>
+                <div class="values-grid">
+                    <div class="value-item">
+                        <h3>Community First</h3>
+                        <p>We prioritize building healthy, inclusive gaming communities and supporting local businesses.</p>
+                    </div>
+                    
+                    <div class="value-item">
+                        <h3>Inclusivity</h3>
+                        <p>We believe tabletop gaming is for everyone and strive to make it accessible and welcoming to all.</p>
+                    </div>
+                    
+                    <div class="value-item">
+                        <h3>Transparency</h3>
+                        <p>We maintain clear, honest communication with both shop owners and players about our services.</p>
+                    </div>
+                    
+                    <div class="value-item">
+                        <h3>Passionate Service</h3>
+                        <p>We're gamers serving gamers, and we put the same care into our platform as we do our gaming sessions.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="about-section cta-section">
+                <h2>Join the Tabletop Reserve Community</h2>
+                <p>Whether you're a shop owner looking to grow your business or a player seeking your next game night destination, Tabletop Reserve is here to help.</p>
+                <div class="cta-buttons">
+                    <a href="signup.html" class="cta-button shop-cta">Register Your Shop</a>
+                    <a href="#" class="cta-button app-cta">Download the App</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer will be loaded by footer.js -->
+    <script src="js/nav.js"></script>
+    <script src="js/footer.js"></script>
+</body>
+</html>

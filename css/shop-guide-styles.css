@@ -1,0 +1,393 @@
+/* shop-guide-styles.css - Styles for the Shop Owner Guide page */
+
+:root {
+    --primary-color: #4a6ee0;
+    --primary-dark: #3a5bc0;
+    --secondary-color: #34c759;
+    --secondary-dark: #2aaf4c;
+    --text-color: #333;
+    --light-gray: #f8f9fa;
+    --medium-gray: #e9ecef;
+    --dark-gray: #6c757d;
+    --white: #ffffff;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease;
+}
+
+.guide-main-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--text-color);
+}
+
+/* Hero section */
+.guide-hero {
+    background: linear-gradient(135deg, #4a6ee0 0%, #3a5bc0 100%);
+    color: white;
+    padding: 60px 40px;
+    border-radius: 10px;
+    margin-bottom: 40px;
+    text-align: center;
+    box-shadow: var(--shadow);
+}
+
+.guide-hero h1 {
+    font-size: 2.5rem;
+    margin-bottom: 15px;
+}
+
+.guide-hero p {
+    font-size: 1.2rem;
+    max-width: 700px;
+    margin: 0 auto;
+    opacity: 0.9;
+}
+
+/* Guide layout */
+.guide-content {
+    display: flex;
+    gap: 30px;
+}
+
+/* Navigation sidebar */
+.guide-nav {
+    flex: 0 0 250px;
+    position: sticky;
+    top: 100px;
+    align-self: flex-start;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    padding: 20px;
+    margin-bottom: 30px;
+    max-height: calc(100vh - 150px);
+    overflow-y: auto;
+}
+
+.guide-nav-header {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--medium-gray);
+}
+
+.guide-nav-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.guide-nav-list li {
+    margin-bottom: 8px;
+}
+
+.guide-nav-list a {
+    display: block;
+    padding: 8px 10px;
+    color: var(--text-color);
+    text-decoration: none;
+    border-radius: 5px;
+    transition: var(--transition);
+}
+
+.guide-nav-list a:hover {
+    background-color: var(--light-gray);
+    color: var(--primary-color);
+}
+
+.guide-nav-list a.active {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.guide-download {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid var(--medium-gray);
+}
+
+.download-btn {
+    display: block;
+    text-align: center;
+    background-color: var(--secondary-color);
+    color: white;
+    text-decoration: none;
+    padding: 12px 15px;
+    border-radius: 5px;
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.download-btn:hover {
+    background-color: var(--secondary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Guide main content */
+.guide-sections {
+    flex: 1;
+}
+
+.guide-section {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    padding: 30px;
+    margin-bottom: 30px;
+}
+
+.guide-section h2 {
+    color: var(--primary-color);
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--medium-gray);
+}
+
+.section-intro {
+    font-size: 1.1rem;
+    color: var(--dark-gray);
+    margin-bottom: 25px;
+    line-height: 1.6;
+}
+
+.guide-section h3 {
+    font-size: 1.4rem;
+    margin: 30px 0 15px;
+    color: var(--text-color);
+}
+
+.guide-section p {
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.guide-section ul, 
+.guide-section ol {
+    padding-left: 25px;
+    margin-bottom: 20px;
+}
+
+.guide-section li {
+    margin-bottom: 8px;
+    line-height: 1.5;
+}
+
+.guide-section strong {
+    color: var(--text-color);
+}
+
+/* Screenshots */
+.screenshot {
+    margin: 30px 0;
+    border: 1px solid var(--medium-gray);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.screenshot img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.caption {
+    padding: 10px 15px;
+    background-color: var(--light-gray);
+    color: var(--dark-gray);
+    font-size: 0.9rem;
+    text-align: center;
+    margin: 0;
+    font-style: italic;
+}
+
+/* Info boxes */
+.note-box, .tip-box {
+    display: flex;
+    background-color: #e9f5ff;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 25px 0;
+    gap: 15px;
+}
+
+.tip-box {
+    background-color: #f0fff4;
+}
+
+.note-icon, .tip-icon {
+    font-size: 1.8rem;
+    flex-shrink: 0;
+}
+
+.note-content, .tip-content {
+    flex: 1;
+}
+
+.note-content strong, .tip-content strong {
+    color: #0275d8;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.tip-content strong {
+    color: #34c759;
+}
+
+/* Checklist */
+.checklist {
+    background-color: var(--light-gray);
+    padding: 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+}
+
+.checklist-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.checklist-item:last-child {
+    margin-bottom: 0;
+}
+
+.checklist-item input[type="checkbox"] {
+    margin-right: 10px;
+    transform: scale(1.2);
+}
+
+.checklist-item label {
+    cursor: pointer;
+}
+
+/* Next steps section */
+.next-steps {
+    background-color: var(--light-gray);
+    padding: 40px;
+    border-radius: 10px;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.next-steps h2 {
+    color: var(--text-color);
+    margin-bottom: 15px;
+}
+
+.next-steps p {
+    color: var(--dark-gray);
+    margin-bottom: 25px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.next-step-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+.primary-btn, .secondary-btn {
+    display: inline-block;
+    padding: 12px 30px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: var(--transition);
+}
+
+.primary-btn {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.primary-btn:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.secondary-btn {
+    background-color: var(--white);
+    color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+}
+
+.secondary-btn:hover {
+    background-color: var(--light-gray);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive styles */
+@media (max-width: 1024px) {
+    .guide-nav {
+        flex: 0 0 220px;
+    }
+}
+
+@media (max-width: 768px) {
+    .guide-content {
+        flex-direction: column;
+    }
+    
+    .guide-nav {
+        position: relative;
+        top: 0;
+        width: 100%;
+        max-height: none;
+        margin-bottom: 30px;
+    }
+    
+    .guide-section {
+        padding: 20px;
+    }
+    
+    .guide-hero {
+        padding: 40px 20px;
+    }
+    
+    .guide-hero h1 {
+        font-size: 2rem;
+    }
+    
+    .next-step-buttons {
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .primary-btn, .secondary-btn {
+        width: 100%;
+        max-width: 250px;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .guide-hero h1 {
+        font-size: 1.8rem;
+    }
+    
+    .guide-section h2 {
+        font-size: 1.5rem;
+    }
+    
+    .guide-section h3 {
+        font-size: 1.3rem;
+    }
+    
+    .note-box, .tip-box {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+}
