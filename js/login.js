@@ -98,8 +98,11 @@ loginForm.addEventListener('submit', function(e) {
                                 if (adminDoc.exists && adminDoc.data().role === "admin") {
                                     window.location.href = "adminhome.html";
                                 } else {
-                                    // Neither shop owner nor admin
-                                    errorMessageElement.textContent = "No shop or admin account found for this user.";
+                                    // Neither shop owner nor admin - likely a mobile app user
+                                    errorMessageElement.innerHTML = 
+                                        "<strong>This website is for shop owners only.</strong><br>" +
+                                        "If you're a customer, please use the Tabletop Reserve mobile app to make reservations.<br>" +
+                                        "If you're a shop owner, please register your shop using the 'Register Your Shop' button below.";
                                     auth.signOut();
                                 }
                             });
@@ -109,9 +112,23 @@ loginForm.addEventListener('submit', function(e) {
         .catch((error) => {
             // Only show error message if not already handled (email verification)
             if (error.message !== "Email not verified") {
-                errorMessageElement.textContent = error.message;
-            }
+                // Handle the new error format
+                if (error.code === "auth/invalid-login-credentials" || 
+                    error.message.includes("INVALID_LOGIN_CREDENTIALS")) {
+                    errorMessageElement.textContent = "Invalid email or password. Please try again.";
+                } else if (error.code === "auth/user-not-found") {
+                    errorMessageElement.textContent = "No account found with this email address.";
+                } else if (error.code === "auth/wrong-password") {
+                    errorMessageElement.textContent = "Incorrect password. Please try again.";
+                } else if (error.code === "auth/too-many-requests") {
+                    errorMessageElement.textContent = "Too many failed login attempts. Please try again later or reset your password.";
+                } else {
+                    // For any other errors, display the message from Firebase
+                    errorMessageElement.textContent = error.message;
+                }
+            } 
         });
+
 });
 
 // Password Reset Modal Functions
