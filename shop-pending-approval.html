@@ -42,17 +42,18 @@
     <script>
         // Verify the user is logged in and has a pending shop
         window.shopAuth.verifyShopOwner(function(user, shopData) {
-            // Check if the shop is pending approval
-            
-            // Show the approval container
-            document.getElementById('loading-message').style.display = 'none';
-            document.getElementById('approval-container').classList.remove('hidden');
-            
-            console.log("Shop is pending approval, displaying pending page");
+            // Check if the shop is already approved (auto-approved or manually)
+            if (shopData.isApproved) {
+                // If approved, redirect to dashboard
+                window.location.href = "shophome.html";
+            } else {
+                // Show the approval container
+                document.getElementById('loading-message').style.display = 'none';
+                document.getElementById('approval-container').classList.remove('hidden');
+                
+                console.log("Shop is pending approval, displaying pending page");
+            }
         });
     </script>
-
-
-
 </body>
 </html>

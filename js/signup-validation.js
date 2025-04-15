@@ -186,6 +186,30 @@ document.addEventListener('DOMContentLoaded', function() {
         return true;
     }
 
+    // Function to check auto-approval setting and auto-approve if enabled
+    function checkAutoApproval(shopId) {
+        return db.collection("appSettings").doc("appSettings").get()
+            .then((doc) => {
+                if (doc.exists && doc.data().autoApproveShops === true) {
+                    console.log("Auto-approval enabled, automatically approving shop");
+                    // Auto-approve the shop
+                    return db.collection("Stores").doc(shopId).update({
+                        isApproved: true,
+                        approvedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        approvedBy: "system (auto-approval)",
+                        registrationStatus: "approved"
+                    });
+                } else {
+                    console.log("Auto-approval disabled, shop pending manual approval");
+                    return Promise.resolve(); // Continue without auto-approval
+                }
+            })
+            .catch((error) => {
+                console.error("Error checking auto-approval setting:", error);
+                return Promise.resolve(); // Continue without auto-approval on error
+            });
+    }
+
     // Create success modal
     function createSuccessModal() {
         // Check if modal already exists
@@ -512,6 +536,10 @@ document.addEventListener('DOMContentLoaded', function() {
                             registrationStatus: "pending",
                             createdAt: firebase.firestore.FieldValue.serverTimestamp()
                         });
+                    })
+                    .then(() => {
+                        // Check if auto-approval is enabled
+                        return checkAutoApproval(user.uid);
                     })
                     .then(() => {
                         console.log("Firestore document created, signing out user...");

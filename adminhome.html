@@ -53,9 +53,9 @@
             </div>
             
             <div class="stat-card">
-                <h3>Rejected Shops</h3>
-                <div id="rejected-shops" class="stat-value">0</div>
-                <p>Rejected applications</p>
+                <h3>Auto-Approved</h3>
+                <div id="auto-approved-shops" class="stat-value">0</div>
+                <p>Auto-approved shops</p>
             </div>
         </section>
         
@@ -119,11 +119,11 @@
                     document.getElementById('approved-shops').textContent = snapshot.size;
                 });
             
-            // Rejected Shops
+            // Auto-Approved Shops
             db.collection("Stores")
-                .where("registrationStatus", "==", "rejected")
+                .where("approvedBy", "==", "system (auto-approval)")
                 .get().then((snapshot) => {
-                    document.getElementById('rejected-shops').textContent = snapshot.size;
+                    document.getElementById('auto-approved-shops').textContent = snapshot.size;
                 });
         }
 
@@ -147,56 +147,109 @@
                         .limit(5)
                         .get()
                         .then((rejectedSnapshot) => {
-                            // Combine and sort the activities
-                            const activities = [];
-                            
-                            approvedSnapshot.forEach((doc) => {
-                                const data = doc.data();
-                                activities.push({
-                                    type: 'approved',
-                                    shopName: data.storeName,
-                                    timestamp: data.approvedAt,
-                                    by: data.approvedBy
+                            // Get auto-approved shops
+                            db.collection("Stores")
+                                .where("approvedBy", "==", "system (auto-approval)")
+                                .orderBy("approvedAt", "desc")
+                                .limit(5)
+                                .get()
+                                .then((autoApprovedSnapshot) => {
+                                    // Combine and sort the activities
+                                    const activities = [];
+                                    
+                                    approvedSnapshot.forEach((doc) => {
+                                        const data = doc.data();
+                                        // Skip auto-approved shops as they'll be added separately
+                                        if (data.approvedBy !== "system (auto-approval)") {
+                                            activities.push({
+                                                type: 'approved',
+                                                shopName: data.storeName,
+                                                timestamp: data.approvedAt,
+                                                by: data.approvedBy || 'Admin'
+                                            });
+                                        }
+                                    });
+                                    
+                                    rejectedSnapshot.forEach((doc) => {
+                                        const data = doc.data();
+                                        activities.push({
+                                            type: 'rejected',
+                                            shopName: data.storeName,
+                                            timestamp: data.rejectedAt,
+                                            by: data.rejectedBy || 'Admin'
+                                        });
+                                    });
+                                    
+                                    autoApprovedSnapshot.forEach((doc) => {
+                                        const data = doc.data();
+                                        activities.push({
+                                            type: 'auto-approved',
+                                            shopName: data.storeName,
+                                            timestamp: data.approvedAt,
+                                            by: 'System (Auto-Approval)'
+                                        });
+                                    });
+                                    
+                                    // Sort activities by timestamp (most recent first)
+                                    activities.sort((a, b) => b.timestamp - a.timestamp);
+                                    
+                                    // Display up to 10 most recent activities
+                                    const recentActivities = activities.slice(0, 10);
+                                    
+                                    if (recentActivities.length === 0) {
+                                        activityList.innerHTML = '<p>No recent activity</p>';
+                                        return;
+                                    }
+                                    
+                                    recentActivities.forEach((activity) => {
+                                        const activityItem = document.createElement('div');
+                                        activityItem.className = 'activity-item';
+                                        
+                                        const date = activity.timestamp.toDate();
+                                        const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
+                                        
+                                        // Add specific styling for auto-approved items
+                                        if (activity.type === 'auto-approved') {
+                                            activityItem.classList.add('auto-approved');
+                                        }
+                                        
+                                        activityItem.innerHTML = `
+                                            <p><strong>${activity.shopName}</strong> was 
+                                                <span class="activity-type ${activity.type}">${activity.type}</span> 
+                                                by ${activity.by} on ${formattedDate}</p>
+                                        `;
+                                        
+                                        activityList.appendChild(activityItem);
+                                    });
                                 });
-                            });
-                            
-                            rejectedSnapshot.forEach((doc) => {
-                                const data = doc.data();
-                                activities.push({
-                                    type: 'rejected',
-                                    shopName: data.storeName,
-                                    timestamp: data.rejectedAt,
-                                    by: data.rejectedBy
-                                });
-                            });
-                            
-                            // Sort activities by timestamp (most recent first)
-                            activities.sort((a, b) => b.timestamp - a.timestamp);
-                            
-                            // Display up to 10 most recent activities
-                            const recentActivities = activities.slice(0, 10);
-                            
-                            if (recentActivities.length === 0) {
-                                activityList.innerHTML = '<p>No recent activity</p>';
-                                return;
-                            }
-                            
-                            recentActivities.forEach((activity) => {
-                                const activityItem = document.createElement('div');
-                                activityItem.className = 'activity-item';
-                                
-                                const date = activity.timestamp.toDate();
-                                const formattedDate = date.toLocaleDateString() + ' ' + date.toLocaleTimeString();
-                                
-                                activityItem.innerHTML = `
-                                    <p><strong>${activity.shopName}</strong> was ${activity.type} by ${activity.by} on ${formattedDate}</p>
-                                `;
-                                
-                                activityList.appendChild(activityItem);
-                            });
                         });
                 });
         }
     </script>
+    
+    <style>
+        /* Additional styles for auto-approval */
+        .activity-type {
+            font-weight: bold;
+        }
+        
+        .activity-type.approved {
+            color: #4caf50;
+        }
+        
+        .activity-type.rejected {
+            color: #f44336;
+        }
+        
+        .activity-type.auto-approved {
+            color: #ff9800;
+        }
+        
+        .activity-item.auto-approved {
+            background-color: #fff8e1;
+            border-left: 3px solid #ff9800;
+            padding-left: 10px;
+        }
+    </style>
 </body>
 </html>
