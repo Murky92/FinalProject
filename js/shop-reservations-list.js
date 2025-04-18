@@ -647,9 +647,9 @@ const ReservationsManager = {
             this.closeModal('cancel-modal');
             this.loadReservations(this.selectedDate);
             
-            // Notify customer if needed
-            if (typeof NotificationManager !== 'undefined') {
-                NotificationManager.sendReservationStatusUpdate(reservationId, 'cancelled', reason);
+            
+            if (window.NotificationManager && typeof window.NotificationManager.sendReservationStatusUpdate === 'function') {
+                window.NotificationManager.sendReservationStatusUpdate(reservationId, 'cancelled', reason);
             }
         })
         .catch((error) => {

@@ -31,7 +31,7 @@
 .main-content {
   margin-left: 250px; /* Same as sidebar width */
   margin-right: auto;
-  max-width: calc(1400px); /* Increased from 1200px */
+  max-width: calc(1400px - 250px); /* Increased from 1200px */
   padding: 20px;
   transition: margin-left 0.3s ease, max-width 0.3s ease;
 }  
