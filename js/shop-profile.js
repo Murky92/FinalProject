@@ -126,7 +126,6 @@ function handleLogoSelect(e) {
     
     if (!file) return;
     
-    // Update status to show we're checking the file
     updateStatus('Checking file...', 'normal');
     
     // Type validation
@@ -306,8 +305,7 @@ function uploadLogo(file, shopId) {
             .then((listResults) => {
                 // Create an array of promises for deleting existing files
                 const deletePromises = listResults.items.map(item => {
-                    // Only delete files that aren't the same as what we're about to upload
-                    // This prevents unnecessary deletion and re-upload of the same file type
+                    
                     if (item.name !== newLogoFileName) {
                         console.log(`Deleting old logo file: ${item.name}`);
                         return item.delete();

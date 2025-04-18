@@ -17,6 +17,10 @@
     <script src="js/shop-auth.js"></script>
     <!-- Load shop notification manager script -->
     <script src="js/shop-notifications-manager.js"></script>
+    <!-- Load event notification manager -->
+    <script src="js/event-notification-manager.js"></script>
+    <!-- Load table availability notifier -->
+    <script src="js/table-availability-notifier.js"></script>
 </head>
 <body>
     <div id="loading-message">Verifying shop access...</div>
@@ -50,6 +54,7 @@
         <div class="tab-header">
             <button class="tab-button active" onclick="window.shopNotificationManager.switchTab('compose')">Send Notification</button>
             <button class="tab-button" onclick="window.shopNotificationManager.switchTab('history')">Notification History</button>
+            <button class="tab-button" onclick="window.shopNotificationManager.switchTab('templates')">Templates</button>
         </div>
 
         <!-- Compose Notification Tab -->
@@ -65,7 +70,18 @@
                             <option value="update">Shop Update</option>
                             <option value="promo">Promotion</option>
                             <option value="event">Event Announcement</option>
+                            <option value="availability">Table Availability</option>
                         </select>
+                    </div>
+                    
+                    <!-- Event selection (hidden by default, shown for event announcements) -->
+                    <div id="event-selection" class="form-group hidden">
+                        <label for="event-select">Select Event*</label>
+                        <select id="event-select">
+                            <option value="">-- Select an Event --</option>
+                            <!-- Events will be loaded dynamically -->
+                        </select>
+                        <small>Selecting an event will pre-fill the notification with event details</small>
                     </div>
                     
                     <div class="form-group">
@@ -99,7 +115,7 @@
                     </div>
                     
                     <div class="form-buttons">
-                        <button type="submit" class="success-btn">Send Notification</button>
+                        <button type="submit" class="success-btn">Preview Notification</button>
                     </div>
                 </form>
                 
@@ -109,6 +125,8 @@
                         <li><strong>Be concise and clear</strong> - Keep your message short and direct</li>
                         <li><strong>Provide value</strong> - Send information that's useful to your customers</li>
                         <li><strong>Don't overdo it</strong> - Limit notifications to important updates to avoid customer fatigue</li>
+                        <li><strong>Use specific details</strong> - Include specific dates, times, or offers when relevant</li>
+                        <li><strong>Include a call to action</strong> - Tell customers what to do next</li>
                     </ul>
                 </div>
             </div>
@@ -124,6 +142,7 @@
                         <button class="filter-button" data-filter="update">Updates</button>
                         <button class="filter-button" data-filter="promo">Promotions</button>
                         <button class="filter-button" data-filter="event">Events</button>
+                        <button class="filter-button" data-filter="availability">Availability</button>
                     </div>
                 </div>
 
@@ -135,6 +154,60 @@
                 <div id="empty-notifications" class="hidden" style="text-align: center; padding: 30px;">
                     <h3>No Notifications Sent Yet</h3>
                     <p>You haven't sent any notifications to your customers yet.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Templates Tab -->
+        <div id="templates-tab" class="tab-content">
+            <div class="card">
+                <h2>Notification Templates</h2>
+                <p>Use these pre-designed templates to quickly create effective notifications.</p>
+                
+                <div class="template-selector">
+                    <h3>Promotions</h3>
+                    <div class="template-option" onclick="window.shopNotificationManager.useTemplate('discount')">
+                        <div class="template-title">Special Discount</div>
+                        <div class="template-description">Announce a limited-time discount to attract customers</div>
+                    </div>
+                    
+                    <div class="template-option" onclick="window.shopNotificationManager.useTemplate('flash-sale')">
+                        <div class="template-title">Flash Sale</div>
+                        <div class="template-description">Create urgency with a one-day sale announcement</div>
+                    </div>
+                    
+                    <h3>Events</h3>
+                    <div class="template-option" onclick="window.shopNotificationManager.useTemplate('new-event')">
+                        <div class="template-title">New Event Announcement</div>
+                        <div class="template-description">Inform customers about an upcoming event</div>
+                    </div>
+                    
+                    <div class="template-option" onclick="window.shopNotificationManager.useTemplate('tournament')">
+                        <div class="template-title">Tournament Reminder</div>
+                        <div class="template-description">Remind players about an upcoming tournament</div>
+                    </div>
+                    
+                    <h3>Table Availability</h3>
+                    <div class="template-option" onclick="window.shopNotificationManager.useTemplate('tables-available')">
+                        <div class="template-title">Open Tables</div>
+                        <div class="template-description">Let players know you have tables available today</div>
+                    </div>
+                    
+                    <div class="template-option" onclick="window.shopNotificationManager.useTemplate('weekend-tables')">
+                        <div class="template-title">Weekend Availability</div>
+                        <div class="template-description">Promote table availability for the upcoming weekend</div>
+                    </div>
+                    
+                    <h3>Shop Updates</h3>
+                    <div class="template-option" onclick="window.shopNotificationManager.useTemplate('new-games')">
+                        <div class="template-title">New Games Arrived</div>
+                        <div class="template-description">Announce new games added to your collection</div>
+                    </div>
+                    
+                    <div class="template-option" onclick="window.shopNotificationManager.useTemplate('hours-change')">
+                        <div class="template-title">Hours Change</div>
+                        <div class="template-description">Inform customers about changes to your opening hours</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -159,17 +232,135 @@
             </div>
             
             <div class="popup-buttons">
-                <button onclick="window.shopNotificationManager.closePopup()" class="primary-btn">Cancel</button>
+                <button onclick="window.shopNotificationManager.closePopup()" class="primary-btn">Edit</button>
                 <button onclick="window.shopNotificationManager.sendNotification()" class="success-btn">Send Notification</button>
             </div>
         </div>
     </div>
 
     <script>
-        // Verify shop owner access
+        // Verify shop owner access and initialize notification manager
         window.shopAuth.verifyShopOwner(function(user, shopInfo) {
             // Initialize the notification manager with shop data
             window.shopNotificationManager.initializeShopData(user, shopInfo);
+            
+            // Also initialize the event notification manager
+            if (window.EventNotificationManager) {
+                window.EventNotificationManager.initialize(user, shopInfo);
+            }
+            
+            // And the table availability notifier
+            if (window.TableAvailabilityNotifier) {
+                window.TableAvailabilityNotifier.initialize(user, shopInfo);
+            }
+            
+            // Load events for the event selection dropdown
+            loadEvents();
+        });
+        
+        // Load events for selection
+        function loadEvents() {
+            const shopId = window.shopNotificationManager.shopData?.id;
+            if (!shopId) return;
+            
+            const now = new Date();
+            
+            // Get future events
+            firebase.firestore().collection('Events')
+                .where('shopId', '==', shopId)
+                .where('date', '>=', now)
+                .orderBy('date', 'asc')
+                .limit(20)
+                .get()
+                .then(querySnapshot => {
+                    const eventSelect = document.getElementById('event-select');
+                    
+                    // Add default option
+                    eventSelect.innerHTML = '<option value="">-- Select an Event --</option>';
+                    
+                    // Add events to dropdown
+                    querySnapshot.forEach(doc => {
+                        const event = doc.data();
+                        const eventDate = event.date ? new Date(event.date.seconds * 1000) : new Date();
+                        const formattedDate = eventDate.toLocaleDateString('en-GB', {
+                            weekday: 'short',
+                            day: 'numeric',
+                            month: 'short'
+                        });
+                        
+                        const option = document.createElement('option');
+                        option.value = doc.id;
+                        option.textContent = `${event.title || event.name} (${formattedDate})`;
+                        option.dataset.eventData = JSON.stringify(event);
+                        eventSelect.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error loading events:', error);
+                });
+        }
+        
+        // Show/hide event selection based on notification type
+        document.getElementById('notification-type').addEventListener('change', function() {
+            const eventSelection = document.getElementById('event-selection');
+            
+            if (this.value === 'event') {
+                eventSelection.classList.remove('hidden');
+            } else {
+                eventSelection.classList.add('hidden');
+            }
+        });
+        
+        // Pre-fill notification when event is selected
+        document.getElementById('event-select').addEventListener('change', function() {
+            if (!this.value) return;
+            
+            // Get selected option
+            const selectedOption = this.options[this.selectedIndex];
+            
+            // Parse event data
+            let eventData;
+            try {
+                eventData = JSON.parse(selectedOption.dataset.eventData);
+            } catch (error) {
+                console.error('Error parsing event data:', error);
+                return;
+            }
+            
+            // Format date and time
+            const eventDate = eventData.date ? new Date(eventData.date.seconds * 1000) : new Date();
+            const formattedDate = eventDate.toLocaleDateString('en-GB', {
+                weekday: 'long',
+                day: 'numeric',
+                month: 'long'
+            });
+            
+            const formattedTime = eventData.startTime || '18:00';
+            
+            // Set notification title and message
+            document.getElementById('notification-title').value = `Join us for: ${eventData.title || eventData.name}`;
+            
+            // Update character count
+            document.getElementById('title-length').textContent = document.getElementById('notification-title').value.length;
+            
+            // Create message
+            let message = `We're hosting ${eventData.title || eventData.name} on ${formattedDate} at ${formattedTime}. `;
+            
+            if (eventData.description && eventData.description.length > 100) {
+                message += "Don't miss out!";
+            } else if (eventData.description) {
+                message += eventData.description;
+            } else {
+                message += "We hope to see you there!";
+            }
+            
+            // Truncate if too long
+            if (message.length > 200) {
+                message = message.substring(0, 197) + '...';
+            }
+            
+            document.getElementById('notification-message').value = message;
+            document.getElementById('message-length').textContent = message.length;
         });
     </script>
     <script src="js/sidebar.js"></script>

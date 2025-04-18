@@ -708,7 +708,7 @@ const ReservationsManager = {
                     let isAvailable = true;
                     
                     snapshot.forEach((doc) => {
-                        // Skip the current reservation if we're editing
+                      
                         if (reservationId && doc.id === reservationId) return;
                         
                         const res = doc.data();

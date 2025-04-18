@@ -1,7 +1,7 @@
 // Modified footer.js with delayed insertion for shop pages
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Check if we're on a shop dashboard page
+    // Check if the page is a shop page by looking for the shop-content element
     const isShopPage = document.getElementById('shop-content') !== null;
     
     // For shop pages, wait until authentication is complete
@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (mutation.target.style.display === 'block') {
                     // Shop content is now visible, it's safe to add the footer
                     createFooter();
-                    // Disconnect the observer as we don't need it anymore
+                    
                     observer.disconnect();
                 }
             });
