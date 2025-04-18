@@ -16,6 +16,82 @@
     
     <!-- Page-specific stylesheet -->
     <link rel="stylesheet" href="css/shop-guide-styles.css">
+    
+    <style>
+        /* Style for "Coming Soon" badges */
+        .coming-soon {
+            display: inline-block;
+            background-color: #ff9500;
+            color: white;
+            font-size: 0.7rem;
+            font-weight: bold;
+            padding: 3px 8px;
+            border-radius: 12px;
+            margin-left: 10px;
+            vertical-align: middle;
+            text-transform: uppercase;
+        }
+        
+        /* Style for release timeline */
+        .release-timeline {
+            margin-top: 60px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+        }
+        
+        .timeline-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #4a6ee0;
+        }
+        
+        .timeline-items {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+        }
+        
+        .timeline-items::before {
+            content: "";
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background-color: #4a6ee0;
+            z-index: 1;
+        }
+        
+        .timeline-item {
+            position: relative;
+            text-align: center;
+            z-index: 2;
+            width: 23%;
+        }
+        
+        .timeline-item .date {
+            background-color: #4a6ee0;
+            color: white;
+            width: 80px;
+            height: 40px;
+            line-height: 40px;
+            border-radius: 20px;
+            margin: 0 auto 15px auto;
+            font-weight: bold;
+        }
+        
+        .timeline-item .milestone {
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        
+        .timeline-item .features {
+            font-size: 0.9rem;
+            color: #666;
+        }
+    </style>
 </head>
 <body>
     <!-- Navigation will be loaded by nav.js -->
@@ -37,9 +113,9 @@
                     <li><a href="#events">Creating Events</a></li>
                     <li><a href="#reservations">Managing Reservations</a></li>
                     <li><a href="#notifications">Customer Communication</a></li>
-                    <li><a href="#payments">Payments & Billing</a></li>
-                    <li><a href="#marketing">Marketing Tips</a></li>
-                    <li><a href="#analytics">Understanding Analytics</a></li>
+                    <li><a href="#payments">Payments & Billing <span class="coming-soon">Coming Soon</span></a></li>
+                    <li><a href="#marketing">Marketing Tips <span class="coming-soon">Coming Soon</span></a></li>
+                    <li><a href="#analytics">Understanding Analytics <span class="coming-soon">Coming Soon</span></a></li>
                 </ul>
                 
             </div>
@@ -235,7 +311,7 @@
                         </div>
                     </div>
                     
-                    <h3>Booking Windows</h3>
+                    <h3>Booking Windows <span class="coming-soon">Coming Soon</span></h3>
                     <p>Control when and how far in advance customers can make reservations:</p>
                     <ul>
                         <li><strong>Minimum Notice:</strong> How far in advance bookings must be made (e.g., 2 hours)</li>
@@ -243,7 +319,7 @@
                         <li><strong>Booking Intervals:</strong> Time slots available for booking (e.g., hourly, half-hourly)</li>
                     </ul>
                     
-                    <h3>Time Slot Management</h3>
+                    <h3>Time Slot Management <span class="coming-soon">Coming Soon</span></h3>
                     <p>Optimize your schedule with these strategies:</p>
                     <ul>
                         <li>Consider staggering reservation start times to manage customer flow</li>
@@ -304,7 +380,7 @@
                         </div>
                     </div>
                     
-                    <h3>Event Promotion</h3>
+                    <h3>Event Promotion <span class="coming-soon">Coming Soon</span></h3>
                     <p>Maximize attendance with these promotion strategies:</p>
                     <ul>
                         <li>Use the "Send Notification" feature to alert customers about new events</li>
@@ -378,7 +454,7 @@
                         <li>Check table availability before changing dates or times</li>
                     </ul>
                     
-                    <h3>Cancellation Policy</h3>
+                    <h3>Cancellation Policy <span class="coming-soon">Coming Soon</span></h3>
                     <p>Set a clear cancellation policy in your shop settings:</p>
                     <ul>
                         <li>Define how much notice is required for cancellations</li>
@@ -462,10 +538,11 @@
                 </section>
                 
                 <section id="payments" class="guide-section">
-                    <h2>Payments & Billing</h2>
+                    <h2>Payments & Billing <span class="coming-soon">Coming Soon</span></h2>
                     
                     <div class="section-intro">
                         <p>Understanding how payments work on Tabletop Reserve will help you manage your business finances effectively.</p>
+                        <p><strong>Note:</strong> Our payment processing system is currently under development and will be available in a future release. Below is an overview of the planned functionality.</p>
                     </div>
                     
                     <h3>Payment Setup</h3>
@@ -522,10 +599,11 @@
                 </section>
                 
                 <section id="marketing" class="guide-section">
-                    <h2>Marketing Tips</h2>
+                    <h2>Marketing Tips <span class="coming-soon">Coming Soon</span></h2>
                     
                     <div class="section-intro">
                         <p>Use these marketing strategies to attract more players to your shop and maximize your booking revenue.</p>
+                        <p><strong>Note:</strong> Our expanded marketing features are currently under development and will be available in a future release. Below is an overview of the planned functionality.</p>
                     </div>
                     
                     <h3>Optimizing Your Profile</h3>
@@ -580,10 +658,11 @@
                 </section>
                 
                 <section id="analytics" class="guide-section">
-                    <h2>Understanding Analytics</h2>
+                    <h2>Understanding Analytics <span class="coming-soon">Coming Soon</span></h2>
                     
                     <div class="section-intro">
                         <p>Tabletop Reserve provides powerful analytics to help you understand your business performance and make data-driven decisions.</p>
+                        <p><strong>Note:</strong> Our advanced analytics dashboard is currently under development and will be available in a future release. Below is an overview of the planned functionality.</p>
                     </div>
                     
                     <h3>Dashboard Overview</h3>
@@ -644,6 +723,58 @@
                         <li>Schedule events when you have more capacity</li>
                     </ul>
                 </section>
+            </div>
+        </div>
+        
+        <!-- Feature Release Timeline -->
+        <div class="release-timeline">
+            <div class="timeline-title">Feature Release Timeline</div>
+            <div class="timeline-items">
+                <div class="timeline-item">
+                    <div class="date">NOW</div>
+                    <div class="milestone">Current Release</div>
+                    <div class="features">
+                        • Shop Profiles<br>
+                        • Table Management<br>
+                        • Basic Scheduling<br>
+                        • Reservations<br>
+                        • Event Management<br>
+                        • Notifications
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="date">Q3 2025</div>
+                    <div class="milestone">Summer Update</div>
+                    <div class="features">
+                        • Booking Windows<br>
+                        • Time Slot Management<br>
+                        • Advanced Event Promotion<br>
+                        • Custom Cancellation Policies
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="date">Q4 2025</div>
+                    <div class="milestone">Fall Update</div>
+                    <div class="features">
+                        • Payment Processing<br>
+                        • Revenue Reports<br>
+                        • Refund Management<br>
+                        • Marketing Tools
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="date">Q1 2026</div>
+                    <div class="milestone">Analytics Suite</div>
+                    <div class="features">
+                        • Advanced Analytics<br>
+                        • Business Intelligence<br>
+                        • Customer Loyalty Program<br>
+                        • Performance Forecasting
+                    </div>
+                </div>
             </div>
         </div>
         

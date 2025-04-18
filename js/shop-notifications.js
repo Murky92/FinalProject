@@ -1,4 +1,6 @@
-/**
+// File: js/shop-notifications.js
+// Description: This file contains the NotificationManager object which handles in-app notifications and customer notification sending for a reservation system. It includes methods to show notifications, send reservation status updates, and log customer notifications for demo purposes.
+javascript/**
  * functions/shop-notifications.js
  * Manages in-app notifications and customer notification sending
  */
@@ -71,6 +73,10 @@ const NotificationManager = {
             // Show success message in app
             this.showNotification('Reservation created successfully!', 'success');
             
+            // Get shop name from the current shop auth
+            const shopName = window.shopAuth && window.shopAuth.shopData ? 
+                window.shopAuth.shopData.storeName : '';
+            
             // In a real app, you would send an email or SMS to the customer
             // This would typically be handled by a Cloud Function or server-side code
             console.log('Sending new reservation notification to customer:', reservation.customerEmail || reservation.customerPhone);
@@ -79,7 +85,8 @@ const NotificationManager = {
             this.logCustomerNotification(
                 reservation,
                 'Reservation Confirmation',
-                `Your reservation for ${reservation.partySize} people at our shop has been created. We look forward to seeing you!`
+                `Your reservation for ${reservation.partySize} people at our shop has been created. We look forward to seeing you!`,
+                shopName
             );
         });
     },
@@ -106,11 +113,15 @@ const NotificationManager = {
                     break;
             }
             
+            // Get shop name from the current shop auth
+            const shopName = window.shopAuth && window.shopAuth.shopData ? 
+                window.shopAuth.shopData.storeName : '';
+            
             // Show success message in app
             this.showNotification(`Reservation ${status} notification sent to customer`, 'success');
             
             // Log the notification for demo purposes
-            this.logCustomerNotification(reservation, title, message);
+            this.logCustomerNotification(reservation, title, message, shopName);
         });
     },
     
@@ -134,7 +145,7 @@ const NotificationManager = {
     },
     
     // Log customer notification (for demo purposes)
-    logCustomerNotification: function(reservation, title, message) {
+    logCustomerNotification: function(reservation, title, message, shopName) {
         const dateTime = new Date(reservation.reservationTime.seconds * 1000);
         const formattedDate = dateTime.toLocaleDateString();
         const formattedTime = dateTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -149,7 +160,14 @@ const NotificationManager = {
         console.log('Message Body:');
         console.log(`Dear ${reservation.customerName},`);
         console.log('');
-        console.log(message);
+        
+        // Include shop name in the notification if available
+        if (shopName) {
+            console.log(`From ${shopName}: ${message}`);
+        } else {
+            console.log(message);
+        }
+        
         console.log('');
         console.log('Reservation Details:');
         console.log(`Date: ${formattedDate}`);
