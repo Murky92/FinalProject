@@ -7,11 +7,11 @@
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-firestore.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-messaging.js"></script>
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="css/mobile-styles.css">
     <link rel="stylesheet" href="/css/shop-styles.css">
     <link rel="stylesheet" href="css/sidebar.css">
+    <link rel="stylesheet" href="css/fixed-layout.css">
     <!-- Load shop authentication script -->
     <script src="js/shop-auth.js"></script>
     <style>
@@ -67,112 +67,6 @@
             font-size: 0.9rem;
         }
         
-        .booking-feed {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        
-        .feed-column {
-            flex: 1;
-        }
-        
-        .feed-card {
-            background-color: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-        
-        .feed-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .feed-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: #333;
-            display: flex;
-            align-items: center;
-        }
-        
-        .feed-title i {
-            margin-right: 8px;
-        }
-        
-        .feed-item {
-            padding: 12px 0;
-            border-bottom: 1px solid #f0f0f0;
-            position: relative;
-        }
-        
-        .feed-item:last-child {
-            border-bottom: none;
-        }
-        
-        .feed-item-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 5px;
-        }
-        
-        .feed-item-title {
-            font-weight: 500;
-            color: #333;
-        }
-        
-        .feed-item-date {
-            font-size: 0.85rem;
-            color: #888;
-        }
-        
-        .feed-item-details {
-            font-size: 0.9rem;
-            color: #666;
-        }
-        
-        .view-all {
-            text-align: center;
-            margin-top: 10px;
-        }
-        
-        .view-all a {
-            color: #4a6ee0;
-            text-decoration: none;
-            font-weight: 500;
-            font-size: 0.9rem;
-        }
-        
-        .view-all a:hover {
-            text-decoration: underline;
-        }
-        
-        .status-indicator {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            display: inline-block;
-            margin-right: 5px;
-        }
-        
-        .status-confirmed {
-            background-color: #34c759;
-        }
-        
-        .status-pending {
-            background-color: #ff9500;
-        }
-        
-        .status-cancelled {
-            background-color: #ff3b30;
-        }
-        
         .quick-actions {
             display: flex;
             gap: 10px;
@@ -217,68 +111,10 @@
             color: #4a6ee0;
         }
 
-        /* Calendar mini view */
-        .calendar-mini {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 5px;
-            margin-top: 15px;
-        }
-        
-        .calendar-day-header {
-            text-align: center;
-            font-weight: bold;
-            font-size: 0.8rem;
-            color: #666;
-        }
-        
-        .calendar-day {
-            aspect-ratio: 1 / 1;
-            padding: 5px;
-            text-align: center;
-            border-radius: 4px;
-            background-color: #f8f9fa;
-            font-size: 0.8rem;
-            position: relative;
-        }
-        
-        .calendar-day.today {
-            background-color: #e3f2fd;
-            font-weight: bold;
-            color: #4a6ee0;
-        }
-        
-        .calendar-day.has-events::after {
-            content: "";
-            position: absolute;
-            bottom: 3px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 4px;
-            height: 4px;
-            border-radius: 50%;
-            background-color: #4a6ee0;
-        }
-        
-        .calendar-day.has-reservations::before {
-            content: "";
-            position: absolute;
-            top: 3px;
-            right: 3px;
-            width: 4px;
-            height: 4px;
-            border-radius: 50%;
-            background-color: #34c759;
-        }
-        
         /* Media queries for responsiveness */
         @media (max-width: 768px) {
             .stats-grid {
                 grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .booking-feed {
-                flex-direction: column;
             }
             
             .quick-actions {
@@ -465,8 +301,6 @@
             
             // Load dashboard data
             loadDashboardData(shopData.id);
-            
-            
         });
         
         // Update UI with shop data
@@ -510,8 +344,6 @@
         
         // Load dashboard data
         function loadDashboardData(shopId) {
-            // Add console logging to debug auth issues
-            console.log("Load dashboard data for shop ID:", shopId);
             const db = window.shopAuth.db;
             
             // Get today's date at midnight
@@ -567,204 +399,14 @@
                 .get()
                 .then((snapshot) => {
                     document.getElementById('active-events').textContent = snapshot.size;
-                    console.log("Found " + snapshot.size + " active events");
                 })
                 .catch((error) => {
                     console.error('Error loading events:', error);
                 });
-            
-            // Load recent reservations for feed
-            db.collection('Reservations')
-                .where('shopId', '==', shopId)
-                .orderBy('reservationTime', 'desc')
-                .limit(5)
-                .get()
-                .then((snapshot) => {
-                    const feedContainer = document.getElementById('reservations-feed');
-                    
-                    if (snapshot.empty) {
-                        feedContainer.innerHTML = '<div style="text-align: center; padding: 20px;">No recent reservations</div>';
-                        return;
-                    }
-                    
-                    feedContainer.innerHTML = '';
-                    
-                    snapshot.forEach((doc) => {
-                        const reservation = doc.data();
-                        
-                        // Format reservation time
-                        const reservationTime = reservation.reservationTime ? new Date(reservation.reservationTime.seconds * 1000) : new Date();
-                        const formattedDate = reservationTime.toLocaleDateString('en-US', { 
-                            weekday: 'short',
-                            month: 'short', 
-                            day: 'numeric'
-                        });
-                        
-                        const formattedTime = reservationTime.toLocaleTimeString('en-US', { 
-                            hour: '2-digit', 
-                            minute: '2-digit'
-                        });
-                        
-                        // Determine status class
-                        let statusClass = 'status-pending';
-                        switch(reservation.status) {
-                            case 'confirmed': 
-                                statusClass = 'status-confirmed'; 
-                                break;
-                            case 'cancelled': 
-                                statusClass = 'status-cancelled'; 
-                                break;
-                            case 'completed': 
-                                statusClass = 'status-completed'; 
-                                break;
-                        }
-                        
-                        // Create feed item
-                        const feedItem = document.createElement('div');
-                        feedItem.className = 'feed-item';
-                        feedItem.innerHTML = `
-                            <div class="feed-item-header">
-                                <div class="feed-item-title">
-                                    <span class="status-indicator ${statusClass}"></span>
-                                    ${reservation.customerName || 'Anonymous Customer'}
-                                </div>
-                                <div class="feed-item-date">${formattedDate}, ${formattedTime}</div>
-                            </div>
-                            <div class="feed-item-details">
-                                ${reservation.tableName || `Table ${reservation.tableNumber || 'Unknown'}`} - 
-                                ${reservation.partySize || '?'} people
-                            </div>
-                        `;
-                        
-                        // Add click event to view details
-                        feedItem.addEventListener('click', function() {
-                            window.location.href = 'shop-reservations.html';
-                        });
-                        
-                        feedContainer.appendChild(feedItem);
-                    });
-                    
-                    // Add "View all" link
-                    const viewAll = document.createElement('div');
-                    viewAll.className = 'view-all';
-                    viewAll.innerHTML = '<a href="shop-reservations.html">View all reservations</a>';
-                    feedContainer.appendChild(viewAll);
-                })
-                .catch((error) => {
-                    console.error('Error loading reservation feed:', error);
-                    document.getElementById('reservations-feed').innerHTML = 
-                        '<div style="color: #ff3b30; padding: 10px;">Error loading reservations</div>';
-                });
-            
-            // Load recent event bookings for feed
-            db.collection('EventBookings')
-                .where('shopId', '==', shopId)
-                .orderBy('createdAt', 'desc')
-                .limit(5)
-                .get()
-                .then((snapshot) => {
-                    const feedContainer = document.getElementById('events-feed');
-                    
-                    if (snapshot.empty) {
-                        feedContainer.innerHTML = '<div style="text-align: center; padding: 20px;">No event bookings yet</div>';
-                        return;
-                    }
-                    
-                    feedContainer.innerHTML = '';
-                    
-                    // Need to get event details for each booking
-                    const bookings = [];
-                    snapshot.forEach((doc) => {
-                        const booking = doc.data();
-                        booking.id = doc.id;
-                        bookings.push(booking);
-                    });
-                    
-                    // Process and display each booking
-                    Promise.all(bookings.map(booking => {
-                        // Get event details if not included
-                        if (booking.eventName) {
-                            return Promise.resolve(booking);
-                        } else {
-                            return db.collection('Events').doc(booking.eventId).get()
-                                .then(eventDoc => {
-                                    if (eventDoc.exists) {
-                                        booking.eventName = eventDoc.data().title;
-                                    } else {
-                                        booking.eventName = 'Unknown Event';
-                                    }
-                                    return booking;
-                                });
-                        }
-                    }))
-                    .then(processedBookings => {
-                        processedBookings.forEach(booking => {
-                            // Format booking date
-                            const bookingTime = booking.createdAt ? new Date(booking.createdAt.seconds * 1000) : new Date();
-                            const formattedDate = bookingTime.toLocaleDateString('en-US', { 
-                                weekday: 'short',
-                                month: 'short', 
-                                day: 'numeric'
-                            });
-                            
-                            // Determine status class
-                            let statusClass = 'status-pending';
-                            switch(booking.status) {
-                                case 'confirmed': 
-                                    statusClass = 'status-confirmed'; 
-                                    break;
-                                case 'cancelled': 
-                                    statusClass = 'status-cancelled'; 
-                                    break;
-                                case 'completed': 
-                                    statusClass = 'status-completed'; 
-                                    break;
-                            }
-                            
-                            // Create feed item
-                            const feedItem = document.createElement('div');
-                            feedItem.className = 'feed-item';
-                            feedItem.innerHTML = `
-                                <div class="feed-item-header">
-                                    <div class="feed-item-title">
-                                        <span class="status-indicator ${statusClass}"></span>
-                                        ${booking.customerName || 'Anonymous Customer'}
-                                    </div>
-                                    <div class="feed-item-date">${formattedDate}</div>
-                                </div>
-                                <div class="feed-item-details">
-                                    ${booking.eventName || 'Unknown Event'} - 
-                                    ${booking.attendanceLimit || 1} seat(s)
-                                </div>
-                            `;
-                            
-                            // Add click event to view details
-                            feedItem.addEventListener('click', function() {
-                                window.location.href = 'shop-event-bookings.html';
-                            });
-                            
-                            feedContainer.appendChild(feedItem);
-                        });
-                        
-                        // Add "View all" link
-                        const viewAll = document.createElement('div');
-                        viewAll.className = 'view-all';
-                        viewAll.innerHTML = '<a href="shop-event-bookings.html">View all event bookings</a>';
-                        feedContainer.appendChild(viewAll);
-                    });
-                })
-                .catch((error) => {
-                    console.error('Error loading event bookings feed:', error);
-                    document.getElementById('events-feed').innerHTML = 
-                        '<div style="color: #ff3b30; padding: 10px;">Error loading event bookings</div>';
-                });
         }
-        
-       
     </script>
 
     <script src="js/sidebar.js"></script>
     <script src="js/footer.js"></script>
-    
 </body>
 </html>
