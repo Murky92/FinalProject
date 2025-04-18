@@ -14,3 +14,4 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log('Shop Events page initialized successfully');
     });
 });
+

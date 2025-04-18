@@ -208,7 +208,7 @@ const RecurrenceManager = {
                 nextDate.setDate(nextDate.getDate() + 1);
             }
             else if (recurrenceData.type === 'weekly') {
-                // For weekly, we need to find the next day that matches the weekdays pattern
+                
                 const weekdays = recurrenceData.weekdays;
                 let found = false;
 
@@ -216,7 +216,7 @@ const RecurrenceManager = {
                 nextDate = new Date(currentDate);
                 nextDate.setDate(nextDate.getDate() + 1);
 
-                // Keep incrementing until we find a matching weekday
+                
                 for (let i = 0; i < 7; i++) {
                     const dayOfWeek = nextDate.getDay();
                     if (weekdays.includes(dayOfWeek)) {

@@ -2,11 +2,18 @@ const functions = require('firebase-functions/v1');
 const admin = require('firebase-admin');
 const nodemailer = require('nodemailer');
 
-// Initialize Firebase Admin SDK
-admin.initializeApp();
+// Initialize Firebase Admin SDK only once
+if (!admin.apps.length) {
+  admin.initializeApp();
+}
 
-const notificationFunctions = require('./sendPromotionalNotifications');
-exports.sendPromotionalNotifications = notificationFunctions.sendPromotionalNotifications;
+// Import notification services
+const sendNotifications = require('./sendNotifications');
+const sendPromotionalNotifications = require('./sendPromotionalNotifications');
+
+// Export notification functions
+exports.sendNotifications = sendNotifications.sendNotifications;
+exports.sendPromotionalNotifications = sendPromotionalNotifications.sendPromotionalNotifications;
 
 // Function that sends the email notification
 async function sendSignUpNotification(storeData) {
@@ -18,11 +25,12 @@ async function sendSignUpNotification(storeData) {
             pass: functions.config().gmail.app_password
         }
     });
-
+    
     // Create email content
     const mailOptions = {
         from: `Tabletop Reserve <${functions.config().gmail.email}>`,
-        to: functions.config().admin.email, 
+        to: functions.config().admin.email,
+        
         subject: 'New Store Registration on Tabletop Reserve',
         html: `
             <h2>New Store Registration</h2>
@@ -33,15 +41,13 @@ async function sendSignUpNotification(storeData) {
                 <li><strong>Email:</strong> ${storeData.email || 'Not provided'}</li>
                 <li><strong>Phone:</strong> ${storeData.phoneNumber || 'Not provided'}</li>
                 <li><strong>Location:</strong> ${storeData.city || ''}, ${storeData.county || ''}</li>
-
             </ul>
             <p>Please review this registration in the admin dashboard.</p>
             <p>For more information, visit our website: <a href="https://www.tabletopreserve.com" target="_blank">Tabletop Reserve</a></p>
             <p>Thank you!</p>
-            
         `,
     };
-
+    
     try {
         const info = await transporter.sendMail(mailOptions);
         console.log('Email sent:', info.response);
@@ -68,3 +74,4 @@ exports.newStoreSignUp = functions.firestore
             return null;
         }
     });
+
