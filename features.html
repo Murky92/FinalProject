@@ -16,6 +16,60 @@
     
     <!-- Page-specific stylesheet -->
     <link rel="stylesheet" href="css/features-styles.css">
+    
+    <!-- Modal image viewer stylesheet -->
+    <style>
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            padding-top: 50px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.9);
+            transition: 0.3s;
+        }
+        
+        .modal-content {
+            margin: auto;
+            display: block;
+            max-width: 90%;
+            max-height: 90%;
+            opacity: 0;
+            transform: scale(0.9);
+            transition: opacity 0.3s, transform 0.3s;
+        }
+        
+        .modal-content.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+        
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 1001;
+        }
+        
+        /* Make feature images clickable */
+        .feature-image img {
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        .feature-image img:hover {
+            transform: scale(1.05);
+        }
+    </style>
 </head>
 <body>
     <!-- Navigation will be loaded by nav.js -->
@@ -35,7 +89,7 @@
             <div class="tab-content active" id="shop-owners-content">
                 <div class="feature-section">
                     <div class="feature-image">
-                        <img src="images/placeholder-reservation-system.jpg" alt="Reservation System">
+                        <img src="/images/calander.png" alt="Reservation System" class="enlargeable">
                     </div>
                     <div class="feature-details">
                         <h2>Easy Table Management</h2>
@@ -51,7 +105,7 @@
                 
                 <div class="feature-section reverse">
                     <div class="feature-image">
-                        <img src="images/placeholder-events.jpg" alt="Events Calendar">
+                        <img src="images/events.png" alt="Events Calendar" class="enlargeable">
                     </div>
                     <div class="feature-details">
                         <h2>Event Management</h2>
@@ -67,7 +121,7 @@
                 
                 <div class="feature-section">
                     <div class="feature-image">
-                        <img src="images/placeholder-notifications.jpg" alt="Push Notifications">
+                        <img src="images/notifications.png" alt="Push Notifications" class="enlargeable">
                     </div>
                     <div class="feature-details">
                         <h2>Customer Communication</h2>
@@ -83,7 +137,7 @@
                 
                 <div class="feature-section reverse">
                     <div class="feature-image">
-                        <img src="images/placeholder-analytics.jpg" alt="Analytics Dashboard">
+                        <img src="images/dashboard.png" alt="Analytics Dashboard" class="enlargeable">
                     </div>
                     <div class="feature-details">
                         <h2>Business Analytics</h2>
@@ -101,7 +155,7 @@
             <div class="tab-content" id="players-content">
                 <div class="feature-section">
                     <div class="feature-image">
-                        <img src="images/placeholder-discover.jpg" alt="Discover Shops">
+                        <img src="images/shop-selection.png" alt="Discover Shops" class="enlargeable">
                     </div>
                     <div class="feature-details">
                         <h2>Discover Gaming Spaces</h2>
@@ -117,7 +171,7 @@
                 
                 <div class="feature-section reverse">
                     <div class="feature-image">
-                        <img src="images/placeholder-booking.jpg" alt="Easy Booking">
+                        <img src="images/app-reservations.png" alt="Easy Booking" class="enlargeable">
                     </div>
                     <div class="feature-details">
                         <h2>Seamless Reservations</h2>
@@ -133,7 +187,7 @@
                 
                 <div class="feature-section">
                     <div class="feature-image">
-                        <img src="images/placeholder-events-player.jpg" alt="Join Events">
+                        <img src="images/app-events.png" alt="Join Events" class="enlargeable">
                     </div>
                     <div class="feature-details">
                         <h2>Join Gaming Events</h2>
@@ -149,7 +203,7 @@
                 
                 <div class="feature-section reverse">
                     <div class="feature-image">
-                        <img src="images/placeholder-community.jpg" alt="Player Community">
+                        <img src="images/profile.png" alt="Player Community" class="enlargeable">
                     </div>
                     <div class="feature-details">
                         <h2>Player Community</h2>
@@ -173,6 +227,12 @@
                 <a href="#" class="cta-button app-cta">Download the App</a>
             </div>
         </div>
+    </div>
+    
+    <!-- Modal image viewer -->
+    <div id="imageModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modalImg">
     </div>
 
     <!-- Scripts -->
@@ -200,6 +260,46 @@
                 const tabId = this.getAttribute('data-tab');
                 document.getElementById(tabId + '-content').classList.add('active');
             });
+        });
+        
+        // Modal image viewer functionality
+        const modal = document.getElementById("imageModal");
+        const modalImg = document.getElementById("modalImg");
+        const closeBtn = document.getElementsByClassName("close")[0];
+        
+        // Setup click handlers for all enlargeable images
+        document.querySelectorAll('.enlargeable').forEach(img => {
+            img.addEventListener('click', function() {
+                modal.style.display = "block";
+                modalImg.src = this.src;
+                
+                // Add show class after a small delay for animation
+                setTimeout(() => {
+                    modalImg.classList.add('show');
+                }, 10);
+            });
+        });
+        
+        // Close the modal when the × is clicked
+        closeBtn.addEventListener('click', function() {
+            modalImg.classList.remove('show');
+            
+            // Wait for animation to complete before hiding modal
+            setTimeout(() => {
+                modal.style.display = "none";
+            }, 300);
+        });
+        
+        // Close the modal when clicking outside the image
+        modal.addEventListener('click', function(event) {
+            if (event.target === modal) {
+                modalImg.classList.remove('show');
+                
+                // Wait for animation to complete before hiding modal
+                setTimeout(() => {
+                    modal.style.display = "none";
+                }, 300);
+            }
         });
     </script>
 </body>
