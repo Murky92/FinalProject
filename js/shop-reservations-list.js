@@ -594,10 +594,15 @@ const ReservationsManager = {
             this.closeModal('view-reservation-modal');
             this.loadReservations(this.selectedDate);
             
-            // Notify customer if needed
-            if (typeof NotificationManager !== 'undefined') {
-                NotificationManager.sendReservationStatusUpdate(reservationId, 'confirmed');
+            try {
+                if (window.NotificationManager && typeof window.NotificationManager.sendReservationStatusUpdate === 'function') {
+                    window.NotificationManager.sendReservationStatusUpdate(reservationId, 'confirmed');
+                }
+            } catch (error) {
+                console.warn('Error sending confirmation notification:', error);
+                
             }
+            
         })
         .catch((error) => {
             console.error('Error confirming reservation:', error);
