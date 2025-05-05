@@ -12,6 +12,7 @@ body {
     align-items: center !important;
     min-height: 100vh !important;
     font-family: Arial, sans-serif !important;
+    padding-bottom: 600.734px; 
 }
 
 /* Hide any existing logo that might be positioned at the top left */
@@ -22,23 +23,24 @@ body {
 /* Main container for centered content */
 .login-main-container {
     position: relative !important;
-
     display: flex !important;
     flex-direction: column !important;
     align-items: flex-start !important; 
     width: 90% !important;
     max-width: 400px;
     margin-bottom: 200px !important;
+    padding-bottom: 312.734px; 
 }
 
 /* Logo styling */
 .login-logo-container {
+
+    display: flex !important;
     text-align: left !important; /* Changed from center to left */
     margin-bottom: 40px !important;
-    margin-top: 100px;
-
+    margin-top: 75px !important;
     width: 100% !important;
-    margin-left: 50px;
+    margin-left: 50px !important;
 }
 
 .login-logo {
