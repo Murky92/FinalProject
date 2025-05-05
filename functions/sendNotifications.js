@@ -171,7 +171,7 @@ exports.sendNotifications = functions.firestore
         },
         webpush: {
           notification: {
-            icon: '/images/logo-transparent-png.png',
+            icon: '/images/tabletoplogo.png',
             badge: '/images/notification-badge.png'
           }
         }

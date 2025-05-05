@@ -22,24 +22,27 @@ body {
 /* Main container for centered content */
 .login-main-container {
     position: relative !important;
+
     display: flex !important;
     flex-direction: column !important;
-    align-items: flex-start !important; /* Changed from center to flex-start to align content to left */
+    align-items: flex-start !important; 
     width: 90% !important;
     max-width: 400px;
-    margin-bottom: 300px;
+    margin-bottom: 200px !important;
 }
 
 /* Logo styling */
 .login-logo-container {
     text-align: left !important; /* Changed from center to left */
     margin-bottom: 40px !important;
+    margin-top: 100px;
+
     width: 100% !important;
-    margin-left: -70px !important; /* Negative margin to move logo even more left */
+    margin-left: 50px;
 }
 
 .login-logo {
-    max-width: 540px !important;
+    max-width: 270px !important; /* Reduced by half from 540px */
     height: auto !important;
     position: static !important; /* Override any absolute positioning */
 }
@@ -113,25 +116,21 @@ body {
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .login-logo {
-        max-width: 440px !important; /* Still large but better for tablets */
+        max-width: 220px !important; /* Reduced by half from 440px */
     }
     
     .login-logo-container {
-        margin-left: -40px !important; /* Less negative margin on medium screens */
+        margin-left: -20px !important; /* Reduced by half from -40px */
     }
 }
 
 @media (max-width: 480px) {
     .login-logo {
-        max-width: 320px !important; /* Adjusted for mobile but still larger than original */
-    }
-    
-    .login-container {
-        padding: 20px !important;
+        max-width: 160px !important; /* Reduced by half from 320px */
     }
     
     .login-logo-container {
-        margin-left: -20px !important; /* Even less negative margin on small screens */
+        margin-left: -10px !important; /* Reduced by half from -20px */
     }
 }
 

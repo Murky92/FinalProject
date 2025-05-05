@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
         <div class="nav-container">
             <div class="nav-logo">
                 <a href="index.html">
-                    <img src="images/logo-transparent-png.png" alt="Tabletop Reserve">
+                    <img src="images/tabletoplogo.png" alt="Tabletop Reserve">
                 </a>
             </div>
             

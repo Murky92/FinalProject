@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', function() {
   
   // Use the TableTop Reserve logo
   logoContainer.innerHTML = `
-    <img src="images/logo-transparent-png.png" alt="TableTop Reserve Logo">
+    <img src="images/tabletoplogo.png" alt="TableTop Reserve Logo">
   `;
   
   // 7. Create sidebar header with dynamic title
