@@ -100,18 +100,34 @@
                     <div class="form-group">
                         <label>Target Recipients*</label>
                         <div class="target-options">
-                            <label class="checkbox-label">
-                                <input type="radio" name="target" value="all" checked>
-                                All Customers
-                            </label>
-                            <label class="checkbox-label">
-                                <input type="radio" name="target" value="followers">
-                                Followers Only
-                            </label>
-                            <label class="checkbox-label">
-                                <input type="radio" name="target" value="recent">
-                                Recent Customers (last 30 days)
-                            </label>
+                            <div class="target-option selected">
+                                <input type="radio" id="target-all" name="target" value="all" checked onchange="window.shopNotificationManager.toggleWarning(this)">
+                                <label for="target-all" class="target-label">
+                                    <span class="target-title">All Customers</span>
+                                    <span class="target-description">Sends to all users with the app who have notifications enabled</span>
+                                </label>
+                            </div>
+                            
+                            <div class="target-option">
+                                <input type="radio" id="target-followers" name="target" value="followers" onchange="window.shopNotificationManager.toggleWarning(this)">
+                                <label for="target-followers" class="target-label">
+                                    <span class="target-title">Followers Only</span>
+                                    <span class="target-description">Sends only to users who follow your shop</span>
+                                </label>
+                            </div>
+                            
+                            <div class="target-option">
+                                <input type="radio" id="target-recent" name="target" value="recent" onchange="window.shopNotificationManager.toggleWarning(this)">
+                                <label for="target-recent" class="target-label">
+                                    <span class="target-title">Recent Customers (last 30 days)</span>
+                                    <span class="target-description">Sends to customers who have made reservations or bookings recently</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div id="all-customers-warning" class="warning-box active">
+                            <span class="warning-icon">⚠️</span>
+                            <strong>Use sparingly:</strong> Sending to all app users can be overwhelming. Reserve this for major announcements or emergencies. Consider targeting specific groups instead.
                         </div>
                     </div>
                     
@@ -240,6 +256,43 @@
     </div>
 
     <script>
+        // Add a method to toggle the warning box with card selection
+        window.shopNotificationManager.toggleWarning = function(radio) {
+            const warningBox = document.getElementById('all-customers-warning');
+            if (radio.value === 'all') {
+                warningBox.classList.add('active');
+            } else {
+                warningBox.classList.remove('active');
+            }
+            
+            // Update selected card state
+            document.querySelectorAll('.target-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            radio.closest('.target-option').classList.add('selected');
+        };
+
+        // Initialize card selection on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set up card selection handling
+            document.querySelectorAll('.target-option input[type="radio"]').forEach(radio => {
+                radio.addEventListener('change', function() {
+                    // Remove selected class from all options
+                    document.querySelectorAll('.target-option').forEach(option => {
+                        option.classList.remove('selected');
+                    });
+                    // Add selected class to the parent option
+                    this.closest('.target-option').classList.add('selected');
+                });
+            });
+            
+            // Initialize the selected state
+            const checkedRadio = document.querySelector('input[name="target"]:checked');
+            if (checkedRadio) {
+                checkedRadio.closest('.target-option').classList.add('selected');
+            }
+        });
+
         // Verify shop owner access and initialize notification manager
         window.shopAuth.verifyShopOwner(function(user, shopInfo) {
             // Initialize the notification manager with shop data

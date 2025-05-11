@@ -70,10 +70,89 @@
     color: #777;
 }
 
+/* Card-based target options */
+.target-options {
+    display: grid;
+    gap: 12px;
+    margin-top: 15px;
+    margin-bottom: 20px;
+}
+
+.target-option {
+    position: relative;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background-color: #fff;
+}
+
+.target-option:hover {
+    border-color: #4a6ee0;
+    background-color: #f8f9ff;
+}
+
+.target-option.selected {
+    border-color: #4a6ee0;
+    background-color: #f0f7ff;
+    box-shadow: 0 2px 8px rgba(74, 110, 224, 0.15);
+}
+
+.target-option input[type="radio"] {
+    position: absolute;
+    top: 18px;
+    left: 16px;
+    transform: scale(1.2);
+    cursor: pointer;
+}
+
+.target-label {
+    display: block;
+    padding-left: 36px;
+    cursor: pointer;
+}
+
+.target-title {
+    display: block;
+    font-weight: 600;
+    font-size: 15px;
+    color: #333;
+    margin-bottom: 4px;
+}
+
+.target-description {
+    display: block;
+    font-size: 13px;
+    color: #666;
+    line-height: 1.4;
+}
+
+/* Warning box */
+.warning-box {
+    background-color: #fff3e0;
+    border-left: 4px solid #ff9500;
+    padding: 12px 15px;
+    margin-top: 15px;
+    border-radius: 4px;
+    display: none;
+}
+
+.warning-box.active {
+    display: block;
+}
+
+.warning-icon {
+    color: #ff9500;
+    margin-right: 8px;
+}
+
+/* Form buttons */
 .form-buttons {
     margin-top: 25px;
     display: flex;
     justify-content: flex-end;
+    clear: both;
 }
 
 .success-btn {
@@ -86,28 +165,11 @@
     cursor: pointer;
     font-size: 16px;
     transition: background-color 0.2s;
+    white-space: nowrap;
 }
 
 .success-btn:hover {
     background-color: #2eb350;
-}
-
-/* Target options */
-.target-options {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 10px;
-}
-
-.checkbox-label {
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-}
-
-.checkbox-label input {
-    margin-right: 10px;
 }
 
 /* Notification tips */
