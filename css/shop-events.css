@@ -263,14 +263,11 @@ input:checked+.slider:before {
     user-select: none;
     transition: all 0.2s ease;
     font-weight: 500;
-    /* Important properties for centering the letter */
     text-align: center;
     line-height: 36px;
-    /* Match the height */
     padding: 0;
-    /* Remove any default padding */
     position: relative;
-    /* For proper positioning */
+  
 }
 
 .weekday-label span {

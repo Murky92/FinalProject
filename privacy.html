@@ -357,7 +357,7 @@
         // Smooth scrolling for anchor links
         document.querySelectorAll('.privacy-toc a, .back-to-top').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
-                // Don't scroll if it's the "Back to top" link going to "#"
+                
                 if (this.getAttribute('href') === '#') {
                     e.preventDefault();
                     window.scrollTo({
@@ -381,10 +381,10 @@
             });
         });
         
-        // Cookie preferences button functionality (example)
+        
         document.querySelector('.cookie-preferences-btn').addEventListener('click', function(e) {
             e.preventDefault();
-            // This would typically open a cookie preferences modal
+            // demonstration of cookie preferences
             alert('Cookie preferences would open here. This is a placeholder for demonstration purposes.');
         });
     </script>

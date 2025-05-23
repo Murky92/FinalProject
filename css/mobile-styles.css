@@ -1,18 +1,18 @@
-/* Mobile fixes for Tabletop Reserve */
+/* Mobile styles*/
 
 @media (max-width: 768px) {
-  /* General fixes */
+ 
   body {
     overflow-x: hidden;
   }
   
-  /* Fix overflow on modals and cards */
+
   .modal-content, .card {
     max-width: 100%;
     box-sizing: border-box;
   }
   
-  /* Fix notification history page */
+  
   .notification-card {
     padding: 12px;
     margin-bottom: 10px;
@@ -36,14 +36,14 @@
     word-break: break-word;
   }
   
-  /* Fix filter buttons */
+ 
   .filter-button, .status-filter {
     padding: 8px 10px;
     font-size: 13px;
     white-space: nowrap;
   }
   
-  /* Fix date navigation */
+ 
   .date-nav {
     flex-wrap: wrap;
     justify-content: center;
@@ -56,13 +56,13 @@
     margin-bottom: 10px;
   }
   
-  /* Calendar fixes */
+
   .calendar-container {
     overflow-x: auto;
     max-width: 100%;
   }
   
-  /* Tab fixes */
+ 
   .tab-buttons {
     display: flex;
   }
@@ -75,20 +75,20 @@
     font-size: 14px;
   }
   
-  /* Reservation form fixes */
+  
   input, select, textarea {
     width: 100%;
     max-width: 100%;
     box-sizing: border-box;
-    font-size: 16px; /* Prevent zoom on iOS */
+    font-size: 16px; 
   }
   
-  /* Fix for the date input */
+ 
   input[type="date"] {
     min-height: 38px;
   }
   
-  /* Fix for reservation details page */
+  
   .reservation-details-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -107,7 +107,7 @@
     text-overflow: ellipsis;
   }
   
-  /* Fix for reservation details buttons */
+  
   .modal-buttons {
     display: flex;
     flex-wrap: wrap;

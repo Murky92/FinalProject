@@ -452,7 +452,7 @@ const EventManager = {
 
         // For each occurrence, create an event
         occurrences.forEach((occurrenceDate, index) => {
-            // Reference for this occurrence (parent for first, new ID for rest)
+            // Reference for this occurrence
             const occurrenceRef = index === 0
                 ? window.shopAuth.db.collection('Events').doc(parentId)
                 : window.shopAuth.db.collection('Events').doc();

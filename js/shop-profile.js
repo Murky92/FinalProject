@@ -300,7 +300,7 @@ function uploadLogo(file, shopId) {
         const newLogoFileName = `logo.${fileExtension}`;
         const logoRef = storageRef.child(`${shopLogoFolder}/${newLogoFileName}`);
         
-        // First list all files in the shop's logo folder to delete old logos
+        
         storageRef.child(shopLogoFolder).listAll()
             .then((listResults) => {
                 // Create an array of promises for deleting existing files
@@ -310,7 +310,7 @@ function uploadLogo(file, shopId) {
                         console.log(`Deleting old logo file: ${item.name}`);
                         return item.delete();
                     }
-                    return Promise.resolve(); // No-op for files we're keeping
+                    return Promise.resolve(); 
                 });
                 
                 // Wait for all deletions to complete

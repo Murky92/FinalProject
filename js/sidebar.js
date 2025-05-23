@@ -120,7 +120,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const logoutMenu = document.createElement('ul');
   logoutMenu.className = 'logout-menu';
   
-  // Find the existing logout button to get its onclick handler
+ 
   const existingLogoutBtn = document.querySelector('.logout-btn');
   let logoutOnclick = '';
   

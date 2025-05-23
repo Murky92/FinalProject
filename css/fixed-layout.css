@@ -29,9 +29,9 @@
 
 /* Main content with sidebar consideration */
 .main-content {
-  margin-left: 250px; /* Same as sidebar width */
+  margin-left: 250px; 
   margin-right: auto;
-  max-width: calc(1400px - 250px); /* Increased from 1200px */
+  max-width: calc(1400px - 250px); 
   padding: 20px;
   transition: margin-left 0.3s ease, max-width 0.3s ease;
 }  
@@ -39,14 +39,14 @@
 
 /* Center the actual content within the main container */
 .event-booking-container {
-  max-width: 1050px; /* Increased from 900px */
+  max-width: 1050px; 
   margin: 0 auto;
   width: 100%;
 }  
 
 /* Dashboard container centering */
 .dashboard-container {
-  max-width: 1400px; /* Increased from 1200px */
+  max-width: 1400px; 
   margin: 0 auto;
   padding: 20px;
   width: 100%;
@@ -98,7 +98,7 @@
     padding: 15px;
   }
   
-  /* Ensure all elements take full width on mobile */
+  
   .event-booking-container,
   .dashboard-container,
   .card,

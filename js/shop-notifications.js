@@ -18,8 +18,7 @@ const NotificationManager = {
     
     // Set up notification listeners
     setupListeners: function() {
-        // Listen for Firestore updates if needed
-        // This could be used for real-time updates from other admins
+        
     },
     
     // Show a notification popup
@@ -77,11 +76,10 @@ const NotificationManager = {
             const shopName = window.shopAuth && window.shopAuth.shopData ? 
                 window.shopAuth.shopData.storeName : '';
             
-            // In a real app, you would send an email or SMS to the customer
-            // This would typically be handled by a Cloud Function or server-side code
+            // Create the notification message
             console.log('Sending new reservation notification to customer:', reservation.customerEmail || reservation.customerPhone);
             
-            // For demo purposes, let's just log what would be sent
+            // Log the notification for demo purposes
             this.logCustomerNotification(
                 reservation,
                 'Reservation Confirmation',

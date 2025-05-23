@@ -190,16 +190,16 @@ document.addEventListener('DOMContentLoaded', function() {
     function checkAutoApproval(shopId) {
         console.log("Checking auto-approval for shop ID:", shopId);
         
-        // Use the correct path to your settings: SystemSettings/appSettings
+      
         return db.collection("SystemSettings").doc("appSettings").get()
             .then((doc) => {
-                // Add detailed logging to see what's in the document
+                
                 console.log("Settings document exists:", doc.exists);
                 if (doc.exists) {
                     const data = doc.data();
                     console.log("Settings document data:", data);
                     
-                    // Check autoApproveShops property (case-sensitive)
+                   
                     const autoApproveEnabled = 
                         data.autoApproveShops === true || 
                         data.autoApproveShops === "true";

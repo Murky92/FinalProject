@@ -198,7 +198,7 @@
     border: none;
 }
 
-/* Delete confirmation modal - modified as requested */
+/* Delete confirmation modal */
 #delete-modal .modal-content {
     width: 400px;
     position: relative;

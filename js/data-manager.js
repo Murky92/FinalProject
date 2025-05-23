@@ -16,7 +16,7 @@ const DataManager = {
     
     /**
      * Load all upcoming events for the shop
-     * @param {function} callback - Function to call with the events data
+     * @param {function} callback - Callback function to handle the loaded events
      */
     loadEvents: function(callback) {
         if (!this.shopId) {

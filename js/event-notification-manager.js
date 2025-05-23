@@ -1,5 +1,5 @@
 // Event Notification Component
-// To be included in shop-events.js or main.js
+
 
 const EventNotificationManager = {
     shopData: null,

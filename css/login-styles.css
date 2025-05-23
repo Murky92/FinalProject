@@ -1,6 +1,6 @@
-/* login-styles.css - Fixed version for better responsiveness */
 
-/* Reset conflicting styles with proper body setup */
+
+
 body {
     background-image: none !important;
     margin: 0 !important;
@@ -10,15 +10,15 @@ body {
     font-family: Arial, sans-serif !important;
     display: flex !important;
     flex-direction: column !important;
-    /* Remove fixed padding that was causing issues */
+    
 }
 
-/* Main container for centered content - with better positioning */
+
 .login-main-container {
     width: 90% !important;
     max-width: 400px !important;
     margin: 0 auto !important;
-    padding: 60px 0 40px !important; /* Simpler padding */
+    padding: 60px 0 40px !important;
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
@@ -26,7 +26,7 @@ body {
     position: relative !important;
 }
 
-/* Logo styling - improved for better centering */
+
 .login-logo-container {
     text-align: center !important;
     margin-bottom: 40px !important;
@@ -36,10 +36,10 @@ body {
 .login-logo {
     max-width: 270px !important;
     height: auto !important;
-    position: static !important; /* Override any absolute positioning */
+    position: static !important; 
 }
 
-/* Login container - unchanged but with cleaner structure */
+
 .login-container {
     width: 100% !important;
     padding: 30px !important;
@@ -57,7 +57,7 @@ body {
     font-size: 24px !important;
 }
 
-/* Form styling - unchanged */
+/* Form styling  */
 .login-container input {
     width: 100% !important;
     padding: 12px !important;
@@ -119,11 +119,11 @@ body {
     text-decoration: underline;
 }
 
-/* Footer positioning fix */
+
 .footer {
-    position: relative !important; /* Not fixed */
+    position: relative !important; 
     width: 100%;
-    margin-top: auto !important; /* Push to bottom */
+    margin-top: auto !important; 
     padding: 25px 0;
     background-color: #1a2639;
 }

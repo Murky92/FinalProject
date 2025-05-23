@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add this navigation bar to the beginning of the body
     document.body.insertBefore(navbar, document.body.firstChild);
     
-    // Add navigation styles if not already present
+    
     if (!document.querySelector('link[href*="nav-styles.css"]')) {
         const navStylesheet = document.createElement('link');
         navStylesheet.rel = 'stylesheet';

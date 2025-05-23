@@ -1,7 +1,7 @@
 const functions = require('firebase-functions/v1');
 const admin = require('firebase-admin');
 
-// Initialize admin if not already initialized
+// Initialize admin 
 if (!admin.apps.length) {
   admin.initializeApp();
 }
@@ -93,11 +93,9 @@ exports.sendNotifications = functions.firestore
           }
         });
         
-        // If we have recent customers, add this to the query
+        
         if (eligibleUserIds.size > 0) {
-          // Convert to array for Firestore 'in' query
-          // Note: Firestore 'in' query supports up to 10 values, so we'll need to batch if more
-          // For simplicity in this implementation, we'll just use the first 10
+         
           const userIdBatch = Array.from(eligibleUserIds).slice(0, 10);
           userQuery = userQuery.where('id', 'in', userIdBatch);
         } else {

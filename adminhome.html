@@ -96,7 +96,7 @@
             db.collection("Stores")
                 .where("isApproved", "==", false)
                 .get().then((snapshot) => {
-                    // Filter results client-side to handle undefined or null registrationStatus
+                    
                     let pendingCount = 0;
                     snapshot.forEach(doc => {
                         const data = doc.data();
@@ -106,7 +106,7 @@
                     });
                     document.getElementById('pending-approvals').textContent = pendingCount;
                     
-                    // After counting, check if we have pending shops but none are showing on the approval page
+                    
                     if (pendingCount > 0) {
                         console.log(`Dashboard shows ${pendingCount} pending shops`);
                     }

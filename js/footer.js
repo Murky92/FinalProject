@@ -6,11 +6,11 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // For shop pages, wait until authentication is complete
     if (isShopPage) {
-        // Create a MutationObserver to detect when the shop content becomes visible
+        
         const observer = new MutationObserver(function(mutations) {
             mutations.forEach(function(mutation) {
                 if (mutation.target.style.display === 'block') {
-                    // Shop content is now visible, it's safe to add the footer
+                    
                     createFooter();
                     
                     observer.disconnect();

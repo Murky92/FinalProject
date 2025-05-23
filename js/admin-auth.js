@@ -16,7 +16,8 @@ function initializeFirebase() {
     if (!firebase.apps || !firebase.apps.length) {
         firebase.initializeApp(firebaseConfig);
     } else {
-        firebase.app(); // Use existing app if already initialized
+        // Use existing app if already initialized
+        firebase.app(); 
     }
 
     return {

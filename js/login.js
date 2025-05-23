@@ -46,7 +46,7 @@ loginForm.addEventListener('submit', function(e) {
                 // Email not verified, show error
                 errorMessageElement.innerHTML = "Please verify your email before logging in.<br>Check your inbox and spam folder.";
                 
-                // Add a container for the resend link (to style and position it separately)
+                
                 const resendContainer = document.createElement('div');
                 resendContainer.className = 'resend-container';
                 resendContainer.style.marginTop = '10px';
@@ -98,7 +98,7 @@ loginForm.addEventListener('submit', function(e) {
                                 if (adminDoc.exists && adminDoc.data().role === "admin") {
                                     window.location.href = "adminhome.html";
                                 } else {
-                                    // Neither shop owner nor admin - likely a mobile app user
+                                    // Neither shop owner nor admin - probably a mobile app user
                                     errorMessageElement.innerHTML = 
                                         "<strong>This website is for shop owners only.</strong><br>" +
                                         "If you're a customer, please use the Tabletop Reserve mobile app to make reservations.<br>" +

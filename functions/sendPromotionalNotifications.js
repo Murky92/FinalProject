@@ -46,8 +46,7 @@ exports.sendPromotionalNotifications = functions.firestore
         // Query users who follow this shop
         userQuery = userQuery.where(`followedShops.${notification.shopId}`, '==', true);
       } else if (notification.target === 'recent') {
-        // For recent customers, we'd need to check their reservation history
-        // This is a simplified version - in production you'd do a more sophisticated query
+        // Get the date 30 days ago
         const thirtyDaysAgo = new Date();
         thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
         

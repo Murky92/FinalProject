@@ -31,9 +31,6 @@ const { auth, db } = initializeFirebase();
 // Global variable to store current shop data
 let currentShopData = null;
 
-// Shop authentication function
-// Updated shop-auth.js function to handle pending approval redirect
-// This is a modification to the verifyShopOwner function
 
 function verifyShopOwner(onSuccess, onFailure) {
     // Show loading state
@@ -85,7 +82,7 @@ function verifyShopOwner(onSuccess, onFailure) {
                         return;
                     }
                     
-                    // NEW: Redirect pending shops to the pending approval page
+            
                     if (!currentShopData.isApproved) {
                         // Only allow access to the pending approval page
                         const currentPage = window.location.pathname.split('/').pop();

@@ -198,7 +198,7 @@ const RecurrenceManager = {
         }
 
         // Generate occurrences based on recurrence type
-        let count = 1; // Already added the first occurrence
+        let count = 1; 
 
         while (count < maxOccurrences) {
             let nextDate = null;
@@ -259,7 +259,7 @@ const RecurrenceManager = {
                         nextDate.setDate(nextDate.getDate() + (7 * (weekNumber - 1)));
                     } else if (weekNumber === 5) {
                         // "Last" occurrence logic
-                        // First, find the first occurrence in the month
+                        
                         const firstOccurrence = new Date(nextDate);
 
                         // Go to first day of next month
@@ -272,8 +272,7 @@ const RecurrenceManager = {
                             nextDate.setDate(nextDate.getDate() - 1);
                         }
 
-                        // If this gives the same result as the first occurrence,
-                        // there's only one occurrence that month, so use that
+                        // Check if the last occurrence is the same as the first occurrence
                         if (nextDate.getMonth() === firstOccurrence.getMonth() &&
                             nextDate.getDate() === firstOccurrence.getDate()) {
                             nextDate = firstOccurrence;
