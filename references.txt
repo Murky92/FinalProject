@@ -1,14 +1,21 @@
-The following pages were generated using chatgpt (https://chatgpt.com/) to help generate the text as they are generic:
+The following pages were generated using ChatGPT (https://chatgpt.com/) to help generate the text as they are generic:
+Web Pages:
 
-- **features.html** - Marketing copy generated using ChatGPT (OpenAI, 2024)
-- **privacy.html** - Privacy policy template generated using ChatGPT (OpenAI, 2024)
-- **terms.html** - Terms of service template generated using ChatGPT (OpenAI, 2024)
-- **accessibility.html** - Accessibility statement generated using ChatGPT (OpenAI, 2024)
-- **faq.html** - FAQ content structure generated using ChatGPT (OpenAI, 2024)
-- **about.html** - Company description content generated using ChatGPT (OpenAI, 2024)
-- **shop-guide.html** - Tutorial content generated using ChatGPT (OpenAI, 2024)
+features.html - Marketing copy generated using ChatGPT (OpenAI, 2024)
+privacy.html - Privacy policy template generated using ChatGPT (OpenAI, 2024)
+terms.html - Terms of service template generated using ChatGPT (OpenAI, 2024)
+accessibility.html - Accessibility statement generated using ChatGPT (OpenAI, 2024)
+faq.html - FAQ content structure generated using ChatGPT (OpenAI, 2024)
+about.html - Company description content generated using ChatGPT (OpenAI, 2024)
+shop-guide.html - Tutorial content generated using ChatGPT (OpenAI, 2024)
 
-Code References for the firebase setup I used this and modified it:
+Android Application Files:
+
+HelpSupportActivity.kt - Help and support functionality including FAQ content and dialog structures generated using ChatGPT (OpenAI, 2024)
+PrivacyActivity.kt - Privacy settings activity including privacy policy text and account deletion flow generated using ChatGPT (OpenAI, 2024)
+
+
+Code References for the firebase setup I used this and modified it in the firebase code:
 
 https://firebase.google.com/docs/firestore/quickstart
 https://firebase.google.com/docs/cloud-messaging/ios/client?_gl=1*aifo3l*_up*MQ..*_ga*OTQ3NzYwMDg3LjE3NDg1NTYwODY.*_ga_CW55HF8NVT*czE3NDg1NTYwODYkbzEkZzAkdDE3NDg1NTYwODYkajYwJGwwJGgw
